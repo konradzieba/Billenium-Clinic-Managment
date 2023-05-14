@@ -60,7 +60,7 @@ export function SpecializationCard({
   const navigate = useNavigate();
 
   return (
-    <Card w={'20%'} withBorder radius="md" className={cx(classes.card, className)} {...others}>
+    <Card  w={'20rem'} withBorder radius="md" className={cx(classes.card, className)} {...others}>
       <Card.Section>
         <a {...linkProps}>
           <Image src={image} height={250} />

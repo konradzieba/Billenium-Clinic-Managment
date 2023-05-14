@@ -42,7 +42,7 @@ export const SpecializationList = () => {
 
   return (
     <Flex
-      maw={'100%'}
+      w={'100%'}
     >
       <Group
         w={'100%'}

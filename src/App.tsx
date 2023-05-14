@@ -14,7 +14,7 @@ const App = () => {
       withGlobalStyles
       withNormalizeCSS
     >
-      <Container px={0} mx={0} h="100vh" display="flex">
+      <Container px={0} mx={0} h="100vh" display="flex" maw={'100%'}>
         <SideMenu />
         <Routes>
           <Route path="/" element={<Home />} />

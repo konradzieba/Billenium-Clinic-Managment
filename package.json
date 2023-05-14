@@ -25,7 +25,6 @@
     "@mantine/spotlight": "^6.0.10",
     "@mantine/tiptap": "^6.0.10",
     "@tabler/icons-react": "^2.18.0",
-    "dayjs": "^1.11.7",
     "@tiptap/extension-link": "^2.0.3",
     "@tiptap/react": "^2.0.3",
     "@tiptap/starter-kit": "^2.0.3",

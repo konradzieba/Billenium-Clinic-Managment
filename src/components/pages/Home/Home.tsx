@@ -11,8 +11,8 @@ const HomeText =
 
 const FlexStyle = {
   borderRadius: rem(10),
-  borderTop: '6px solid orange',
-  borderBottom: '6px solid orange',
+  borderTop: '6px solid #fd7e14',
+  borderBottom: '6px solid #fd7e14',
 };
 
 const BREAKPOINT = 1470;

@@ -40,22 +40,22 @@ const Doctor = (props:DoctorProps) => {
           mr={'md'}
         />
       </Flex>
-      <Flex
-        miw='70%'
-        direction={'column'}
-        align={'start'}
-      >
-        <Text fw='bold' align='start'>
-          {props.name + " " + props.lastname}
-        </Text>
-      <Flex>
-        <Text
-          mt={'xs'}
-          align={width < 1280 ? 'justify': 'center'}
+        <Flex
+          miw='70%'
+          direction={'column'}
+          align={'start'}
         >
-          {props.description}
-        </Text>
-      </Flex>
+          <Text fw='bold' align='start'>
+            {props.name + " " + props.lastname}
+          </Text>
+        <Flex>
+          <Text
+            mt={'xs'}
+            align={width < 1280 ? 'justify' : 'start'}
+          >
+            {props.description}
+          </Text>
+        </Flex>
       </Flex>
       <Flex
         h={'100%'}

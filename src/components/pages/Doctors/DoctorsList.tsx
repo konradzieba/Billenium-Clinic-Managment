@@ -5,5 +5,9 @@ import { Text } from '@mantine/core';
 // };
 
 export const DoctorList = () => {
-  return <Text size="xl">Historia wizyt</Text>;
+  return (
+    <>
+      <Text size="xl">DZIAŁA</Text>
+    </>
+  );
 };

@@ -12,12 +12,17 @@
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@mantine/core": "^6.0.10",
+    "@mantine/dates": "^6.0.10",
     "@mantine/ds": "^6.0.10",
+    "@mantine/form": "^6.0.10",
     "@mantine/hooks": "^6.0.10",
     "@tabler/icons-react": "^2.18.0",
+    "dayjs": "^1.11.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.1"
+    "react-router-dom": "^6.11.1",
+    "validate-polish": "^2.1.40",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

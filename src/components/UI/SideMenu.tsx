@@ -102,7 +102,13 @@ export function SideMenu() {
   ));
 
   return (
-    <Navbar height="100%" width={{ base: 80 }} p="md">
+    <Navbar
+      height="100%"
+      width={{ base: 80 }}
+      p="md"
+      mih="100vh"
+      style={{ position: 'sticky', top: 0 }}
+    >
       <Center>
         <UnstyledButton style={{ cursor: 'pointer' }}>
           <Image

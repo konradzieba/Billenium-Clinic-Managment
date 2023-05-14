@@ -40,7 +40,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface ArticleCardProps {
+type ArticleCardProps = {
   image: string;
   link: string;
   title: string;
@@ -56,18 +56,21 @@ export function SpecializationCard({
                               ...others
                             }: ArticleCardProps & Omit<React.ComponentPropsWithoutRef<'div'>, keyof ArticleCardProps>) {
   const { classes, cx } = useStyles();
-  const linkProps = { href: link, target: '_blank', rel: 'noopener noreferrer' };
   const navigate = useNavigate();
-
   return (
-    <Card  w={'20rem'} withBorder radius="md" className={cx(classes.card, className)} {...others}>
+    <Card
+      w={'20rem'}
+      withBorder
+      radius="md"
+      className={cx(classes.card, className)}
+      {...others}
+      shadow={'md'}
+    >
       <Card.Section>
-        <a {...linkProps}>
           <Image src={image} height={250} />
-        </a>
       </Card.Section>
 
-      <Text className={classes.title} fw={500} component="a" {...linkProps}>
+      <Text className={classes.title} fw={500} >
         {title}
       </Text>
 
@@ -79,7 +82,7 @@ export function SpecializationCard({
         <Button
           variant={'outline'}
           onClick={() => {
-            navigate('/'+link);
+            navigate(link);
           }}
         >
           Wybierz

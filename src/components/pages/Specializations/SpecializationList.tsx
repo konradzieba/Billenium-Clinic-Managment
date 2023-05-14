@@ -12,25 +12,25 @@ import pulm from './img/pulm.jpg'
 const specializations = [
     {
       image: inter,
-      link: '#',
+      link: '/specializations/internists',
       title:'Internista',
       description: 'Lekarz internista zajmuje się diagnozowaniem, leczeniem oraz profilaktyką chorób dorosłych pacjentów. Ma specjalistyczną wiedzę na temat chorób układu krążenia, cukrzycy, chorób tarczycy, chorób układu oddechowego oraz chorób trawienia.'
     },
     {
     image: gast,
-    link: '#',
+    link: '/doctors',
     title:'Gastrolog',
     description: 'Lekarz gastrolog zajmuje się diagnostyką, leczeniem i zapobieganiem chorobom układu pokarmowego, takim jak choroby jelit, wątroby, trzustki czy żołądka. Specjalista ten może również wykonywać badania endoskopowe, takie jak gastroskopia.'
     },
     {
       image: okul,
-      link: '#',
+      link: '/doctors',
       title:'Okulista',
       description: 'Lekarz okulista zajmuje się diagnozowaniem i leczeniem chorób oczu oraz zaburzeń widzenia. Wykonuje badania okulistyczne, przepisuje okulary lub soczewki kontaktowe oraz prowadzi terapię chorób oczu i przygotowuje do operacji oka.'
     },
     {
       image: pulm,
-      link: '#',
+      link: '/doctors',
       title:'Pulmonolog ',
       description: 'Lekarz pulmonolog zajmuje się diagnozowaniem i leczeniem chorób układu oddechowego, takich jak astma, przewlekła obturacyjna choroba płuc (POChP), zapalenie płuc, czy też choroby dróg oddechowych spowodowane paleniem tytoniu.'
     },
@@ -51,10 +51,11 @@ export const SpecializationList = () => {
         {specializations.map((spec) => {
           return(
             <SpecializationCard
-            image={spec.image}
-            link={spec.link}
-            title={spec.title}
-            description={spec.description}
+              key={spec.title}
+              image={spec.image}
+              link={spec.link}
+              title={spec.title}
+              description={spec.description}
           />
           )
         })}

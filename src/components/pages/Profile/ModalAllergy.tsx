@@ -37,7 +37,7 @@ const ModalAllergy = (props:ModalAllergyProps) => {
           data={alergie}
           label="Wpisz swoje alregie"
           placeholder="Nazwa alergii"
-          getCreateLabel={(query) => `+ Create ${query}`}
+          getCreateLabel={(query) => `+ Dodaj ${query}`}
           searchable
           creatable
           maxDropdownHeight={200}

@@ -43,7 +43,7 @@ export const ProfileInfo = () => {
         }}
         direction='column'
       >
-        <Title color='#fd7e14' align={'center'}>
+        <Title align={'center'}>
           Profil pacjenta
         </Title>
         <Flex

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Flex, Modal, MultiSelect } from '@mantine/core';
+import { useState } from 'react';
+import { Button, Flex, Modal, Select, Autocomplete } from '@mantine/core';
 
 type ModalMedicinesProps = {
     opened:boolean;
@@ -29,32 +30,63 @@ const leki = [
   'Doppelherz'
 ];
 
+const reg = new RegExp(/^\d+$/);
+const dawki_lekow = ['mg', 'g', 'ug', 'ng', 'szt']
 const ModalMedicines = (props:ModalMedicinesProps) => {
+  const [data, setData] = useState(leki);
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+
+  const [value, setValue] = useState('');
+  const dawki =
+    value.trim().length > 0 && value.match(reg)
+      ? dawki_lekow.map((provider) => `${value} ${provider}`)
+      : [];
   return(
     <Modal
       radius='md'
       opened={props.opened}
       onClose={() => props.setOpen(false)}
       title="Dodaj lekarstwo"
+      size='md'
     >
       <Flex
-        h='300px'
-        direction={'column'}
-        align={'center'}
-        justify={'space-between'}
+        h={open || open2 ? '200px' : '80px'}
       >
-        <MultiSelect
-          w='100%'
-          data={leki}
+        <Flex>
+        <Select
+          onDropdownOpen={() => setOpen(true)}
+          onDropdownClose={() => setOpen(false)}
+          w='80%'
+          data={data}
           label="Wpisz swoje lekarstwa"
           placeholder="Nazwa lekarstwa"
           searchable
+          getCreateLabel={(query) => `+ Dodaj ${query}`}
+          onCreate={(query) => {
+            const item = query ;
+            setData((current) => [...current, item]);
+            return item;
+          }}
           creatable
           nothingFound="Brak leku"
-          maxDropdownHeight={200}
+          maxDropdownHeight={120}
         />
-        <Button mt='md' variant='outline'>Dodaj lekarstwo</Button>
+        <Autocomplete
+          onDropdownOpen={() => setOpen2(true)}
+          onDropdownClose={() => setOpen2(false)}
+          w='30%'
+          data={dawki}
+          value={value}
+          onChange={setValue}
+          label="Dawka"
+          placeholder="Dawka"
+          maxDropdownHeight={120}
+        />
+        </Flex>
+
       </Flex>
+      <Button mt='md' variant='outline'>Dodaj lekarstwo</Button>
     </Modal>
   )
 }

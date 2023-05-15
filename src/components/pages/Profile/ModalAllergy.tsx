@@ -1,5 +1,5 @@
+import { Button, Flex, Modal, MultiSelect } from '@mantine/core';
 import { Dispatch, useState } from 'react';
-import { Modal, MultiSelect, Flex, Button } from '@mantine/core';
 
 type ModalAllergyProps = {
   opened: boolean;

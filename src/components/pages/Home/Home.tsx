@@ -4,14 +4,15 @@ import {
   Center,
   Flex,
   Image,
+  rem,
   Text,
   Title,
-  rem,
 } from '@mantine/core';
+import { useViewportSize } from '@mantine/hooks';
+
 import StudentMed from '../../../assets/StudentMed.svg';
 import DoctorLImg from './img/doctor_l.png';
 import DoctorRImg from './img/doctor_r.png';
-import { useViewportSize } from '@mantine/hooks';
 // type HomeProps = {
 
 // };

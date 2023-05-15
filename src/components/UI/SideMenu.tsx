@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import {
-  Navbar,
   Center,
+  createStyles,
+  Image,
+  Navbar,
+  rem,
+  Stack,
   Tooltip,
   UnstyledButton,
-  createStyles,
-  Stack,
-  rem,
-  Image,
 } from '@mantine/core';
 import {
-  IconHome2,
-  IconUser,
-  IconLogout,
-  TablerIconsProps,
-  IconNurse,
   IconBook,
+  IconHome2,
+  IconLogout,
   IconNotes,
+  IconNurse,
+  IconUser,
+  TablerIconsProps,
 } from '@tabler/icons-react';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import StudentMed from '../../assets/StudentMed.svg';
 

@@ -1,5 +1,5 @@
-import { Dispatch } from 'react';
 import { Button, Center, Flex, Modal, Text } from '@mantine/core';
+import { Dispatch } from 'react';
 
 type ConfirmModal = {
   title: string;

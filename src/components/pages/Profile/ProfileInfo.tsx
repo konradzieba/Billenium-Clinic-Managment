@@ -7,16 +7,16 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useViewportSize } from '@mantine/hooks';
 import { DateInput } from '@mantine/dates';
 import { useForm, zodResolver } from '@mantine/form';
-import { signUpSchema as schema } from '../../../helpers/schemas';
+import { useViewportSize } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
-import ModalMedicines from './ModalMedicines';
-import ModalAllergy from './ModalAllergy';
-// import ModalSendForm from './ModalSendForm';
+
 import ConfirmModal from '../../../components/UI/ConfirmModal';
+import { signUpSchema as schema } from '../../../helpers/schemas';
+import ModalAllergy from './ModalAllergy';
+import ModalMedicines from './ModalMedicines';
 // type DoctorListProps = {
 
 // };

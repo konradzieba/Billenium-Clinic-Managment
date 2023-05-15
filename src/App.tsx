@@ -1,17 +1,19 @@
+import 'dayjs/locale/pl';
+
 import { Container, MantineProvider } from '@mantine/core';
-import { SideMenu } from './components/UI/SideMenu';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { Home } from './components/pages/Home/Home';
-import { SpecializationList } from './components/pages/Specializations/SpecializationList';
-import { VisitsList } from './components/pages/Visits/VisitsList';
-import { History } from './components/pages/History/History';
-import { ProfileInfo } from './components/pages/Profile/ProfileInfo';
+import { DatesProvider } from '@mantine/dates';
+import { Navigate,Route, Routes } from 'react-router-dom';
+
+import ForgotPassword from './components/pages/Auth/ForgotPassword';
 import SignIn from './components/pages/Auth/SignIn';
 import SignUp from './components/pages/Auth/SignUp';
-import { DatesProvider } from '@mantine/dates';
-import 'dayjs/locale/pl';
 import { DoctorList } from './components/pages/Doctors/DoctorsList';
-import ForgotPassword from './components/pages/Auth/ForgotPassword';
+import { History } from './components/pages/History/History';
+import { Home } from './components/pages/Home/Home';
+import { ProfileInfo } from './components/pages/Profile/ProfileInfo';
+import { SpecializationList } from './components/pages/Specializations/SpecializationList';
+import { VisitsList } from './components/pages/Visits/VisitsList';
+import { SideMenu } from './components/UI/SideMenu';
 
 const App = () => {
   return (

@@ -1,4 +1,13 @@
-import { Box, Button, Flex, Image, Text, Title, rem } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Image,
+  Text,
+  Title,
+  rem,
+} from '@mantine/core';
 import StudentMed from '../../../assets/StudentMed.svg';
 import DoctorLImg from './img/doctor_l.png';
 import DoctorRImg from './img/doctor_r.png';
@@ -20,50 +29,57 @@ const BREAKPOINT = 1470;
 export const Home = () => {
   const { width } = useViewportSize();
   return (
-    <Flex w="80%" mx="auto" direction="column" px="xs">
-      <Flex align="center" justify="center" mt={50} mb={30}>
-        <Image src={StudentMed} height={rem(78)} width={rem(78)} mr={rem(4)} />
-        <Title fw="bold" fz={rem(64)}>
-          tudentMed
-        </Title>
-      </Flex>
+    <Center>
+      <Flex w="80%" direction="column">
+        <Flex align="center" justify="center" mt={50} mb={30}>
+          <Image
+            src={StudentMed}
+            height={rem(78)}
+            width={rem(78)}
+            mr={rem(4)}
+          />
+          <Title fw="bold" fz={rem(64)}>
+            tudentMed
+          </Title>
+        </Flex>
 
-      <Flex
-        align="center"
-        gap={30}
-        my={60}
-        py="lg"
-        style={FlexStyle}
-        direction={width > BREAKPOINT ? 'row' : 'column'}
-      >
-        <Image
-          src={DoctorLImg}
-          width={rem(400)}
-          radius="md"
-          alt="Obraz doktora z założonymi rękoma"
-        />
-        <Box>
-          <Text align="justify" fz="lg">
-            {HomeText}
-          </Text>
-        </Box>
-        <Image
-          width={rem(400)}
-          radius="md"
-          src={DoctorRImg}
-          alt="Obraz uśmiechniętego doktora z teczką"
-        />
+        <Flex
+          align="center"
+          gap={30}
+          my={60}
+          py="lg"
+          style={FlexStyle}
+          direction={width > BREAKPOINT ? 'row' : 'column'}
+        >
+          <Image
+            src={DoctorLImg}
+            width={rem(400)}
+            radius="md"
+            alt="Obraz doktora z założonymi rękoma"
+          />
+          <Box>
+            <Text align="justify" fz="lg">
+              {HomeText}
+            </Text>
+          </Box>
+          <Image
+            width={rem(400)}
+            radius="md"
+            src={DoctorRImg}
+            alt="Obraz uśmiechniętego doktora z teczką"
+          />
+        </Flex>
+        <Flex
+          align="center"
+          justify="center"
+          mb={60}
+          mt={width > BREAKPOINT ? 'xl' : 0}
+        >
+          <Button size="md" radius="md">
+            Umów się na wizytę
+          </Button>
+        </Flex>
       </Flex>
-      <Flex
-        align="center"
-        justify="center"
-        mb={60}
-        mt={width > BREAKPOINT ? 'xl' : 0}
-      >
-        <Button size="md" radius="md">
-          Umów się na wizytę
-        </Button>
-      </Flex>
-    </Flex>
+    </Center>
   );
 };

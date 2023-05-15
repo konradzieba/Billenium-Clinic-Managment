@@ -11,11 +11,12 @@ import { useViewportSize } from '@mantine/hooks';
 import { DateInput } from '@mantine/dates';
 import { useForm, zodResolver } from '@mantine/form';
 import { signUpSchema as schema } from '../../../helpers/schemas';
-import {IconPlus} from '@tabler/icons-react'
+import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import ModalMedicines from './ModalMedicines';
 import ModalAllergy from './ModalAllergy';
-import ModalSendForm from './ModalSendForm';
+// import ModalSendForm from './ModalSendForm';
+import ConfirmModal from '../../../components/UI/ConfirmModal';
 // type DoctorListProps = {
 
 // };
@@ -25,7 +26,7 @@ export const ProfileInfo = () => {
   const [openMedicines, setOpenMedicines] = useState(false);
   const [openAllergy, setOpenAllergy] = useState(false);
   const [save, setSave] = useState(false);
-  const [isEditing, setIsEditing] = useState(true)
+  const [isEditing, setIsEditing] = useState(true);
   const form = useForm({
     initialValues: {
       email: '',
@@ -34,205 +35,147 @@ export const ProfileInfo = () => {
     validate: zodResolver(schema),
   });
   return (
-    <Container
-      p='md'
-      miw={'22rem'}
-    >
+    <Container p="md" miw={'22rem'}>
       <Flex
-        sx={(theme) => {return {
-              borderRadius:theme.radius.md,
-              border:'3px #fd7e14 solid'
-        }
+        sx={(theme) => {
+          return {
+            borderRadius: theme.radius.md,
+            border: '3px #fd7e14 solid',
+          };
         }}
-        direction='column'
+        direction="column"
       >
-        <Title align={'center'}>
+        <Title align="center" fw={700} lts={1} mt="sm">
           Profil pacjenta
         </Title>
-        <Flex
-        m='md'
-        justify={'space-between'}
-        >
+        <Flex m="md" justify="space-between">
           <Text>Dane Osobowe</Text>
-          {
-            isEditing &&
-            <Button
-            variant={'outline'}
-            onClick={() => setIsEditing(false)}
-            >
-            Edytuj dane
+          {isEditing && (
+            <Button variant="outline" onClick={() => setIsEditing(false)}>
+              Edytuj dane
             </Button>
-
-          }
-          {
-            !isEditing &&
-            (
-              <Flex gap='md'>
-            <Button
-            variant={'outline'}
-            onClick={() => setIsEditing(true)}
-            >
-            Anuluj
-            </Button>
-            <Button
-            variant={'filled'}
-            onClick={() => setSave(true)}
-            >
-            Zapisz
-            </Button>
+          )}
+          {!isEditing && (
+            <Flex gap="md">
+              <Button variant="outline" onClick={() => setIsEditing(true)}>
+                Anuluj
+              </Button>
+              <Button variant="filled" onClick={() => setSave(true)}>
+                Zapisz
+              </Button>
             </Flex>
-            )
-          }
+          )}
         </Flex>
-        <Flex
-          direction={width < 1080 ? 'column' : 'row'}
-        >
-          <TextInput
-            miw='12rem'
-            disabled
-            radius='md'
-            p='md'
-            label='Imię'
-          />
-          <TextInput
-            miw='12rem'
-            disabled
-            radius='md'
-            p='md'
-            label='Nazwisko'
-          />
+        <Flex direction={width < 1080 ? 'column' : 'row'}>
+          <TextInput miw="12rem" disabled radius="md" p="md" label="Imię" />
+          <TextInput miw="12rem" disabled radius="md" p="md" label="Nazwisko" />
           <DateInput
-            miw='12rem'
+            miw="12rem"
             disabled
-            radius='md'
+            radius="md"
             valueFormat="DD.MM.YYYY"
-            p='md'
-            label='Data urodzenia'
+            p="md"
+            label="Data urodzenia"
           />
-          <TextInput
-            miw='12rem'
-            disabled
-            radius='md'
-            p='md'
-            label='PESEL'
-          />
+          <TextInput miw="12rem" disabled radius="md" p="md" label="PESEL" />
         </Flex>
-        <Flex
-          direction={width < 1080 ? 'column' : 'row'}
-        >
+        <Flex direction={width < 1080 ? 'column' : 'row'}>
           <TextInput
-            miw='12rem'
-            radius='md'
-            p='md'
-            label='Kod pocztowy'
+            miw="12rem"
+            radius="md"
+            p="md"
+            label="Kod pocztowy"
             disabled={isEditing}
           />
           <TextInput
-            miw='12rem'
-            radius='md'
-            p='md'
-            label='Miasto'
+            miw="12rem"
+            radius="md"
+            p="md"
+            label="Miasto"
             disabled={isEditing}
           />
           <TextInput
-            miw='15rem'
-            radius='md'
-            p='md'
+            miw="15rem"
+            radius="md"
+            p="md"
             w={width < 1080 ? '100%' : '50%'}
-            label='Adres'
+            label="Adres"
             disabled={isEditing}
           />
         </Flex>
-        <Flex
-          direction={width < 1080 ? 'column' : 'row'}
-        >
+        <Flex direction={width < 1080 ? 'column' : 'row'}>
           <TextInput
-            miw='12rem'
-            radius='md'
-            p='md'
-            label='Email'
+            miw="12rem"
+            radius="md"
+            p="md"
+            label="Email"
+            disabled={isEditing}
             {...form.getInputProps('email')}
-            disabled={isEditing}
           />
           <TextInput
-            miw='12rem'
-            radius='md'
-            p='md'
-            label='Numer telefonu'
-            {...form.getInputProps('phoneNumber')}
+            miw="12rem"
+            radius="md"
+            p="md"
+            label="Numer telefonu"
             disabled={isEditing}
+            {...form.getInputProps('phoneNumber')}
           />
         </Flex>
-        <Flex
-          direction={width < 1080 ? 'column' : 'row'}
-        >
-          <Flex
-            direction='column'
-            w={width < 1080 ? '100%' : '50%'}
-            p='md'
-          >
-            <Flex
-              justify='space-between'
-            >
-              <Text>
-                Stosowane leki
-              </Text>
+        <Flex direction={width < 1080 ? 'column' : 'row'}>
+          <Flex direction="column" w={width < 1080 ? '100%' : '50%'} p="md">
+            <Flex justify="space-between">
+              <Text>Stosowane leki</Text>
               <ActionIcon
-                color='#fd7e14'
-                variant='light'
+                color="#fd7e14"
+                variant="light"
                 onClick={() => setOpenMedicines(true)}
               >
-                <IconPlus size='1rem'/>
+                <IconPlus size="1rem" />
               </ActionIcon>
             </Flex>
             <Flex
-              mt='xs'
-              sx={(theme) => {return {
-                borderRadius:theme.radius.md,
-                border:'2px #fd7e14 solid'
-              }
+              mt="xs"
+              sx={(theme) => {
+                return {
+                  borderRadius: theme.radius.md,
+                  border: '2px #fd7e14 solid',
+                };
               }}
-              p='md'
-            >
-
-            </Flex>
+              p="md"
+            ></Flex>
           </Flex>
-          <Flex
-            direction='column'
-            w={width < 1080 ? '100%' : '50%'}
-            p='md'
-          >
-            <Flex
-              justify='space-between'
-            >
-              <Text>
-                Alergie
-              </Text>
+          <Flex direction="column" w={width < 1080 ? '100%' : '50%'} p="md">
+            <Flex justify="space-between">
+              <Text>Alergie</Text>
               <ActionIcon
-                color='#fd7e14'
-                variant='light'
+                color="#fd7e14"
+                variant="light"
                 onClick={() => setOpenAllergy(true)}
               >
-                <IconPlus size='1rem'/>
+                <IconPlus size="1rem" />
               </ActionIcon>
             </Flex>
             <Flex
-              mt='xs'
-              sx={(theme) => {return {
-                borderRadius:theme.radius.md,
-                border:'2px #fd7e14 solid'
-              }
+              mt="xs"
+              sx={(theme) => {
+                return {
+                  borderRadius: theme.radius.md,
+                  border: '2px #fd7e14 solid',
+                };
               }}
-              p='md'
-            >
-
-            </Flex>
+              p="md"
+            ></Flex>
           </Flex>
         </Flex>
       </Flex>
-      <ModalMedicines opened={openMedicines} setOpen={setOpenMedicines}/>
-      <ModalAllergy opened={openAllergy} setOpen={setOpenAllergy}/>
-      <ModalSendForm opened={save} setOpen={setSave}/>
+      <ModalMedicines opened={openMedicines} setOpen={setOpenMedicines} />
+      <ModalAllergy opened={openAllergy} setOpen={setOpenAllergy} />
+      <ConfirmModal
+        title="Czy na pewno chcesz zmienić dane?"
+        opened={save}
+        setOpen={setSave}
+        acceptText="Zapisz"
+      />
     </Container>
-  )
+  );
 };

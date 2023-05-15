@@ -1,15 +1,28 @@
-import { Button, Container, Flex, Text, TextInput, Title } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Container,
+  Flex,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
 import { DateInput } from '@mantine/dates';
 import { useForm, zodResolver } from '@mantine/form';
 import { signUpSchema as schema } from '../../../helpers/schemas';
-
+import {IconPlus} from '@tabler/icons-react'
+import { useState } from 'react';
+import ModalMedicines from './ModalMedicines';
+import ModalAllergy from './ModalAllergy';
 // type DoctorListProps = {
 
 // };
 
 export const ProfileInfo = () => {
   const { width } = useViewportSize();
+  const [openMedicines, setOpenMedicines] = useState(false);
+  const [openAllergy, setOpenAllergy] = useState(false);
   const form = useForm({
     initialValues: {
       email: '',
@@ -122,10 +135,22 @@ export const ProfileInfo = () => {
             w={width < 1080 ? '100%' : '50%'}
             p='md'
           >
-            <Text>
-              Stosowane leki
-            </Text>
             <Flex
+              justify='space-between'
+            >
+              <Text>
+                Stosowane leki
+              </Text>
+              <ActionIcon
+                color='#fd7e14'
+                variant='light'
+                onClick={() => setOpenMedicines(true)}
+              >
+                <IconPlus size='1rem'/>
+              </ActionIcon>
+            </Flex>
+            <Flex
+              mt='xs'
               sx={(theme) => {return {
                 borderRadius:theme.radius.md,
                 border:'2px #fd7e14 solid'
@@ -141,8 +166,22 @@ export const ProfileInfo = () => {
             w={width < 1080 ? '100%' : '50%'}
             p='md'
           >
-            <Text>Alergie</Text>
             <Flex
+              justify='space-between'
+            >
+              <Text>
+                Alergie
+              </Text>
+              <ActionIcon
+                color='#fd7e14'
+                variant='light'
+                onClick={() => setOpenAllergy(true)}
+              >
+                <IconPlus size='1rem'/>
+              </ActionIcon>
+            </Flex>
+            <Flex
+              mt='xs'
               sx={(theme) => {return {
                 borderRadius:theme.radius.md,
                 border:'2px #fd7e14 solid'
@@ -155,6 +194,8 @@ export const ProfileInfo = () => {
           </Flex>
         </Flex>
       </Flex>
+      <ModalMedicines opened={openMedicines} setOpen={setOpenMedicines}/>
+      <ModalAllergy opened={openAllergy} setOpen={setOpenAllergy}/>
     </Container>
   )
 };

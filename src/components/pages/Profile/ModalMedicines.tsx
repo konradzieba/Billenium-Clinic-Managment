@@ -1,6 +1,5 @@
-import { Dispatch } from 'react';
-import { useState } from 'react';
-import { Button, Flex, Modal, Select, Autocomplete } from '@mantine/core';
+import { Autocomplete, Button, Flex, Modal, Select } from '@mantine/core';
+import { Dispatch, useState } from 'react';
 
 type ModalMedicinesProps = {
   opened: boolean;

@@ -10,8 +10,9 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 import { useForm, zodResolver } from '@mantine/form';
+import { useNavigate } from 'react-router-dom';
+
 import { signInSchema as schema } from '../../../helpers/schemas';
 
 const SignIn = () => {

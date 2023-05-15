@@ -83,9 +83,11 @@ const ModalMedicines = (props: ModalMedicinesProps) => {
           />
         </Flex>
       </Flex>
-      <Button mt="md" variant="outline">
-        Dodaj lekarstwo
-      </Button>
+      <Flex justify={'center'}>
+        <Button mt="md" variant="outline">
+          Dodaj lekarstwo
+        </Button>
+      </Flex>
     </Modal>
   );
 };

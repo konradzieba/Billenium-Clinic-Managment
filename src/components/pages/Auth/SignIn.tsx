@@ -28,7 +28,7 @@ const SignIn = () => {
 
   return (
     <Container w={420} my={40}>
-      <Title align="center" fw={700}>
+      <Title align="center" fw={700} lts={1}>
         Logowanie
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>

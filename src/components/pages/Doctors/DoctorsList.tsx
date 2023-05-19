@@ -1,44 +1,46 @@
+import { Flex, Loader, Title } from '@mantine/core';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
+import { DoctorListType } from '../../../helpers/types';
 import Doctor from './Doctor';
-import PiotrImg from './img/piotrek.jpg'
-import { Flex, Title } from '@mantine/core';
 
-// type DoctorListProps = {
+type DoctorListProps = {
+  specialization: string;
+};
+const URL =
+  'http://localhost:8080/api/doctors/by-specialization?specialization=';
 
-// };
-
-const Doctors = [
-  {
-    avatar:PiotrImg,
-    name:'Piotr',
-    lastName:'Śpiewak',
-    description:'Piotr Śpiewak to doświadczony lekarz internista, który specjalizuje się w leczeniu chorób układu krążenia. Jego pacjenci chwalą go za empatyczne podejście oraz skuteczne leczenie. W wolnych chwilach uwielbia grać na gitarze i uprawiać turystykę górską.',
-
-  },
-  {
-    avatar:PiotrImg,
-    name:'Piotr',
-    lastName:'Śpiewak',
-    description:'Piotr Śpiewak to doświadczony lekarz internista, który specjalizuje się w leczeniu chorób układu krążenia. Jego pacjenci chwalą go za empatyczne podejście oraz skuteczne leczenie. W wolnych chwilach uwielbia grać na gitarze i uprawiać turystykę górską.',
-
-  }
-]
-
-export const DoctorList = () => {
+export const DoctorList = ({ specialization }: DoctorListProps) => {
+  const fetchDoctors = async (specialization: string) => {
+    const response = await axios.get(`${URL}${specialization}`);
+    return response.data as DoctorListType[];
+  };
+  const { data, isLoading } = useQuery([`${specialization}`], () =>
+    fetchDoctors(specialization)
+  );
+  console.log(data);
   return (
     <Flex
-      maw='100%'
+      maw="100%"
       direction={'column'}
       align={'center'}
       my={'80px'}
       mx={'auto'}
     >
       <Title align={'center'}> Wybierz interesującego Cię lekarza</Title>
-        {Doctors.map((doc,index) => {
-          return(
-            <Doctor avatar={doc.avatar} name={doc.name} lastname={doc.lastName} description={doc.description} index={index}/>
-          )
-        })}
+      {isLoading && <Loader mt="xl" />}
+      {data?.map((doc, index) => {
+        return (
+          <Doctor
+            avatar={doc.photo}
+            name={doc.firstName}
+            lastname={doc.lastName}
+            description={doc.description}
+            index={index}
+          />
+        );
+      })}
     </Flex>
   );
 };

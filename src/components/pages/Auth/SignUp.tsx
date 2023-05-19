@@ -36,11 +36,7 @@ const SignUp = () => {
       <Title
         align="center"
         fw={700}
-        sx={() => {
-          return {
-            fontSize: '2rem',
-          };
-        }}
+        lts={1}
       >
         Rejestracja
       </Title>

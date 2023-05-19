@@ -2,7 +2,8 @@ import 'dayjs/locale/pl';
 
 import { Container, MantineProvider } from '@mantine/core';
 import { DatesProvider } from '@mantine/dates';
-import { Navigate,Route, Routes } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import ForgotPassword from './components/pages/Auth/ForgotPassword';
 import SignIn from './components/pages/Auth/SignIn';
@@ -14,6 +15,9 @@ import { ProfileInfo } from './components/pages/Profile/ProfileInfo';
 import { SpecializationList } from './components/pages/Specializations/SpecializationList';
 import { VisitsList } from './components/pages/Visits/VisitsList';
 import { SideMenu } from './components/UI/SideMenu';
+import { DoctorsSpeciality } from './helpers/enums';
+
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
@@ -27,31 +31,45 @@ const App = () => {
       withNormalizeCSS
     >
       <DatesProvider settings={{ locale: 'pl' }}>
-        <Container
-          px={0}
-          mx={0}
-          display="flex"
-          maw="100%"
-          style={{ position: 'relative' }}
-        >
-          <SideMenu />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/specializations" element={<SpecializationList />} />
-            <Route
-              path="/specializations/internists"
-              element={<DoctorList />}
-            />
-            <Route path="/visits" element={<VisitsList />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/profile" element={<ProfileInfo />} />
+        <QueryClientProvider client={queryClient}>
+          <Container
+            px={0}
+            mx={0}
+            display="flex"
+            maw="100%"
+            style={{ position: 'relative' }}
+          >
+            <SideMenu />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/sign-up" element={<SignUp />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/specializations" element={<SpecializationList />} />
+              <Route
+                path={`/specializations/${DoctorsSpeciality.INTERNIST}`}
+                element={<DoctorList specialization={DoctorsSpeciality.INTERNIST}/>}
+              />
+              <Route
+                path={`/specializations/${DoctorsSpeciality.GASTROENTEROLOGIST}`}
+                element={<DoctorList specialization={DoctorsSpeciality.GASTROENTEROLOGIST}/>}
+              />
+              <Route
+                path={`/specializations/${DoctorsSpeciality.OPHTHALMOLOGIST}`}
+                element={<DoctorList specialization={DoctorsSpeciality.OPHTHALMOLOGIST}/>}
+              />
+              <Route
+                path={`/specializations/${DoctorsSpeciality.PULMONOLOGIST}`}
+                element={<DoctorList specialization={DoctorsSpeciality.PULMONOLOGIST}/>}
+              />
+              <Route path="/visits" element={<VisitsList />} />
+              <Route path="/history" element={<History />} />
+              <Route path="/profile" element={<ProfileInfo />} />
 
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </Container>
+              {/* <Route path="*" element={<Navigate to="/" />} /> */}
+            </Routes>
+          </Container>
+        </QueryClientProvider>
       </DatesProvider>
     </MantineProvider>
   );

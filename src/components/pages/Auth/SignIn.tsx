@@ -12,8 +12,27 @@ import {
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
-
 import { signInSchema as schema } from '../../../helpers/schemas';
+import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import { FormEvent } from 'react';
+
+const URL = 'http://localhost:8080/api/users/login'
+
+type loginValues = {
+  email:string,
+  password:string
+}
+
+type responseValues = {
+  userInfoId:number,
+  sessionId:string,
+  email:string,
+  firstName:string,
+  lastName:string,
+  pesel:string,
+  role:string
+}
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -25,6 +44,24 @@ const SignIn = () => {
     },
     validate: zodResolver(schema),
   });
+
+  const login = async (value:loginValues) => {
+    const response  = await axios.post(URL, value)
+    return response.data as responseValues
+  }
+  const mutation = useMutation(login, {
+    onSuccess: () => {
+      form.reset()
+      navigate('/')
+      // sessionStorage.setItem('sessionId', mutation)
+      // sessionStorage.getItem('sessionId')
+    }
+  })
+
+  const handleSubmit = (values:loginValues,e:FormEvent<HTMLFormElement> ) =>{
+    e.preventDefault()
+    mutation.mutate(values)
+  }
 
   return (
     <Container w={420} my={40}>
@@ -43,7 +80,7 @@ const SignIn = () => {
       </Text>
       <Box
         component="form"
-        onSubmit={form.onSubmit((values) => console.log(values))}
+        onSubmit={form.onSubmit((values,e) => handleSubmit(values,e))}
       >
         <Paper
           withBorder

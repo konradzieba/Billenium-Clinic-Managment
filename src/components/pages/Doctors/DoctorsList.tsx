@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { DoctorListType } from '../../../helpers/types';
-import Doctor from './Doctor';
 
 type DoctorListProps = {
   specialization: string;
@@ -30,17 +29,17 @@ export const DoctorList = ({ specialization }: DoctorListProps) => {
     >
       <Title align={'center'}> Wybierz interesującego Cię lekarza</Title>
       {isLoading && <Loader mt="xl" />}
-      {data?.map((doc, index) => {
-        return (
-          <Doctor
-            avatar={doc.photo}
-            name={doc.firstName}
-            lastname={doc.lastName}
-            description={doc.description}
-            index={index}
-          />
-        );
-      })}
+      {/*{data?.map((doc, index) => {*/}
+      {/*  return (*/}
+      {/*    <Doctor*/}
+      {/*      avatar={doc.photo}*/}
+      {/*      name={doc.firstName}*/}
+      {/*      lastname={doc.lastName}*/}
+      {/*      // description={doc.description}*/}
+      {/*      index={index}*/}
+      {/*    />*/}
+      {/*  );*/}
+      {/*})}*/}
     </Flex>
   );
 };

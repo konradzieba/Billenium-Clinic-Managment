@@ -35,7 +35,7 @@ export const signUpSchema = z
     pesel: z.string().refine((value) => validatePolish.pesel(value), {
       message: 'Niepoprawny numer PESEL',
     }),
-    birthDate: z.date().refine((value) => dayjs(value).isValid(), {
+    birthdate: z.date().refine((value) => dayjs(value).isValid(), {
       message: 'Niepoprawna data urodzenia',
     }),
     password: z

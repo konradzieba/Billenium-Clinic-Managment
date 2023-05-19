@@ -15,6 +15,29 @@ import { useForm, zodResolver } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { signUpSchema as schema } from '../../../helpers/schemas';
+import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import { FormEvent } from 'react';
+
+const URL = 'http://localhost:8080/api/users'
+
+type registerValues ={
+  firstName:string,
+  lastName:string,
+  email:string,
+  phoneNumber:string,
+  birthdate:string,
+  pesel:string,
+  password?:string,
+  role:string,
+  confirmPassword?:string
+}
+type responseType = registerValues & {
+  userInfoId:number,
+  createdAt:string,
+  modifiedAt:string,
+
+}
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -24,13 +47,33 @@ const SignUp = () => {
       lastName: '',
       email: '',
       phoneNumber: '',
+      birthdate: '',
       pesel: '',
-      birthDate: '',
       password: '',
+      role:'patient',
       confirmPassword: '',
     },
     validate: zodResolver(schema),
   });
+
+  const createUser = async (value:registerValues) => {
+    const response = await axios.post(URL, value);
+    return response.data as responseType;
+  };
+
+  const mutation = useMutation(createUser, {
+    onSuccess: () => {
+      form.reset()
+      navigate('/sign-in')
+  }
+  })
+
+  const handleSubmit = (values:registerValues,e:FormEvent<HTMLFormElement> ) =>{
+        e.preventDefault()
+        const {confirmPassword, ...rest} = values;
+        const date = dayjs(values.birthdate).format(`YYYY-MM-DD`)
+        mutation.mutate({...rest, birthdate:date})
+  }
   return (
     <Container w={640} my={40}>
       <Title
@@ -53,7 +96,7 @@ const SignUp = () => {
 
       <Box
         component="form"
-        onSubmit={form.onSubmit((values) => console.log(values))}
+        onSubmit={form.onSubmit((values,e) => handleSubmit(values,e))}
       >
         <Paper
           withBorder
@@ -120,14 +163,14 @@ const SignUp = () => {
               mt={3}
               w="30%"
               withAsterisk
-              valueFormat="DD.MM.YYYY"
+              valueFormat="YYYY-MM-DD"
               label="Data urodzenia"
               defaultLevel="decade"
-              placeholder="DD.MM.YYYY"
+              placeholder="YYYY-MM-DD"
               maxDate={new Date()}
               minDate={dayjs(new Date()).subtract(100, 'year').toDate()}
               required
-              {...form.getInputProps('birthDate')}
+              {...form.getInputProps('birthdate')}
             />
           </Flex>
           <Flex gap="lg">

@@ -3,7 +3,7 @@ import 'dayjs/locale/pl';
 import { Container, MantineProvider } from '@mantine/core';
 import { DatesProvider } from '@mantine/dates';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import ForgotPassword from './components/pages/Auth/ForgotPassword';
 import SignIn from './components/pages/Auth/SignIn';

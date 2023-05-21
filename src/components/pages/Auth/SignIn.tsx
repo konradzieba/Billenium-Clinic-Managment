@@ -64,12 +64,10 @@ const SignIn = () => {
       if(data.doctorId){
         sessionStorage.setItem('doctorId', data.doctorId.toString())
       }
-      // console.log(data);
       navigate('/');
     },
     onError: () => {
       form.setFieldError('email', 'Email bądź hasło nie są poprawne. Spróbuj ponownie.');
-      // console.log(error);
     },
   });
 

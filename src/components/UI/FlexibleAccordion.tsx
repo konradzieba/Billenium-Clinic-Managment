@@ -1,27 +1,34 @@
-import { Text, Box, Flex, List, Accordion } from '@mantine/core';
+import { Accordion, Box, Button, Flex, List, Text } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
 import { IconPointFilled } from '@tabler/icons-react';
 
-
-
-type AppointmentsData = {
-  id: string;
-  doctorName: string;
-  appointmentDate: string;
-  patientSymptoms: string;
-  medicinesTaken: string[];
-  doctorRecommendations: string[];
-};
+import { AppointmentResponseType } from '../../helpers/types';
 
 type FlexibleAccordionProps = {
-  dataList: AppointmentsData[];
+  dataList: AppointmentResponseType[];
   firstTableTitle: 'Leki:' | 'Stosowane leki:';
   secoundTableTitle: 'Zalecenia:' | 'Objawy:';
+  isWithStatus: boolean;
+  descriptionTitle?: string;
+  descriptionBody?: string;
+  withButtons?: boolean;
+  onAccept?: () => void;
+  onDecline?: () => void;
 };
 
 const BREAKPOINT = 700;
 
-export const FlexibleAccordion = ({dataList, firstTableTitle, secoundTableTitle}: FlexibleAccordionProps) => {
+export const FlexibleAccordion = ({
+  dataList,
+  firstTableTitle,
+  secoundTableTitle,
+  withButtons,
+  onAccept,
+  onDecline,
+  descriptionTitle,
+  descriptionBody,
+  isWithStatus,
+}: FlexibleAccordionProps) => {
   const { width } = useViewportSize();
   return (
     <Accordion
@@ -38,31 +45,61 @@ export const FlexibleAccordion = ({dataList, firstTableTitle, secoundTableTitle}
       }}
     >
       {dataList.map((data) => (
-        <Accordion.Item value={data.id}>
-          <Accordion.Control>
-            <Flex direction="column">
-              <Text color="orange" fw="bold">
-                {data.appointmentDate}
-              </Text>
-              <Text fw="bold">{`lek. ${data.doctorName}`}</Text>
-              <Text>
-                <Text span fw="bold" mr={3}>
-                  Rozpoznanie:
-                </Text>
-                {data.patientSymptoms}
-              </Text>
-            </Flex>
-          </Accordion.Control>
+        <Accordion.Item
+          value={data.appointmentId.toString()}
+          key={data.appointmentId}
+        >
+          <Flex>
+            <Accordion.Control>
+              <Flex justify="space-between" align="center">
+                <Flex direction="column">
+                  <Text color="orange" fw="bold">
+                    {data.appointmentDate.split(' ')[0]}
+                  </Text>
+                  <Text color="orange" fw="bold">
+                    {data.appointmentDate.split(' ')[1]}
+                  </Text>
+                  <Text fw="bold">{`lek. ${data.doctorName}`}</Text>
+                  {isWithStatus ? (
+                    <Text>
+                      <Text span fw="bold" mr={3}>
+                        Status:
+                      </Text>
+                      {data.appointmentStatus === 'NEW' && 'Oczekująca'}
+                      {data.appointmentStatus === 'APPROVED' && 'Zatwierdzona'}
+                      {data.appointmentDate === 'CANCELED' && 'Odrzucona'}
+                      {data.appointmentDate === 'RESCHEDULED' && 'Przeniesiona'}
+                    </Text>
+                  ) : (
+                    <Text>
+                      <Text span fw="bold" mr={3}>
+                        {descriptionTitle || 'Tytuł:'}
+                      </Text>
+                      {descriptionBody || 'Opis'}
+                    </Text>
+                  )}
+                </Flex>
+              </Flex>
+            </Accordion.Control>
+            {withButtons && (
+              <Flex justify="center" align="center" gap="xs" px="md">
+                <Button size="xs" onClick={onAccept}>
+                  Zakcpetuj
+                </Button>
+                <Button onClick={onDecline} variant="outline" size="xs">
+                  Odrzuć
+                </Button>
+              </Flex>
+            )}
+          </Flex>
           <Accordion.Panel>
             <Flex
-              px='xl'
-              justify="space-between"
+              px="xl"
+              justify="space-around"
               direction={width < BREAKPOINT ? 'column' : 'row'}
             >
               <Box>
-                <Text fw="bold">
-                  {firstTableTitle}
-                </Text>
+                <Text fw="bold">{firstTableTitle}</Text>
                 <List
                   icon={
                     <IconPointFilled
@@ -75,15 +112,13 @@ export const FlexibleAccordion = ({dataList, firstTableTitle, secoundTableTitle}
                     />
                   }
                 >
-                  {data.medicinesTaken.map((medicine) => (
-                    <List.Item>{medicine}</List.Item>
+                  {data.medicinesTaken.split(', ').map((medicine, index) => (
+                    <List.Item key={index}>{medicine}</List.Item>
                   ))}
                 </List>
               </Box>
-              <Box >
-                <Text fw="bold">
-                  {secoundTableTitle}
-                </Text>
+              <Box>
+                <Text fw="bold">{secoundTableTitle}</Text>
                 <List
                   icon={
                     <IconPointFilled
@@ -96,9 +131,11 @@ export const FlexibleAccordion = ({dataList, firstTableTitle, secoundTableTitle}
                     />
                   }
                 >
-                  {data.doctorRecommendations.map((recommendation) => (
-                    <List.Item>{recommendation}</List.Item>
-                  ))}
+                  {data.patientSymptoms
+                    .split(', ')
+                    .map((recommendation, index) => (
+                      <List.Item key={index}>{recommendation}</List.Item>
+                    ))}
                 </List>
               </Box>
             </Flex>

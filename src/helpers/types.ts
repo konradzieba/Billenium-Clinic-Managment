@@ -56,3 +56,16 @@ export type PatchUserInfoType = {
   medicines: string;
   addressUpdateDTO: AddressResponseType;
 };
+
+export type AppointmentResponseType = {
+  appointmentId: number;
+  patientName: string;
+  doctorName: string;
+  appointmentDate: string;
+  patientSymptoms: string;
+  medicinesTaken: string;
+  appointmentStatus: string;
+  doctorRecommendations: string;
+  createdAt: string;
+  modifiedAt: string;
+};

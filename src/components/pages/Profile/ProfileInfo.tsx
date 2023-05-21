@@ -4,13 +4,11 @@ import {
   Container,
   Flex,
   Input,
-  // NumberInput,
   Skeleton,
   Text,
   TextInput,
   Title,
 } from '@mantine/core';
-// import { isEmail } from '@mantine/form';
 import { useViewportSize } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -28,7 +26,6 @@ import { UserProfileInfoType } from '../../../helpers/types';
 import ModalAllergy from './ModalAllergy';
 import ModalMedicines from './ModalMedicines';
 
-// import ReactInputMask from 'react-input-mask';
 // type DoctorListProps = {
 
 // };
@@ -66,9 +63,9 @@ export const ProfileInfo = () => {
       },
     }
   );
-  
-  const patchUserInfo = async () => {
-    const response = await axios.patch(URL, {
+
+  const patchUserInfo = async (url: string) => {
+    const response = await axios.patch(url, {
       patientId: data!.patientId,
       userInfoUpdateDTO: {
         userInfoId: data!.patientUserInfo.userInfoId,
@@ -86,16 +83,16 @@ export const ProfileInfo = () => {
     });
     return response.data as UserProfileInfoType;
   };
+
   const mutation = useMutation(patchUserInfo, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       refetch();
-      console.log(data);
       dispatch({ type: 'reset' });
     },
   });
 
   const handleSave = () => {
-    mutation.mutate();
+    mutation.mutate(URL);
     setSave(false);
     setIsBlocked(true);
   };

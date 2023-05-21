@@ -41,8 +41,18 @@ export type UserProfileInfoType = {
 
 export type PatchUserInfoType = {
   patientId: number;
-  userInfoUpdateDTO: Omit<PatientUserInfoType, 'userRole' |'createdAt' | 'modifiedAt' | 'pesel' | 'email'>;
+  userInfoUpdateDTO: Omit<
+    PatientUserInfoType,
+    | 'userRole'
+    | 'createdAt'
+    | 'modifiedAt'
+    | 'pesel'
+    | 'email'
+    | 'firstName'
+    | 'lastName'
+    | 'birthdate'
+  >;
   allergies: string;
   medicines: string;
   addressUpdateDTO: AddressResponseType;
-}
+};

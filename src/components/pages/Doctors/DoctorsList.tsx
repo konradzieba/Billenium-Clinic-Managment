@@ -1,8 +1,10 @@
-import { Flex, Loader, Title } from '@mantine/core';
+import { Box, Flex, Loader, Title } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { DoctorListType } from '../../../helpers/types';
+import AppointmentStepper from '../../UI/AppointmentStepper';
+import Doctor from './Doctor';
 
 type DoctorListProps = {
   specialization: string;
@@ -18,28 +20,33 @@ export const DoctorList = ({ specialization }: DoctorListProps) => {
   const { data, isLoading } = useQuery([`${specialization}`], () =>
     fetchDoctors(specialization)
   );
-  console.log(data);
+  // console.log(data);
   return (
     <Flex
       maw="100%"
       direction={'column'}
       align={'center'}
-      my={'80px'}
+      justify={'space-between'}
+      mt={40}
       mx={'auto'}
     >
-      <Title align={'center'}> Wybierz interesującego Cię lekarza</Title>
-      {isLoading && <Loader mt="xl" />}
-      {/*{data?.map((doc, index) => {*/}
-      {/*  return (*/}
-      {/*    <Doctor*/}
-      {/*      avatar={doc.photo}*/}
-      {/*      name={doc.firstName}*/}
-      {/*      lastname={doc.lastName}*/}
-      {/*      // description={doc.description}*/}
-      {/*      index={index}*/}
-      {/*    />*/}
-      {/*  );*/}
-      {/*})}*/}
+      <Box>
+        <Title align={'center'}> Wybierz interesującego Cię lekarza</Title>
+        {isLoading && <Loader mt="xl" />}
+        {data?.map((doc, index) => {
+          return (
+            <Doctor
+              key={index}
+              avatar={doc.photo}
+              name={doc.firstName}
+              lastname={doc.lastName}
+              description={doc.description}
+              doctorId={doc.doctorId}
+            />
+          );
+        })}
+      </Box>
+      <AppointmentStepper activeStep={0} />
     </Flex>
   );
 };

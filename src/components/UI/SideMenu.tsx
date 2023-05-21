@@ -9,11 +9,8 @@ import {
   UnstyledButton,
 } from '@mantine/core';
 import {
-  IconBook,
-  IconHome2,
+  IconLogin,
   IconLogout,
-  IconNotes,
-  IconNurse,
   IconUser,
   TablerIconsProps,
 } from '@tabler/icons-react';
@@ -21,6 +18,12 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import StudentMed from '../../assets/StudentMed.svg';
+import {
+  DoctorMenuLinks,
+  NoLoginMenuLinks,
+  PatientMenuLinks,
+  ReceptionistMenuLinks,
+} from '../../helpers/sideMenuLinks';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -76,19 +79,24 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
   );
 }
 
-const mockdata = [
-  { icon: IconHome2, label: 'Strona główna', link: '/' },
-  { icon: IconNurse, label: 'Specjaliści', link: '/specializations' },
-  { icon: IconBook, label: 'Wizyty', link: '/visits' },
-  { icon: IconNotes, label: 'Historia wizyt', link: '/history' },
-];
-
 export function SideMenu() {
   const { pathname } = useLocation();
-  console.log(pathname);
+  // console.log(pathname);
   const [active, setActive] = useState(pathname);
+  const session = {
+    sessionId: sessionStorage.getItem('sessionId') || null,
+    userId: sessionStorage.getItem('userId') || null,
+    role: sessionStorage.getItem('role') || null,
+  }
   const navigate = useNavigate();
-
+  const mockdata =
+    session.role === 'doctor'
+      ? DoctorMenuLinks
+      : session.role === 'receptionist'
+      ? ReceptionistMenuLinks
+      : session.role === 'patient'
+      ? PatientMenuLinks
+      : NoLoginMenuLinks;
   const links = mockdata.map((link) => (
     <NavbarLink
       {...link}
@@ -130,16 +138,36 @@ export function SideMenu() {
       </Navbar.Section>
       <Navbar.Section>
         <Stack justify="center" spacing={0}>
-          <NavbarLink
-            icon={IconUser}
-            label="Profil pacjenta"
-            onClick={() => {
-              navigate('/profile');
-              setActive('/profile');
-            }}
-            active={active === '/profile'}
-          />
-          <NavbarLink icon={IconLogout} label="Wyloguj się" />
+          {session.role === 'patient' && (
+            <NavbarLink
+              icon={IconUser}
+              label="Profil pacjenta"
+              onClick={() => {
+                navigate('/profile');
+                setActive('/profile');
+              }}
+              active={active === '/profile'}
+            />
+          )}
+          {session.sessionId &&
+          session.userId ? (
+            <NavbarLink
+              icon={IconLogout}
+              onClick={() => {
+                sessionStorage.clear();
+                navigate('/');
+              }}
+              label="Wyloguj się"
+            />
+          ) : (
+            <NavbarLink
+              icon={IconLogin}
+              onClick={() => {
+                navigate('/sign-in');
+              }}
+              label="Zaloguj się"
+            />
+          )}
         </Stack>
       </Navbar.Section>
     </Navbar>

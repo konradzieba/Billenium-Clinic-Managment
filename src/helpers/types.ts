@@ -3,6 +3,37 @@
 
 export type DoctorListType = {
   doctorId: number;
-  doctorName: string;
+  description: string;
   specialization: string;
-}
+  photo: string;
+  firstName: string;
+  lastName: string;
+};
+
+type PatientUserInfoType = {
+  userInfoId: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  birthdate: string;
+  pesel: string;
+  phoneNumber: string;
+  userRole: string;
+  createdAt: string;
+  modifiedAt: string;
+};
+
+type AddressResponseType = {
+  addressId: number;
+  city: string;
+  street: string;
+  zipCode: string;
+};
+
+export type UserProfileInfoType = {
+  patientId: number;
+  allergies: string;
+  medicines: string;
+  patientUserInfo: PatientUserInfoType;
+  addressResponseDTO: AddressResponseType;
+};

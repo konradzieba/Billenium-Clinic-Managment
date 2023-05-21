@@ -9,6 +9,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
+import { useNavigate } from 'react-router-dom';
 
 import StudentMed from '../../../assets/StudentMed.svg';
 import DoctorLImg from './img/doctor_l.png';
@@ -29,6 +30,9 @@ const BREAKPOINT = 1470;
 
 export const Home = () => {
   const { width } = useViewportSize();
+  const navigate = useNavigate();
+  const isDoctor = sessionStorage.getItem('role') === 'doctor';
+  // console.log(isDoctor);
   return (
     <Center>
       <Flex w="80%" direction="column">
@@ -76,9 +80,26 @@ export const Home = () => {
           mb={60}
           mt={width > BREAKPOINT ? 'xl' : 0}
         >
-          <Button size="md" radius="md">
-            Umów się na wizytę
-          </Button>
+          {sessionStorage.getItem('sessionId') &&
+          sessionStorage.getItem('userId') && !isDoctor ? (
+            <Button
+              size="md"
+              radius="md"
+              onClick={() => navigate('/specializations')}
+            >
+              Umów się na wizytę
+            </Button>
+          ) : isDoctor ? (
+            <Button size="md" radius="md" onClick={() => navigate('/')}>
+              Przeglądaj wizyty
+            </Button>
+          ) : (
+            <Button size="md" radius="md" onClick={() => navigate('/sign-in')}>
+              Zaloguj się
+            </Button>
+          )}
+
+          {/* Jeśli użytkownik nie będzie zalogowany tutaj trzeba podmienić przycisk na zaloguj się */}
         </Flex>
       </Flex>
     </Center>

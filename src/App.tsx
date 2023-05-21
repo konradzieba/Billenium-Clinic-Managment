@@ -3,8 +3,11 @@ import 'dayjs/locale/pl';
 import { Container, MantineProvider } from '@mantine/core';
 import { DatesProvider } from '@mantine/dates';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
+import Calendar from './components/pages/Appointment/Calendar';
+import Layout from './components/pages/Appointment/Layout';
+import SymptomsMeds from './components/pages/Appointment/SymptomsMeds';
 import ForgotPassword from './components/pages/Auth/ForgotPassword';
 import SignIn from './components/pages/Auth/SignIn';
 import SignUp from './components/pages/Auth/SignUp';
@@ -48,25 +51,67 @@ const App = () => {
               <Route path="/specializations" element={<SpecializationList />} />
               <Route
                 path={`/specializations/${DoctorsSpeciality.INTERNIST}`}
-                element={<DoctorList specialization={DoctorsSpeciality.INTERNIST}/>}
+                element={
+                  <DoctorList specialization={DoctorsSpeciality.INTERNIST} />
+                }
               />
               <Route
                 path={`/specializations/${DoctorsSpeciality.GASTROENTEROLOGIST}`}
-                element={<DoctorList specialization={DoctorsSpeciality.GASTROENTEROLOGIST}/>}
+                element={
+                  <DoctorList
+                    specialization={DoctorsSpeciality.GASTROENTEROLOGIST}
+                  />
+                }
               />
               <Route
                 path={`/specializations/${DoctorsSpeciality.OPHTHALMOLOGIST}`}
-                element={<DoctorList specialization={DoctorsSpeciality.OPHTHALMOLOGIST}/>}
+                element={
+                  <DoctorList
+                    specialization={DoctorsSpeciality.OPHTHALMOLOGIST}
+                  />
+                }
               />
               <Route
-                path={`/specializations/${DoctorsSpeciality.PULMONOLOGIST}`}
-                element={<DoctorList specialization={DoctorsSpeciality.PULMONOLOGIST}/>}
+                path={`specializations/${DoctorsSpeciality.PULMONOLOGIST}`}
+                element={
+                  <DoctorList
+                    specialization={DoctorsSpeciality.PULMONOLOGIST}
+                  />
+                }
               />
+              <Route
+                path={`/specializations/${DoctorsSpeciality.INTERNIST}/appointment`}
+                element={<Layout />}
+              >
+                <Route path="calendar/:id" element={<Calendar />} />
+                <Route path="symptoms-meds/:id" element={<SymptomsMeds />} />
+              </Route>
+              <Route
+                path={`/specializations/${DoctorsSpeciality.GASTROENTEROLOGIST}/appointment`}
+                element={<Layout />}
+              >
+                <Route path="calendar/:id" element={<Calendar />} />
+                <Route path="symptoms-meds/:id" element={<SymptomsMeds />} />
+              </Route>
+              <Route
+                path={`/specializations/${DoctorsSpeciality.OPHTHALMOLOGIST}/appointment`}
+                element={<Layout />}
+              >
+                <Route path="calendar/:id" element={<Calendar />} />
+                <Route path="symptoms-meds/:id" element={<SymptomsMeds />} />
+              </Route>
+              <Route
+                path={`/specializations/${DoctorsSpeciality.PULMONOLOGIST}/appointment`}
+                element={<Layout />}
+              >
+                <Route path="calendar/:id" element={<Calendar />} />
+                <Route path="symptoms-meds/:id" element={<SymptomsMeds />} />
+              </Route>
               <Route path="/visits" element={<VisitsList />} />
               <Route path="/history" element={<History />} />
               <Route path="/profile" element={<ProfileInfo />} />
 
-              {/* <Route path="*" element={<Navigate to="/" />} /> */}
+              <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </Container>
         </QueryClientProvider>

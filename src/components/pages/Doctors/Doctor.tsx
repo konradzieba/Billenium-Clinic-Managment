@@ -1,78 +1,80 @@
-import { Avatar, Button, Text, Flex } from '@mantine/core';
+import { Avatar, Button, Flex, Text } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
+import { useLocation, useNavigate } from 'react-router-dom';
 type DoctorProps = {
-  avatar:string;
+  avatar: string;
   name: string;
   lastname: string;
   description: string;
-  index:number;
-}
+  doctorId: number;
+};
 
-
-const Doctor = (props:DoctorProps) => {
+const Doctor = (props: DoctorProps) => {
   const { width } = useViewportSize();
-
-  return(
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  return (
     <Flex
-      maw='80rem'
-      justify='center'
-      align='start'
-      mt='4rem'
-      p='md'
-      sx={(theme) => {return {
-        backgroundColor: props.index % 2 == 1 ? theme.colors.gray[1] : 'none',
-        borderRadius:theme.radius.md,
-      }
-    }}
-      direction={width < 1280 ? 'column':'row'}
+      miw="40rem"
+      maw="80rem"
+      justify="center"
+      align="start"
+      mt="4rem"
+      p="md"
+      sx={(theme) => {
+        return {
+          // backgroundColor: props.index % 2 == 1 ? theme.colors.gray[1] : 'none',
+          borderRadius: theme.radius.md,
+        };
+      }}
+      direction={width < 1280 ? 'column' : 'row'}
     >
-      <Flex
-        w='100%'
-        justify='center'
-      >
+      <Flex w="100%" justify="center">
         <Avatar
-          radius='md'
-          size='8rem'
-          miw='8rem'
-          mih='8rem'
+          radius="md"
+          size="8rem"
+          miw="8rem"
+          mih="8rem"
           src={props.avatar}
           ml={'md'}
           mr={'md'}
         />
       </Flex>
-        <Flex
-          miw='70%'
-          direction={'column'}
-          align={'start'}
-        >
-          <Text fw='bold' align='start'>
-            {props.name + " " + props.lastname}
-          </Text>
+      <Flex miw="70%" direction={'column'} align={'start'}>
+        <Text fw="bold" align="start">
+          {props.name + ' ' + props.lastname}
+        </Text>
         <Flex>
-          <Text
-            mt={'xs'}
-            align={width < 1280 ? 'justify' : 'start'}
-          >
+          <Text mt={'xs'} align={width < 1280 ? 'justify' : 'start'}>
             {props.description}
           </Text>
         </Flex>
       </Flex>
-      <Flex
-        h={'100%'}
-        w={'100%'}
-        align={'center'}
-        justify={'center'}
-      >
-        <Button
-          mt= {width < 1280 ? 'md':'none'}
-          variant='outline'
-          ml={'md'}
-          size={'md'}
-        >
-          Sprawdź terminy
-        </Button>
+      <Flex h={'100%'} w={'100%'} align={'center'} justify={'center'}>
+        {sessionStorage.getItem('sessionId') &&
+        sessionStorage.getItem('userId') ? (
+          <Button
+            mt={width < 1280 ? 'md' : 'none'}
+            variant="outline"
+            ml={'md'}
+            size={'md'}
+            onClick={() => navigate(`${pathname}/appointment/calendar/${props.doctorId}`, { state: { doctorId: props.doctorId } })}
+          >
+            Sprawdź terminy
+          </Button>
+        ) : (
+          <Button
+            mt={width < 1280 ? 'md' : 'none'}
+            variant="outline"
+            ml={'md'}
+            size={'md'}
+            onClick={() => navigate('/sign-in')}
+          >
+            Zaloguj się by sprawdzić terminy
+          </Button>
+        )}
+      </Flex>
     </Flex>
-    </Flex>
-  )
-}
-export default Doctor
+  );
+};
+export default Doctor;

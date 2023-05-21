@@ -11,28 +11,31 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { useNavigate } from 'react-router-dom';
-import { signInSchema as schema } from '../../../helpers/schemas';
-import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 import { FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const URL = 'http://localhost:8080/api/users/login'
+import { signInSchema as schema } from '../../../helpers/schemas';
+
+const URL = 'http://localhost:8080/api/users/login';
 
 type loginValues = {
-  email:string,
-  password:string
-}
+  email: string;
+  password: string;
+};
 
 type responseValues = {
-  userInfoId:number,
-  sessionId:string,
-  email:string,
-  firstName:string,
-  lastName:string,
-  pesel:string,
-  role:string
-}
+  userInfoId: number;
+  sessionId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  pesel: string;
+  role: string;
+  patientId: number;
+  doctorId: number;
+};
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -45,23 +48,35 @@ const SignIn = () => {
     validate: zodResolver(schema),
   });
 
-  const login = async (value:loginValues) => {
-    const response  = await axios.post(URL, value)
-    return response.data as responseValues
-  }
+  const login = async (value: loginValues) => {
+    const response = await axios.post(URL, value);
+    return response.data as responseValues;
+  };
   const mutation = useMutation(login, {
-    onSuccess: () => {
-      form.reset()
-      navigate('/')
-      // sessionStorage.setItem('sessionId', mutation)
-      // sessionStorage.getItem('sessionId')
-    }
-  })
+    onSuccess: (data) => {
+      form.reset();
+      sessionStorage.setItem('sessionId', data.sessionId);
+      sessionStorage.setItem('userId', data.userInfoId.toString());
+      sessionStorage.setItem('role', data.role);
+      if(data.patientId){
+        sessionStorage.setItem('patientId', data.patientId.toString())
+      }
+      if(data.doctorId){
+        sessionStorage.setItem('doctorId', data.doctorId.toString())
+      }
+      // console.log(data);
+      navigate('/');
+    },
+    onError: () => {
+      form.setFieldError('email', 'Email bądź hasło nie są poprawne. Spróbuj ponownie.');
+      // console.log(error);
+    },
+  });
 
-  const handleSubmit = (values:loginValues,e:FormEvent<HTMLFormElement> ) =>{
-    e.preventDefault()
-    mutation.mutate(values)
-  }
+  const handleSubmit = (values: loginValues, e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutation.mutate(values);
+  };
 
   return (
     <Container w={420} my={40}>
@@ -80,7 +95,7 @@ const SignIn = () => {
       </Text>
       <Box
         component="form"
-        onSubmit={form.onSubmit((values,e) => handleSubmit(values,e))}
+        onSubmit={form.onSubmit((values, e) => handleSubmit(values, e))}
       >
         <Paper
           withBorder

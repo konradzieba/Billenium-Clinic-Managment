@@ -7,6 +7,7 @@ type ConfirmModal = {
   setOpen: Dispatch<boolean>;
   acceptText?: string;
   cancelText?: string;
+  onAccept?: () => void;
 };
 
 const ConfirmModal = ({
@@ -15,6 +16,7 @@ const ConfirmModal = ({
   setOpen,
   acceptText,
   cancelText,
+  onAccept,
 }: ConfirmModal) => {
   return (
     <Center>
@@ -25,7 +27,7 @@ const ConfirmModal = ({
             <Button variant="outline" onClick={() => setOpen(false)}>
               {cancelText || 'Anuluj'}
             </Button>
-            <Button variant="filled">{acceptText || 'Zatwierdź'}</Button>
+            <Button variant="filled" onClick={onAccept}>{acceptText || 'Zatwierdź'}</Button>
           </Flex>
         </Flex>
       </Modal>

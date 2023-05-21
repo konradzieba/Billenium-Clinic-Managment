@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { validatePolish } from 'validate-polish';
 import { z } from 'zod';
 
-const phoneRegex = new RegExp(/^\d{9}$/);
+export const phoneRegex = new RegExp(/^\d{9}$/);
 
 export const signInSchema = z.object({
   email: z.string().email('Podany adres email jest nieprawidłowy'),

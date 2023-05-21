@@ -7,8 +7,8 @@ export const userProfileInitialValues = {
 };
 
 type UserProfileReducerActionType = {
-  type: 'email' | 'phoneNumber' | 'city' | 'street' | 'zipCode';
-  payload: string;
+  type: 'email' | 'phoneNumber' | 'city' | 'street' | 'zipCode' | 'reset';
+  payload?: string;
 };
 
 export const userProfileReducer = (
@@ -17,15 +17,17 @@ export const userProfileReducer = (
 ) => {
   switch (action.type) {
     case 'email':
-      return { ...state, email: action.payload };
+      return { ...state, email: action.payload || '' };
     case 'phoneNumber':
-      return { ...state, phoneNumber: action.payload };
+      return { ...state, phoneNumber: action.payload || '' };
     case 'city':
-      return { ...state, city: action.payload };
+      return { ...state, city: action.payload || '' };
     case 'street':
-      return { ...state, street: action.payload };
+      return { ...state, street: action.payload || '' };
     case 'zipCode':
-      return { ...state, zipCode: action.payload };
+      return { ...state, zipCode: action.payload || '' };
+    case 'reset':
+      return userProfileInitialValues;
     default:
       return state;
   }

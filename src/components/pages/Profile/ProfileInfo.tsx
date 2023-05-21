@@ -3,17 +3,20 @@ import {
   Button,
   Container,
   Flex,
+  Input,
+  // NumberInput,
   Skeleton,
   Text,
   TextInput,
   Title,
 } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
+// import { isEmail } from '@mantine/form';
 import { useViewportSize } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
-import dayjs from 'dayjs';
-import { useReducer, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { ChangeEvent, useReducer, useState } from 'react';
+import { IMaskInput } from 'react-imask';
 
 import ConfirmModal from '../../../components/UI/ConfirmModal';
 import { fetchUserInfo } from '../../../helpers/queries';
@@ -21,13 +24,20 @@ import {
   userProfileInitialValues,
   userProfileReducer,
 } from '../../../helpers/reducers';
+import { UserProfileInfoType } from '../../../helpers/types';
 import ModalAllergy from './ModalAllergy';
 import ModalMedicines from './ModalMedicines';
+
+// import ReactInputMask from 'react-input-mask';
 // type DoctorListProps = {
 
 // };
 const URL = 'http://localhost:8080/api/patients/';
-const fetchUserData = () => fetchUserInfo(URL, sessionStorage.getItem('patientId'));
+const fetchUserData = () =>
+  fetchUserInfo(URL, sessionStorage.getItem('patientId'));
+const emailRegex = new RegExp(
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+);
 
 export const ProfileInfo = () => {
   const { width } = useViewportSize();
@@ -35,15 +45,19 @@ export const ProfileInfo = () => {
   const [openAllergy, setOpenAllergy] = useState(false);
   const [save, setSave] = useState(false);
   const [isBlocked, setIsBlocked] = useState(true);
+  const [inputError, setInputError] = useState({ email: '', phoneNumber: '' });
   const [state, dispatch] = useReducer(
     userProfileReducer,
     userProfileInitialValues
   );
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     [`patientInfo${sessionStorage.getItem('patientId')}`],
     fetchUserData,
     {
       onSuccess: (data) => {
+        dispatch({ type: 'city', payload: data.addressResponseDTO.city });
+        dispatch({ type: 'zipCode', payload: data.addressResponseDTO.zipCode });
+        dispatch({ type: 'street', payload: data.addressResponseDTO.street });
         dispatch({ type: 'email', payload: data.patientUserInfo.email });
         dispatch({
           type: 'phoneNumber',
@@ -52,25 +66,40 @@ export const ProfileInfo = () => {
       },
     }
   );
+  
+  const patchUserInfo = async () => {
+    const response = await axios.patch(URL, {
+      patientId: data!.patientId,
+      userInfoUpdateDTO: {
+        userInfoId: data!.patientUserInfo.userInfoId,
+        phoneNumber: state.phoneNumber,
+        email: state.email,
+      },
+      allergies: '',
+      medicines: '',
+      addressUpdateDTO: {
+        addressId: data!.addressResponseDTO.addressId,
+        city: state.city,
+        zipCode: state.zipCode,
+        street: state.street,
+      },
+    });
+    return response.data as UserProfileInfoType;
+  };
+  const mutation = useMutation(patchUserInfo, {
+    onSuccess: (data) => {
+      refetch();
+      console.log(data);
+      dispatch({ type: 'reset' });
+    },
+  });
 
   const handleSave = () => {
+    mutation.mutate();
     setSave(false);
     setIsBlocked(true);
-    // console.log('hejka');
   };
 
-  // const form = useForm({
-  //   initialValues: {
-  //     email: '',
-  //     phoneNumber: '',
-  //   },
-  //   validate: zodResolver(schema),
-  // });
-  // console.log(state.zipCode);
-  // console.log(state.city);
-  // console.log(state.street);
-  // console.log(state.phoneNumber);
-  // console.log(state.email);
   return (
     <Container p="md" miw={'22rem'}>
       <Flex
@@ -97,7 +126,15 @@ export const ProfileInfo = () => {
               <Button variant="outline" onClick={() => setIsBlocked(true)}>
                 Anuluj
               </Button>
-              <Button variant="filled" onClick={() => setSave(true)}>
+              <Button
+                variant="filled"
+                disabled={
+                  inputError.email !== '' || inputError.phoneNumber !== ''
+                    ? true
+                    : false
+                }
+                onClick={() => setSave(true)}
+              >
                 Zapisz
               </Button>
             </Flex>
@@ -122,14 +159,13 @@ export const ProfileInfo = () => {
               label="Nazwisko"
               value={data?.patientUserInfo.lastName || ''}
             />
-            <DateInput
+            <TextInput
               miw="12rem"
               disabled
               radius="md"
-              valueFormat="MM.DD.YYYY"
               p="md"
               label="Data urodzenia"
-              value={dayjs(data?.patientUserInfo.birthdate).toDate() || ''}
+              value={data?.patientUserInfo.birthdate || ''}
             />
             <TextInput
               miw="12rem"
@@ -141,17 +177,18 @@ export const ProfileInfo = () => {
             />
           </Flex>
           <Flex direction={width < 1080 ? 'column' : 'row'}>
-            <TextInput
-              miw="12rem"
-              radius="md"
-              p="md"
-              label="Kod pocztowy"
-              value={state.zipCode}
-              onChange={(e) =>
-                dispatch({ type: 'zipCode', payload: e.currentTarget.value })
-              }
-              disabled={isBlocked}
-            />
+            <Input.Wrapper miw="12rem" p="md" label="Kod pocztowy">
+              <Input
+                radius="md"
+                component={IMaskInput}
+                mask="00-000"
+                value={state.zipCode}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  dispatch({ type: 'zipCode', payload: e.currentTarget.value })
+                }
+                disabled={isBlocked}
+              />
+            </Input.Wrapper>
             <TextInput
               miw="12rem"
               radius="md"
@@ -181,29 +218,57 @@ export const ProfileInfo = () => {
               miw="12rem"
               radius="md"
               p="md"
+              onBlur={() => {
+                if (state.email.match(emailRegex) === null) {
+                  setInputError({
+                    ...inputError,
+                    email: 'Niepoprawny adres email',
+                  });
+                }
+              }}
+              error={inputError.email !== '' ? inputError.email : false}
               label="Email"
               value={state.email}
-              onChange={(e) =>
-                dispatch({ type: 'email', payload: e.currentTarget.value })
-              }
+              onChange={(e) => {
+                setInputError({ ...inputError, email: '' });
+                dispatch({ type: 'email', payload: e.currentTarget.value });
+              }}
               disabled={isBlocked}
-              // {...form.getInputProps('email')}
             />
-            <TextInput
+            <Input.Wrapper
               miw="12rem"
-              radius="md"
               p="md"
               label="Numer telefonu"
-              value={state.phoneNumber}
-              onChange={(e) =>
-                dispatch({
-                  type: 'phoneNumber',
-                  payload: e.currentTarget.value,
-                })
+              error={
+                inputError.phoneNumber !== '' ? inputError.phoneNumber : false
               }
-              disabled={isBlocked}
-              // {...form.getInputProps('phoneNumber')}
-            />
+            >
+              <Input
+                radius="md"
+                onBlur={() => {
+                  if (state.phoneNumber.length !== 9) {
+                    setInputError({
+                      ...inputError,
+                      phoneNumber: 'Numer telefonu musi mieć 9 cyfr',
+                    });
+                  }
+                }}
+                error={
+                  inputError.phoneNumber !== '' ? inputError.phoneNumber : false
+                }
+                component={IMaskInput}
+                mask="000000000"
+                value={state.phoneNumber}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setInputError({ ...inputError, phoneNumber: '' });
+                  dispatch({
+                    type: 'phoneNumber',
+                    payload: e.currentTarget.value,
+                  });
+                }}
+                disabled={isBlocked}
+              />
+            </Input.Wrapper>
           </Flex>
           <Flex direction={width < 1080 ? 'column' : 'row'}>
             <Flex direction="column" w={width < 1080 ? '100%' : '50%'} p="md">

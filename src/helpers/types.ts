@@ -17,6 +17,7 @@ type PatientUserInfoType = {
   email: string;
   birthdate: string;
   pesel: string;
+  password: string;
   phoneNumber: string;
   userRole: string;
   createdAt: string;
@@ -34,6 +35,14 @@ export type UserProfileInfoType = {
   patientId: number;
   allergies: string;
   medicines: string;
-  patientUserInfo: PatientUserInfoType;
+  patientUserInfo: Omit<PatientUserInfoType, 'password'>;
   addressResponseDTO: AddressResponseType;
 };
+
+export type PatchUserInfoType = {
+  patientId: number;
+  userInfoUpdateDTO: Omit<PatientUserInfoType, 'userRole' |'createdAt' | 'modifiedAt' | 'pesel' | 'email'>;
+  allergies: string;
+  medicines: string;
+  addressUpdateDTO: AddressResponseType;
+}

@@ -122,14 +122,14 @@ const ReceptionMain = () => {
       justify='space-around'
       w='100%'
       p='md'
-      gap={width < BrakPoint ? 5 : 0 }
+      gap={width < BrakPoint ? 25 : 0 }
       direction={width < BrakPoint ? 'column' : 'row'}
       miw={width < BrakPoint ? '' : '1080px'}
     >
         <Flex
           w={width < BrakPoint ? '100%' : '25rem' }
           direction='column'
-          gap={width < BrakPoint ? 5 : 0 }
+          gap={width < BrakPoint ? 25: 0 }
           justify='space-around'
           mah='95vh'
         >

@@ -32,7 +32,7 @@ const DoctorItem = (
         <Text>Specjalizacja</Text>
       </Flex>
       <Button
-        variant='subtle'
+        variant='outline'
       >
         Przejdź
       </Button>

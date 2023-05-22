@@ -36,8 +36,7 @@ const Doctor = (props: DoctorProps) => {
           miw="8rem"
           mih="8rem"
           src={props.avatar}
-          ml={'md'}
-          mr={'md'}
+          mx={'md'}
         />
       </Flex>
       <Flex miw="70%" direction={'column'} align={'start'}>

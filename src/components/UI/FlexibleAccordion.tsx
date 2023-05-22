@@ -7,7 +7,7 @@ import { AppointmentResponseType } from '../../helpers/types';
 type FlexibleAccordionProps = {
   dataList: AppointmentResponseType[];
   firstTableTitle: 'Leki:' | 'Stosowane leki:';
-  secoundTableTitle: 'Zalecenia:' | 'Objawy:';
+  secondTableTitle: 'Zalecenia:' | 'Objawy:';
   isWithStatus: boolean;
   descriptionTitle?: string;
   descriptionBody?: string;
@@ -18,12 +18,12 @@ type FlexibleAccordionProps = {
   onEdit?: () => void;
 };
 
-const BREAKPOINT = 700;
+const BREAKPOINT = 1080;
 
 export const FlexibleAccordion = ({
   dataList,
   firstTableTitle,
-  secoundTableTitle,
+  secondTableTitle,
   withButtons,
   onAccept,
   onDecline,
@@ -39,7 +39,7 @@ export const FlexibleAccordion = ({
       variant="separated"
       radius="md"
       multiple
-      w={width < BREAKPOINT ? '90%' : '80%'} //tutaj responywność dodać
+      w={width < BREAKPOINT ? '90%' : '80%'}
       styles={{
         item: {
           // styles added to all items
@@ -52,6 +52,7 @@ export const FlexibleAccordion = ({
         <Accordion.Item
           value={data.appointmentId.toString()}
           key={data.appointmentId}
+          miw= {withButtons ? '25rem' : '15rem'}
         >
           <Flex>
             <Accordion.Control>
@@ -105,12 +106,14 @@ export const FlexibleAccordion = ({
           </Flex>
           <Accordion.Panel>
             <Flex
-              px="xl"
-              justify="space-around"
+              px='md'
+              justify="space-between"
               direction={width < BREAKPOINT ? 'column' : 'row'}
             >
-              <Box>
-                <Text fw="bold">{firstTableTitle}</Text>
+              <Box
+                w="50%"
+              >
+                <Text fw="bold" align={width < BREAKPOINT ? 'start' : 'center'}>{firstTableTitle}</Text>
                 <List
                   icon={
                     <IconPointFilled
@@ -128,8 +131,10 @@ export const FlexibleAccordion = ({
                   ))}
                 </List>
               </Box>
-              <Box>
-                <Text fw="bold">{secoundTableTitle}</Text>
+              <Box
+                w="50%"
+              >
+                <Text fw="bold" align={width < BREAKPOINT ? 'start' : 'center'} >{secondTableTitle}</Text>
                 <List
                   icon={
                     <IconPointFilled

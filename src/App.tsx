@@ -19,6 +19,9 @@ import { SpecializationList } from './components/pages/Specializations/Specializ
 import { VisitsList } from './components/pages/Visits/VisitsList';
 import { SideMenu } from './components/UI/SideMenu';
 import { DoctorsSpeciality } from './helpers/enums';
+import ReceptionMain from './components/pages/Reception/ReceptionMain';
+import EditAppointment from './components/pages/Appointment/EditAppointment';
+import DoctorProfile from './components/pages/DoctorProfile/DoctorProfile';
 
 const queryClient = new QueryClient();
 
@@ -110,6 +113,9 @@ const App = () => {
               <Route path="/visits" element={<VisitsList />} />
               <Route path="/history" element={<History />} />
               <Route path="/profile" element={<ProfileInfo />} />
+              <Route path="/reception" element={<ReceptionMain />} />
+              <Route path="/editAppointment" element={<EditAppointment role={'doctor'}/>} />
+              <Route path="/doc" element={<DoctorProfile/>} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

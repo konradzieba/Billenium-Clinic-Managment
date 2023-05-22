@@ -15,7 +15,7 @@ const Doctor = (props: DoctorProps) => {
   const { pathname } = useLocation();
   return (
     <Flex
-      miw="40rem"
+      miw={width < 1080 ? '100%' : '40rem'}
       maw="80rem"
       justify="center"
       align="start"
@@ -27,9 +27,10 @@ const Doctor = (props: DoctorProps) => {
           borderRadius: theme.radius.md,
         };
       }}
-      direction={width < 1280 ? 'column' : 'row'}
+      direction={width < 1080 ? 'column' : 'row'}
     >
-      <Flex w="100%" justify="center">
+      <Flex w='100%'>
+      <Flex justify="center">
         <Avatar
           radius="md"
           size="8rem"
@@ -44,16 +45,17 @@ const Doctor = (props: DoctorProps) => {
           {props.name + ' ' + props.lastname}
         </Text>
         <Flex>
-          <Text mt={'xs'} align={width < 1280 ? 'justify' : 'start'}>
+          <Text mt={'xs'} align={width < 1080 ? 'justify' : 'start'}>
             {props.description}
           </Text>
         </Flex>
       </Flex>
-      <Flex h={'100%'} w={'100%'} align={'center'} justify={'center'}>
+      </Flex>
+      <Flex h={'100%'} w={'100%'} align={'center'} justify={width < 1080 ? 'start' : 'end'}>
         {sessionStorage.getItem('sessionId') &&
         sessionStorage.getItem('userId') ? (
           <Button
-            mt={width < 1280 ? 'md' : 'none'}
+            mt={width < 1080 ? 'md' : 'none'}
             variant="outline"
             ml={'md'}
             size={'md'}
@@ -63,7 +65,7 @@ const Doctor = (props: DoctorProps) => {
           </Button>
         ) : (
           <Button
-            mt={width < 1280 ? 'md' : 'none'}
+            mt={width < 1080 ? 'md' : 'none'}
             variant="outline"
             ml={'md'}
             size={'md'}

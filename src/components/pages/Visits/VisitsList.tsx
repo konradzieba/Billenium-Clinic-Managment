@@ -9,17 +9,21 @@ import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
 
 // };
 
-const patientId = sessionStorage.getItem('patientId') || null;
-const NEW_APPOINTMENT_URL = `http://localhost:8080/api/patients/${patientId}/appointments?status=new`;
-
-const fetchNewAppointments = async () => {
-  const response = await axios.get(NEW_APPOINTMENT_URL);
-  return response.data as AppointmentResponseType[];
-};
+// const patientId = sessionStorage.getItem('patientId');
+// console.log(patientId);
 
 export const VisitsList = () => {
+  const NEW_APPOINTMENT_URL = `http://localhost:8080/api/patients/${sessionStorage.getItem(
+    'patientId'
+  )}/appointments?status=new`;
+
+  const fetchNewAppointments = async () => {
+    const response = await axios.get(NEW_APPOINTMENT_URL);
+    return response.data as AppointmentResponseType[];
+  };
+
   const { data, isLoading } = useQuery(
-    [`newAppointments-${patientId}`],
+    [`newAppointments-${sessionStorage.getItem('patientId')}`],
     fetchNewAppointments
   );
   return (

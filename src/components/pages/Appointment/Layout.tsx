@@ -1,9 +1,18 @@
 import { Button, Container, Flex, Text } from '@mantine/core';
 import { useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+} from 'react-router-dom';
 
 import AppointmentStepper from '../../UI/AppointmentStepper';
 import ConfirmModal from '../../UI/ConfirmModal';
+
+type ContexType = {
+  doctorId: string;
+};
 
 const Layout = () => {
   const [active, setActive] = useState(1);
@@ -31,7 +40,7 @@ const Layout = () => {
         mih="100%"
       >
         <Text>{doctorId}</Text>
-        <Outlet />
+        <Outlet context={{ doctorId }} />
         <Flex gap="md">
           <Button
             variant="outline"
@@ -80,3 +89,7 @@ const Layout = () => {
 };
 
 export default Layout;
+
+export function useDoctorId() {
+  return useOutletContext<ContexType>();
+}

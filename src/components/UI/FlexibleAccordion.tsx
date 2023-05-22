@@ -12,8 +12,10 @@ type FlexibleAccordionProps = {
   descriptionTitle?: string;
   descriptionBody?: string;
   withButtons?: boolean;
+  withEditButton?: boolean;
   onAccept?: () => void;
   onDecline?: () => void;
+  onEdit?: () => void;
 };
 
 const BREAKPOINT = 700;
@@ -28,6 +30,8 @@ export const FlexibleAccordion = ({
   descriptionTitle,
   descriptionBody,
   isWithStatus,
+  withEditButton,
+  onEdit,
 }: FlexibleAccordionProps) => {
   const { width } = useViewportSize();
   return (
@@ -88,6 +92,13 @@ export const FlexibleAccordion = ({
                 </Button>
                 <Button onClick={onDecline} variant="outline" size="xs">
                   Odrzuć
+                </Button>
+              </Flex>
+            )}
+            {withEditButton && (
+              <Flex justify="center" align="center" gap="xs" px="md">
+                <Button size="xs" onClick={onEdit}>
+                  Edytuj
                 </Button>
               </Flex>
             )}

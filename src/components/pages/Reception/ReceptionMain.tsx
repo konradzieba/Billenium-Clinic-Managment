@@ -146,6 +146,7 @@ const ReceptionMain = () => {
               </Flex>
           <Flex
             h='30rem'
+            w='100%'
             miw={width < BrakPoint ? '100%' : '15rem' }
             direction='column'
             sx={(theme) => {

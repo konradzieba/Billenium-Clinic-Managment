@@ -232,6 +232,7 @@ const ReceptionMain = () => {
                 firstTableTitle={'Stosowane leki:'}
                 secondTableTitle={'Objawy:'}
                 isWithStatus={true}
+                withEditButton={true}
               />
             </Flex>
           </ScrollArea>

@@ -98,7 +98,7 @@ export const FlexibleAccordion = ({
             )}
             {withEditButton && (
               <Flex justify="center" align="center" gap="xs" px="md">
-                <Button size="xs" onClick={onEdit}>
+                <Button size="xs" variant='outline' onClick={onEdit}>
                   Edytuj
                 </Button>
               </Flex>

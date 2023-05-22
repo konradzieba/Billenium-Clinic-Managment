@@ -19,6 +19,7 @@ import { SpecializationList } from './components/pages/Specializations/Specializ
 import { VisitsList } from './components/pages/Visits/VisitsList';
 import { SideMenu } from './components/UI/SideMenu';
 import { DoctorsSpeciality } from './helpers/enums';
+import ReceptionMain from './components/pages/Reception/ReceptionMain';
 
 const queryClient = new QueryClient();
 
@@ -110,6 +111,7 @@ const App = () => {
               <Route path="/visits" element={<VisitsList />} />
               <Route path="/history" element={<History />} />
               <Route path="/profile" element={<ProfileInfo />} />
+              <Route path="/reception" element={<ReceptionMain />} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

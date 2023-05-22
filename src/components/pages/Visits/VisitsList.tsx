@@ -35,7 +35,7 @@ export const VisitsList = () => {
             isWithStatus
             dataList={data || []}
             firstTableTitle="Leki:"
-            secoundTableTitle="Objawy:"
+            secondTableTitle="Objawy:"
           />
         )}
       </Flex>

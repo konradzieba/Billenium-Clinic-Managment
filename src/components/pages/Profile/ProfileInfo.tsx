@@ -137,7 +137,6 @@ export const ProfileInfo = () => {
             </Flex>
           )}
         </Flex>
-        {/* Zrobić szkielet dla każdego z pól */}
         <Skeleton visible={isLoading}>
           <Flex direction={width < 1080 ? 'column' : 'row'}>
             <TextInput

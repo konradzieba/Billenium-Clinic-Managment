@@ -1,6 +1,7 @@
 import { Button, Flex, Select, Textarea, TextInput, Text } from '@mantine/core';
 import PacientItem from './PacientItem';
 import { useState } from 'react';
+import { useViewportSize } from '@mantine/hooks';
 
 const spec = [
   "Internista",
@@ -42,10 +43,11 @@ const Patients = [
 ]
 
 const DoctorProfile = () =>{
-  const [isEditng, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const {width} = useViewportSize()
 
   const handleEditing = () =>{
-    if(isEditng){
+    if(isEditing){
       setIsEditing(false)
     }else{
       setIsEditing(true)
@@ -62,48 +64,61 @@ const DoctorProfile = () =>{
           <Flex
             direction='column'
             gap='md'
+            w={width < 1080 ?'100%': '70rem'}
           >
 
             <Flex
-              w='70rem'
-              direction='row'
+              w='100%'
+              direction={width < 1080 ? 'column' : 'row'}
               gap='md'
               justify={'center'}
               align='center'
             >
               <Flex
                 direction='column'
+                w='100%'
               >
 
                 <Flex
                   w='100%'
                   gap='md'
+                  direction={width < 1080 ? 'column' : 'row'}
                 >
-                  <TextInput
-                    w='25%'
-                    label={'Imię'}
-                    disabled
-                    value={'Jan'}
-                  />
-                  <TextInput
-                    w='25%'
-                    label={'Nazwisko'}
-                    disabled
-                    value={'Nowak'}
-                  />
-                  <Select
-                    w='25%'
-                    label={'Specjalizacja'}
-                    disabled
-                    placeholder={"Internista"}
-                    data={spec}
-                  />
-                  <TextInput
-                    w='25%'
-                    label={'Telefon'}
-                    disabled
-                    value={'994231234'}
-                  />
+                    <Flex
+                      gap='md'
+                      w={width < 1080 ? '100%' : '50%'}
+                    >
+                      <TextInput
+                        w='50%'
+                        label={'Imię'}
+                        disabled
+                        value={'Jan'}
+                      />
+                      <TextInput
+                        w='50%'
+                        label={'Nazwisko'}
+                        disabled
+                        value={'Nowak'}
+                      />
+                  </Flex>
+                  <Flex
+                    w={width < 1080 ? '100%' : '50%'}
+                    gap='md'
+                  >
+                    <Select
+                      w='50%'
+                      label={'Specjalizacja'}
+                      disabled
+                      placeholder={"Internista"}
+                      data={spec}
+                    />
+                    <TextInput
+                      w='50%'
+                      label={'Telefon'}
+                      disabled
+                      value={'994231234'}
+                    />
+                  </Flex>
                 </Flex>
                 <Flex>
                   <Textarea
@@ -113,16 +128,16 @@ const DoctorProfile = () =>{
                   />
                 </Flex>
               </Flex>
-              {!isEditng && (
+              {!isEditing && (
                 <Button
                   onClick={handleEditing}
                   variant='outline'
                 >Edytuj
                 </Button>
               )}
-              {isEditng && (
+              {isEditing && (
                 <Flex
-                  direction='column'
+                  direction={width < 1080 ? 'row' : 'column'}
                   gap='md'
                 >
                 <Button
@@ -148,6 +163,7 @@ const DoctorProfile = () =>{
               gap='md'
             >
               <TextInput
+                w='10rem'
                 placeholder="Wpisz PESEL"
               />
               <Button variant='filled'>

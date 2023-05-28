@@ -6,22 +6,25 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Calendar from './components/pages/Appointment/Calendar';
+import EditAppointment from './components/pages/Appointment/EditAppointment';
 import Layout from './components/pages/Appointment/Layout';
 import SymptomsMeds from './components/pages/Appointment/SymptomsMeds';
 import ForgotPassword from './components/pages/Auth/ForgotPassword';
+import ProtectedRoute from './components/pages/Auth/ProtectedRoute';
 import SignIn from './components/pages/Auth/SignIn';
 import SignUp from './components/pages/Auth/SignUp';
+import DoctorProfile from './components/pages/DoctorProfile/DoctorProfile';
 import { DoctorList } from './components/pages/Doctors/DoctorsList';
+import NotFound from './components/pages/ErrorPages/NotFound';
+import Unauthorized from './components/pages/ErrorPages/Unauthorized';
 import { History } from './components/pages/History/History';
 import { Home } from './components/pages/Home/Home';
 import { ProfileInfo } from './components/pages/Profile/ProfileInfo';
+import ReceptionMain from './components/pages/Reception/ReceptionMain';
 import { SpecializationList } from './components/pages/Specializations/SpecializationList';
 import { VisitsList } from './components/pages/Visits/VisitsList';
 import { SideMenu } from './components/UI/SideMenu';
 import { DoctorsSpeciality } from './helpers/enums';
-import ReceptionMain from './components/pages/Reception/ReceptionMain';
-import EditAppointment from './components/pages/Appointment/EditAppointment';
-import DoctorProfile from './components/pages/DoctorProfile/DoctorProfile';
 
 const queryClient = new QueryClient();
 
@@ -82,6 +85,7 @@ const App = () => {
                   />
                 }
               />
+              {/* Pacient */}
               <Route
                 path={`/specializations/${DoctorsSpeciality.INTERNIST}/appointment`}
                 element={<Layout />}
@@ -111,13 +115,27 @@ const App = () => {
                 <Route path="symptoms-meds/:id" element={<SymptomsMeds />} />
               </Route>
               <Route path="/visits" element={<VisitsList />} />
-              <Route path="/history" element={<History />} />
+              <Route
+                path="/history"
+                element={
+                  <ProtectedRoute role="patient">
+                    <History />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/profile" element={<ProfileInfo />} />
+              {/* Recepcja */}
               <Route path="/reception" element={<ReceptionMain />} />
-              <Route path="/editAppointment" element={<EditAppointment role={'doctor'}/>} />
-              <Route path="/doc" element={<DoctorProfile/>} />
+              {/* Recepcja + lekarz */}
+              <Route
+                path="/editAppointment"
+                element={<EditAppointment role={'doctor'} />}
+              />
+              <Route path="/doc" element={<DoctorProfile />} />
 
-              <Route path="*" element={<Navigate to="/" />} />
+              <Route path="/not-found" element={<NotFound />} />
+              <Route path="/unauthorized" element={<Unauthorized />} />
+              <Route path="*" element={<Navigate to="/not-found" />} />
             </Routes>
           </Container>
         </QueryClientProvider>

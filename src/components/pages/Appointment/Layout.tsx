@@ -1,4 +1,6 @@
-import { Button, Container, Flex, Text } from '@mantine/core';
+import { Button, Container, Flex } from '@mantine/core';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 import { useState } from 'react';
 import {
   Outlet,
@@ -7,12 +9,14 @@ import {
   useOutletContext,
 } from 'react-router-dom';
 
+import { clearAppointmentData } from '../../../helpers/functions';
 import AppointmentStepper from '../../UI/AppointmentStepper';
 import ConfirmModal from '../../UI/ConfirmModal';
-
 type ContexType = {
   doctorId: string;
 };
+
+const URL = 'http://localhost:8080/api/appointments';
 
 const Layout = () => {
   const [active, setActive] = useState(1);
@@ -25,11 +29,37 @@ const Layout = () => {
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const patientId = sessionStorage.getItem('patientId');
+  const patientAppointmentDate = sessionStorage.getItem(
+    `appointmentDate${patientId}`
+  );
+  const patientAppointmentTime = sessionStorage.getItem(
+    `appointmentTime${patientId}`
+  );
+  const patientSymptoms = sessionStorage.getItem(`symptoms${patientId}`);
+  const patientMedicines = sessionStorage.getItem(`meds${patientId}`);
+
+  const postPatientAppointment = async (url: string) => {
+    const response = await axios.post(url, {
+      patientId: patientId,
+      doctorId: doctorId,
+      appointmentDate: `${patientAppointmentDate}T${patientAppointmentTime}`,
+      patientSymptoms: patientSymptoms,
+      medicinesTaken: patientMedicines,
+    });
+    return response.data;
+  };
+
+  const mutation = useMutation(postPatientAppointment, {
+    onSuccess: () => {
+      clearAppointmentData();
+      navigate(`/visits`);
+    },
+  });
 
   const handleAccept = () => {
-    console.log('accept');
+    mutation.mutate(URL);
     setIsModalOpen(false);
-    navigate(`/visits`);
   };
   return (
     <Container w="auto">
@@ -38,8 +68,8 @@ const Layout = () => {
         justify="space-between"
         align="center"
         mih="100%"
+        pt={120}
       >
-        <Text>{doctorId}</Text>
         <Outlet context={{ doctorId }} />
         <Flex gap="md">
           <Button

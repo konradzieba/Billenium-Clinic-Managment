@@ -52,7 +52,7 @@ export const FlexibleAccordion = ({
         <Accordion.Item
           value={data.appointmentId.toString()}
           key={data.appointmentId}
-          miw= {withButtons ? '25rem' : '15rem'}
+          miw={withButtons ? '25rem' : '15rem'}
         >
           <Flex>
             <Accordion.Control>
@@ -98,22 +98,16 @@ export const FlexibleAccordion = ({
             )}
             {withEditButton && (
               <Flex justify="center" align="center" gap="xs" px="md">
-                <Button size="xs" variant='outline' onClick={onEdit}>
+                <Button size="xs" variant="outline" onClick={onEdit}>
                   Edytuj
                 </Button>
               </Flex>
             )}
           </Flex>
           <Accordion.Panel>
-            <Flex
-              px='md'
-              justify="space-between"
-              direction={width < BREAKPOINT ? 'column' : 'row'}
-            >
-              <Box
-                w="50%"
-              >
-                <Text fw="bold" align={width < BREAKPOINT ? 'start' : 'center'}>{firstTableTitle}</Text>
+            <Flex px="md" direction={width < BREAKPOINT ? 'column' : 'row'}>
+              <Box w={width < BREAKPOINT ? '100%' : '50%'} pl="md">
+                <Text fw="bold">{firstTableTitle}</Text>
                 <List
                   icon={
                     <IconPointFilled
@@ -131,10 +125,8 @@ export const FlexibleAccordion = ({
                   ))}
                 </List>
               </Box>
-              <Box
-                w="50%"
-              >
-                <Text fw="bold" align={width < BREAKPOINT ? 'start' : 'center'} >{secondTableTitle}</Text>
+              <Box w={width < BREAKPOINT ? '100%' : '50%'} pl="md">
+                <Text fw="bold">{secondTableTitle}</Text>
                 <List
                   icon={
                     <IconPointFilled

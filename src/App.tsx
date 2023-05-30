@@ -25,6 +25,7 @@ import { SpecializationList } from './components/pages/Specializations/Specializ
 import { VisitsList } from './components/pages/Visits/VisitsList';
 import { SideMenu } from './components/UI/SideMenu';
 import { DoctorsSpeciality } from './helpers/enums';
+import Archives from './components/pages/Archives/Archives';
 
 const queryClient = new QueryClient();
 
@@ -132,6 +133,7 @@ const App = () => {
                 element={<EditAppointment role={'doctor'} />}
               />
               <Route path="/doc" element={<DoctorProfile />} />
+              <Route path="/archives" element={<Archives />} />
 
               <Route path="/not-found" element={<NotFound />} />
               <Route path="/unauthorized" element={<Unauthorized />} />

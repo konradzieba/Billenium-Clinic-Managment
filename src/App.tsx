@@ -89,31 +89,103 @@ const App = () => {
               {/* Pacient */}
               <Route
                 path={`/specializations/${DoctorsSpeciality.INTERNIST}/appointment`}
-                element={<Layout />}
+                element={
+                  <ProtectedRoute role="patient">
+                    <Layout />
+                  </ProtectedRoute>
+                }
               >
-                <Route path="calendar/:id" element={<Calendar />} />
-                <Route path="symptoms-meds/:id" element={<SymptomsMeds />} />
+                <Route
+                  path="calendar/:id"
+                  element={
+                    <ProtectedRoute role="patient">
+                      <Calendar />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="symptoms-meds/:id"
+                  element={
+                    <ProtectedRoute role="patient">
+                      <SymptomsMeds />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
               <Route
                 path={`/specializations/${DoctorsSpeciality.GASTROENTEROLOGIST}/appointment`}
-                element={<Layout />}
+                element={
+                  <ProtectedRoute role="patient">
+                    <Layout />
+                  </ProtectedRoute>
+                }
               >
-                <Route path="calendar/:id" element={<Calendar />} />
-                <Route path="symptoms-meds/:id" element={<SymptomsMeds />} />
+                <Route
+                  path="calendar/:id"
+                  element={
+                    <ProtectedRoute role="patient">
+                      <Calendar />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="symptoms-meds/:id"
+                  element={
+                    <ProtectedRoute role="patient">
+                      <SymptomsMeds />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
               <Route
                 path={`/specializations/${DoctorsSpeciality.OPHTHALMOLOGIST}/appointment`}
-                element={<Layout />}
+                element={
+                  <ProtectedRoute role="patient">
+                    <Layout />
+                  </ProtectedRoute>
+                }
               >
-                <Route path="calendar/:id" element={<Calendar />} />
-                <Route path="symptoms-meds/:id" element={<SymptomsMeds />} />
+                <Route
+                  path="calendar/:id"
+                  element={
+                    <ProtectedRoute role="patient">
+                      <Calendar />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="symptoms-meds/:id"
+                  element={
+                    <ProtectedRoute role="patient">
+                      <SymptomsMeds />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
               <Route
                 path={`/specializations/${DoctorsSpeciality.PULMONOLOGIST}/appointment`}
-                element={<Layout />}
+                element={
+                  <ProtectedRoute role="patient">
+                    <Layout />
+                  </ProtectedRoute>
+                }
               >
-                <Route path="calendar/:id" element={<Calendar />} />
-                <Route path="symptoms-meds/:id" element={<SymptomsMeds />} />
+                <Route
+                  path="calendar/:id"
+                  element={
+                    <ProtectedRoute role="patient">
+                      <Calendar />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="symptoms-meds/:id"
+                  element={
+                    <ProtectedRoute role="patient">
+                      <SymptomsMeds />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
               <Route path="/visits" element={<VisitsList />} />
               <Route
@@ -124,7 +196,14 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/profile" element={<ProfileInfo />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute role="patient">
+                    <ProfileInfo />
+                  </ProtectedRoute>
+                }
+              />
               {/* Recepcja */}
               <Route path="/reception" element={<ReceptionMain />} />
               {/* Recepcja + lekarz */}

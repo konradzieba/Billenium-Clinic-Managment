@@ -64,16 +64,15 @@ const Unauthorized = () => {
         className={classes.description}
       >
         Niestety ta strona jest dostępna tylko dla zalogowanych użytkowników.
-        Jeśli chcesz się zalogować, kliknij poniższy przycisk.
       </Text>
       <Group position="center">
         <Button
           variant="outline"
           color="#fd7e14"
-          onClick={() => navigate('/sign-in')}
+          onClick={() => navigate('/')}
           size="md"
         >
-          Zaloguj się
+          Powrót do strony głównej
         </Button>
       </Group>
     </Container>

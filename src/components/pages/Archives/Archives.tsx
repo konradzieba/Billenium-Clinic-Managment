@@ -3,8 +3,10 @@ import { DateInput } from '@mantine/dates';
 import { useForm, zodResolver } from '@mantine/form';
 
 import { signUpSchema as schema } from '../../../helpers/schemas';
-import { AppointmentResponseType } from '../../../helpers/types';
 import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
+import { useState } from 'react';
+import { AppointmentResponseType } from '../../../helpers/types';
+import dayjs from 'dayjs';
 
 const wizyty = [
   {
@@ -22,7 +24,7 @@ const wizyty = [
   {
     appointmentId: 2,
     patientName: 'Karol Strzyk',
-    doctorName: 'Krystian Bąk',
+    doctorName: 'Adam Piotrowski',
     appointmentDate: '2023-07-04',
     patientSymptoms: 'Mocny ból głowy z zawrotami, zwędzenie rąk.',
     medicinesTaken: 'Ibuprofen',
@@ -60,7 +62,7 @@ const wizyty = [
     appointmentId: 5,
     patientName: 'Karol Strzyk',
     doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-07-04',
+    appointmentDate: '2023-06-02',
     patientSymptoms: 'Mocny ból głowy z zawrotami, zwędzenie rąk.',
     medicinesTaken: 'Ibuprofen',
     appointmentStatus: 'NEW',
@@ -72,7 +74,7 @@ const wizyty = [
     appointmentId: 6,
     patientName: 'Michał Małysz',
     doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-07-04',
+    appointmentDate: '2023-06-03',
     patientSymptoms:
       'Mocny ból głowy z zawrotami, zwędzenie rąk. Jestem ciągle głodny i nie mogę tego wytzymać',
     medicinesTaken: 'Ibuprofen',
@@ -82,10 +84,10 @@ const wizyty = [
     modifiedAt: '2023-06-21',
   },
   {
-    appointmentId: 4,
+    appointmentId: 7,
     patientName: 'Jan Paweł',
     doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-07-04',
+    appointmentDate: '2023-06-10',
     patientSymptoms:
       'WWWWWWW WWWWWWWWWWWWWWWWWWW WWWWWWWW WWWWWWWW WWWWWWWWWWWWWWWWW',
     medicinesTaken: 'Ibuprofen',
@@ -95,7 +97,7 @@ const wizyty = [
     modifiedAt: '2023-06-21',
   },
   {
-    appointmentId: 5,
+    appointmentId: 8,
     patientName: 'Karol Strzyk',
     doctorName: 'Krystian Bąk',
     appointmentDate: '2023-07-04',
@@ -107,7 +109,7 @@ const wizyty = [
     modifiedAt: '2023-06-21',
   },
   {
-    appointmentId: 6,
+    appointmentId: 9,
     patientName: 'Michał Małysz',
     doctorName: 'Krystian Bąk',
     appointmentDate: '2023-07-04',
@@ -120,19 +122,36 @@ const wizyty = [
     modifiedAt: '2023-06-21',
   },
 ];
-const Archives = (appointments: AppointmentResponseType[]) => {
+const Archives = () => {
   const form = useForm({
     initialValues: {
       maxDate: new Date(),
-      pesel: '',
+      patient: '',
+      doctor:''
     },
     validate: zodResolver(schema),
   });
 
-  const filteredAppointments = appointments.filter(
-    (appointment) =>
-      appointment.appointmentDate < form.getInputProps('maxDate').value
-  );
+  const [filteredAppointments, setFilteredAppointments] = useState<AppointmentResponseType[]>([])
+
+  const handleClick = () => {
+    setFilteredAppointments(wizyty.filter(
+      (appointment) =>
+        new Date(appointment.appointmentDate) <= new Date(dayjs(form.getInputProps('maxDate').value).format('YYYY-MM-DD'))
+    ))
+    if(form.getInputProps('patient').value !== ''){
+      setFilteredAppointments((prevState) => prevState.filter(
+        (appointment) =>
+          appointment.patientName.includes(form.getInputProps('patient').value)
+      ))
+    }
+    if(form.getInputProps('doctor').value !== ''){
+      setFilteredAppointments((prevState) => prevState.filter(
+        (appointment) =>
+          appointment.doctorName.includes(form.getInputProps('doctor').value)
+      ))
+    }
+  }
 
   return (
     <Flex w="100%" justify="center">
@@ -142,22 +161,30 @@ const Archives = (appointments: AppointmentResponseType[]) => {
           <Flex w="100%" align="end" justify="space-between" gap="md">
             <Flex gap="md">
               <DateInput
-                valueFormat={'YYYY-MM-DD'}
-                label={'Do dnia'}
+                valueFormat='YYYY-MM-DD'
+                label='Do dnia'
                 {...form.getInputProps('maxDate')}
               />
               <TextInput
-                label={'PESEL'}
-                placeholder={'Wpisz nr PESEL'}
-                {...form.getInputProps('pesel')}
+                label={'Pacjent'}
+                placeholder={'Wpisz dane pacjenta'}
+                {...form.getInputProps('patient')}
+              />
+              <TextInput
+                label={'Doktor'}
+                placeholder={'Wpisz dane doktora'}
+                {...form.getInputProps('doctor')}
               />
             </Flex>
-            <Button>Szukaj</Button>
+            <Button
+              onClick={() => handleClick()}
+            >
+              Szukaj
+            </Button>
           </Flex>
         </Flex>
-        <ScrollArea mah="50rem" w="100%">
+        <ScrollArea mah="50rem" w="100%" maw={'55rem'}>
           <Flex justify="center">
-            {filteredAppointments?.length !== 0 ? (
               <FlexibleAccordion
                 dataList={filteredAppointments}
                 firstTableTitle={'Stosowane leki:'}
@@ -165,10 +192,8 @@ const Archives = (appointments: AppointmentResponseType[]) => {
                 isWithStatus={false}
                 withButtons={false}
                 withEditButton={true}
+                withPatient={true}
               />
-            ) : (
-              <Flex></Flex>
-            )}
           </Flex>
         </ScrollArea>
       </Flex>

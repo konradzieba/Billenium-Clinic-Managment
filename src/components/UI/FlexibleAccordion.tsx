@@ -9,6 +9,7 @@ type FlexibleAccordionProps = {
   firstTableTitle: 'Leki:' | 'Stosowane leki:';
   secondTableTitle: 'Zalecenia:' | 'Objawy:';
   isWithStatus: boolean;
+  withPatient?: boolean;
   descriptionTitle?: string;
   descriptionBody?: string;
   withButtons?: boolean;
@@ -30,6 +31,7 @@ export const FlexibleAccordion = ({
   descriptionTitle,
   descriptionBody,
   isWithStatus,
+  withPatient,
   withEditButton,
   onEdit,
 }: FlexibleAccordionProps) => {
@@ -65,6 +67,9 @@ export const FlexibleAccordion = ({
                     {data.appointmentDate.split(' ')[1]}
                   </Text>
                   <Text fw="bold">{`lek. ${data.doctorName}`}</Text>
+                  {withPatient && (
+                    <Text fw="bold">{`pac. ${data.patientName}`}</Text>
+                  )}
                   {isWithStatus ? (
                     <Text>
                       <Text span fw="bold" mr={3}>

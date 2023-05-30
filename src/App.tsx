@@ -211,7 +211,7 @@ const App = () => {
                 path="/editAppointment"
                 element={<EditAppointment role={'doctor'} />}
               />
-              <Route path="/doc" element={<DoctorProfile />} />
+              <Route path="/doctor-profile/:id" element={<DoctorProfile />} />
               <Route path="/archives" element={<Archives />} />
 
               <Route path="/not-found" element={<NotFound />} />

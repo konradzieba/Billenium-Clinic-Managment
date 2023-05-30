@@ -4,3 +4,11 @@ export enum DoctorsSpeciality {
   GASTROENTEROLOGIST = 'gastroenterologist',
   PULMONOLOGIST = 'pulmonologist',
 }
+
+export enum AppointmentStatus {
+  APPROVED = 'APPROVED',
+  NEW = 'NEW',
+  CANCELED = 'CANCELED',
+  RESCHEDULED = 'RESCHEDULED',
+  DONE = 'DONE',
+}

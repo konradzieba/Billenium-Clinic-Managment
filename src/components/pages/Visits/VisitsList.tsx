@@ -1,15 +1,26 @@
-import { Button, Container, Flex, Loader, Text, Title } from '@mantine/core';
+import {
+  Button,
+  Center,
+  Container,
+  Flex,
+  Loader,
+  ScrollArea,
+  Tabs,
+  Text,
+  Title,
+} from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+import { AppointmentStatus } from '../../../helpers/enums';
 import { AppointmentResponseType } from '../../../helpers/types';
 import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
 
 export const VisitsList = () => {
   const NEW_APPOINTMENT_URL = `http://localhost:8080/api/patients/${sessionStorage.getItem(
     'patientId'
-  )}/appointments?status=new`;
+  )}/appointments`;
 
   const fetchNewAppointments = async () => {
     const response = await axios.get(NEW_APPOINTMENT_URL);
@@ -17,8 +28,9 @@ export const VisitsList = () => {
   };
 
   const { data, isLoading } = useQuery(
-    [`newAppointments-${sessionStorage.getItem('patientId')}`],
-    fetchNewAppointments, {refetchOnMount: 'always'}
+    [`appointments-${sessionStorage.getItem('patientId')}`],
+    fetchNewAppointments,
+    { refetchOnMount: 'always' }
   );
   const navigate = useNavigate();
   return (
@@ -51,12 +63,94 @@ export const VisitsList = () => {
               </Button>
             </Flex>
           ) : (
-            <FlexibleAccordion
-              isWithStatus
-              dataList={data || []}
-              firstTableTitle="Leki:"
-              secondTableTitle="Objawy:"
-            />
+            <Tabs w="90%" defaultValue={AppointmentStatus.APPROVED}>
+              <Tabs.List grow>
+                <Tabs.Tab fz="md" value={AppointmentStatus.APPROVED}>
+                  Zatwierdzone
+                </Tabs.Tab>
+                <Tabs.Tab fz="md" value={AppointmentStatus.NEW}>
+                  Oczekujące
+                </Tabs.Tab>
+                <Tabs.Tab fz="md" value={AppointmentStatus.CANCELED}>
+                  Anulowane
+                </Tabs.Tab>
+                <Tabs.Tab fz="md" value={AppointmentStatus.RESCHEDULED}>
+                  Przełożone
+                </Tabs.Tab>
+              </Tabs.List>
+              <Tabs.Panel mt="xl" value={AppointmentStatus.APPROVED}>
+                <ScrollArea h={550}>
+                  <Center>
+                    <FlexibleAccordion
+                      isWithStatus
+                      dataList={
+                        data?.filter(
+                          (appointment) =>
+                            appointment.appointmentStatus ===
+                            AppointmentStatus.APPROVED
+                        ) || []
+                      }
+                      firstTableTitle="Leki:"
+                      secondTableTitle="Objawy:"
+                    />
+                  </Center>
+                </ScrollArea>
+              </Tabs.Panel>
+              <Tabs.Panel mt="xl" value={AppointmentStatus.NEW}>
+                <ScrollArea h={550}>
+                  <Center>
+                    <FlexibleAccordion
+                      isWithStatus
+                      dataList={
+                        data?.filter(
+                          (appointment) =>
+                            appointment.appointmentStatus ===
+                            AppointmentStatus.NEW
+                        ) || []
+                      }
+                      firstTableTitle="Leki:"
+                      secondTableTitle="Objawy:"
+                    />
+                  </Center>
+                </ScrollArea>
+              </Tabs.Panel>
+              <Tabs.Panel mt="xl" value={AppointmentStatus.CANCELED}>
+                <ScrollArea h={550}>
+                  <Center>
+                    <FlexibleAccordion
+                      isWithStatus
+                      dataList={
+                        data?.filter(
+                          (appointment) =>
+                            appointment.appointmentStatus ===
+                            AppointmentStatus.CANCELED
+                        ) || []
+                      }
+                      firstTableTitle="Leki:"
+                      secondTableTitle="Objawy:"
+                    />
+                  </Center>
+                </ScrollArea>
+              </Tabs.Panel>
+              <Tabs.Panel mt="xl" value={AppointmentStatus.RESCHEDULED}>
+                <ScrollArea h={550}>
+                  <Center>
+                    <FlexibleAccordion
+                      isWithStatus
+                      dataList={
+                        data?.filter(
+                          (appointment) =>
+                            appointment.appointmentStatus ===
+                            AppointmentStatus.RESCHEDULED
+                        ) || []
+                      }
+                      firstTableTitle="Leki:"
+                      secondTableTitle="Objawy:"
+                    />
+                  </Center>
+                </ScrollArea>
+              </Tabs.Panel>
+            </Tabs>
           )}
         </Flex>
       </Flex>

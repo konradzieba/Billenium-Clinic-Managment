@@ -1,214 +1,92 @@
-import { Flex, ScrollArea, Text, Title } from '@mantine/core';
-import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
-import UserSearch from './UserSearch';
-import DoctorItem from './DoctorItem';
+import {
+  Center,
+  Flex,
+  Loader,
+  ScrollArea,
+  Select,
+  Text,
+} from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { useState } from 'react';
 
-const wizyty=[
-  {
-    appointmentId:1,
-    patientName:"Jan Paweł",
-    doctorName:"Krystian Bąk",
-    appointmentDate:'2023-07-04',
-    patientSymptoms:'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus:'NEW',
-    doctorRecommendations:'',
-    createdAt:'2023-06-21',
-    modifiedAt:'2023-06-21'
-  },
-  {
-    appointmentId:2,
-    patientName:"Karol Strzyk",
-    doctorName:"Krystian Bąk",
-    appointmentDate:'2023-07-04',
-    patientSymptoms:'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus:'NEW',
-    doctorRecommendations:'',
-    createdAt:'2023-06-21',
-    modifiedAt:'2023-06-21'
-  },
-  {
-    appointmentId:3,
-    patientName:"Michał Małysz",
-    doctorName:"Krystian Bąk",
-    appointmentDate:'2023-07-04',
-    patientSymptoms:'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus:'NEW',
-    doctorRecommendations:'',
-    createdAt:'2023-06-21',
-    modifiedAt:'2023-06-21'
-  },
-  {
-    appointmentId:4,
-    patientName:"Jan Paweł",
-    doctorName:"Krystian Bąk",
-    appointmentDate:'2023-07-04',
-    patientSymptoms:'WWWWWWW WWWWWWWWWWWWWWWWWWW WWWWWWWW WWWWWWWW WWWWWWWWWWWWWWWWW',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus:'NEW',
-    doctorRecommendations:'',
-    createdAt:'2023-06-21',
-    modifiedAt:'2023-06-21'
-  },
-  {
-    appointmentId:5,
-    patientName:"Karol Strzyk",
-    doctorName:"Krystian Bąk",
-    appointmentDate:'2023-07-04',
-    patientSymptoms:'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus:'NEW',
-    doctorRecommendations:'',
-    createdAt:'2023-06-21',
-    modifiedAt:'2023-06-21'
-  },
-  {
-    appointmentId:6,
-    patientName:"Michał Małysz",
-    doctorName:"Krystian Bąk",
-    appointmentDate:'2023-07-04',
-    patientSymptoms:'Mocny ból głowy z zawrotami, zwędzenie rąk. Jestem ciągle głodny i nie mogę tego wytzymać',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus:'NEW',
-    doctorRecommendations:'',
-    createdAt:'2023-06-21',
-    modifiedAt:'2023-06-21'
-  },
-  {
-    appointmentId:4,
-    patientName:"Jan Paweł",
-    doctorName:"Krystian Bąk",
-    appointmentDate:'2023-07-04',
-    patientSymptoms:'WWWWWWW WWWWWWWWWWWWWWWWWWW WWWWWWWW WWWWWWWW WWWWWWWWWWWWWWWWW',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus:'NEW',
-    doctorRecommendations:'',
-    createdAt:'2023-06-21',
-    modifiedAt:'2023-06-21'
-  },
-  {
-    appointmentId:5,
-    patientName:"Karol Strzyk",
-    doctorName:"Krystian Bąk",
-    appointmentDate:'2023-07-04',
-    patientSymptoms:'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus:'NEW',
-    doctorRecommendations:'',
-    createdAt:'2023-06-21',
-    modifiedAt:'2023-06-21'
-  },
-  {
-    appointmentId: 6,
-    patientName: "Michał Małysz",
-    doctorName: "Krystian Bąk",
-    appointmentDate: '2023-07-04',
-    patientSymptoms: 'Mocny ból głowy z zawrotami, zwędzenie rąk. Jestem ciągle głodny i nie mogę tego wytzymać',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21'
-  }
-]
+import {
+  AppointmentResponseType,
+  DoctorListType,
+} from '../../../helpers/types';
+import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
+import DoctorItem from './DoctorItem';
+import UserSearch from './UserSearch';
+
+const BREAKPOINT = 1080;
+const DOCTORS_URL = 'http://localhost:8080/api/doctors';
+const NEW_APPOINTMENTS = 'http://localhost:8080/api/appointments/new';
+
 const ReceptionMain = () => {
-  const {width} = useViewportSize()
-  const BrakPoint = 1080;
-  return(
-    <Flex
-      justify='space-around'
-      w='100%'
-      p='md'
-      gap={width < BrakPoint ? 25 : 0 }
-      direction={width < BrakPoint ? 'column' : 'row'}
-      miw={width < BrakPoint ? '' : '1080px'}
-    >
-        <Flex
-          w={width < BrakPoint ? '100%' : '25rem' }
-          direction='column'
-          gap={width < BrakPoint ? 'md': 0 }
-          justify='space-around'
-          mah='95vh'
-        >
-              <Flex
-                h='10rem'
-                miw={width < BrakPoint ? '100%' : '15rem' }
-                sx={(theme) => {
-                  return {
-                    borderRadius: theme.radius.md,
-                    border: '3px #fd7e14 solid',
-                  };
-                }}>
-                    <UserSearch/>
-              </Flex>
-          <Flex
-            h='30rem'
-            w='100%'
-            miw={width < BrakPoint ? '100%' : '15rem' }
-            direction='column'
-            sx={(theme) => {
-              return {
-                borderRadius: theme.radius.md,
-                border: '3px #fd7e14 solid',
-              };
-            }}>
-            <DoctorItem
-              index={0}
-            />
-            <DoctorItem
-              index={1}
-            />
-            <DoctorItem
-              index={2}
-            />
-            <DoctorItem
-              index={3}
-            />
-            <DoctorItem
-              index={4}
-            />
+  const { width } = useViewportSize();
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
+  const fetchDoctors = async () => {
+    const response = await axios.get(DOCTORS_URL);
+    return response.data as DoctorListType[];
+  };
+  const fetchNewAppointments = async () => {
+    const response = await axios.get(NEW_APPOINTMENTS);
+    return response.data as AppointmentResponseType[];
+  };
+  const doctorList = useQuery(['doctorsList'], fetchDoctors, {
+    onSuccess: (data) => {
+      setSelectedDoctorId(data[0].doctorId.toString());
+    },
+  });
 
-          </Flex>
-        </Flex>
+  const newAppointmentsList = useQuery(
+    ['newAppointments'],
+    fetchNewAppointments
+  );
+
+  const todaysDate = dayjs(new Date()).format('YYYY-MM-DD').toString();
+
+  const fetchDoctorTodayAppointments = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/api/doctors/${selectedDoctorId}/appointments?appointmendDate=${todaysDate}`
+    );
+    return response.data as AppointmentResponseType[];
+  };
+  const doctorTodayAppointmentsList = useQuery(
+    [`todayAppointments-${selectedDoctorId}`, selectedDoctorId],
+    fetchDoctorTodayAppointments,
+    { enabled: selectedDoctorId !== null }
+  );
+  const selectDoctorData = doctorList.data
+    ? doctorList.data?.map((doc) => {
+        return {
+          value: doc.doctorId.toString(),
+          label: `${doc.firstName} ${doc.lastName}`,
+          image: doc.photo,
+        };
+      })
+    : [{ value: '1', label: 'Brak lekarzy', image: '' }];
+  return (
+    <Flex
+      justify="space-around"
+      w="100%"
+      p="md"
+      gap={width < BREAKPOINT ? 25 : 0}
+      direction={width < BREAKPOINT ? 'column' : 'row'}
+      miw={width < BREAKPOINT ? '' : '1080px'}
+    >
+      <Flex
+        w={width < BREAKPOINT ? '100%' : '25rem'}
+        direction="column"
+        gap={width < BREAKPOINT ? 'md' : 0}
+        justify="space-around"
+        mah="95vh"
+      >
         <Flex
-          miw={width < BrakPoint ? '100%' : '30rem' }
-          w={width < BrakPoint ? '100%' : '50rem' }
-          h='95vh'
-          justify='start'
-          direction='column'
-          sx={(theme) => {
-            return {
-              borderRadius: theme.radius.md,
-              border: '3px #fd7e14 solid',
-            };
-         }}>
-              <Title align={'center'} p='md'>Oczekujące rezerwacje</Title>
-                <ScrollArea
-                  offsetScrollbars
-                  type='always'
-                >
-                  <Flex
-                    w='100%'
-                    justify='center'
-                  >
-                    <FlexibleAccordion
-                      dataList={wizyty}
-                      firstTableTitle={'Stosowane leki:'}
-                      secondTableTitle={'Objawy:'}
-                      isWithStatus={true}
-                      withButtons={true}
-                    />
-                  </Flex>
-              </ScrollArea>
-        </Flex>
-        <Flex
-          miw={width < BrakPoint ? '100%' : '25rem' }
-          w='25rem'
-          h='95vh'
-          direction='column'
+          h="10rem"
+          miw={width < BREAKPOINT ? '100%' : '15rem'}
           sx={(theme) => {
             return {
               borderRadius: theme.radius.md,
@@ -216,29 +94,125 @@ const ReceptionMain = () => {
             };
           }}
         >
-            <Text p='md' fw={700} align='center'>
-              Dzisiejsze wizyty
-            </Text>
-          <ScrollArea
-            offsetScrollbars
-            type='always'
-          >
-            <Flex
-              w='100%'
-              justify='center'
-            >
+          <UserSearch />
+        </Flex>
+        <Flex
+          h="30rem"
+          w="100%"
+          miw={width < BREAKPOINT ? '100%' : '15rem'}
+          direction="column"
+          sx={(theme) => {
+            return {
+              borderRadius: theme.radius.md,
+              border: '3px #fd7e14 solid',
+            };
+          }}
+        >
+          {doctorList.isLoading ? (
+            <Flex justify="center" align="center" h="100%">
+              <Loader />
+            </Flex>
+          ) : (
+            doctorList.data?.map((doctor, index) => {
+              return (
+                <DoctorItem
+                  key={doctor.doctorId}
+                  index={index}
+                  lastName={doctor.lastName}
+                  specialization={doctor.specialization}
+                  photo={doctor.photo}
+                  doctorId={doctor.doctorId}
+                />
+              );
+            })
+          )}
+        </Flex>
+      </Flex>
+      <Flex
+        miw={width < BREAKPOINT ? '100%' : '30rem'}
+        w={width < BREAKPOINT ? '100%' : '50rem'}
+        h="95vh"
+        justify="start"
+        direction="column"
+        sx={(theme) => {
+          return {
+            borderRadius: theme.radius.md,
+            border: '3px #fd7e14 solid',
+          };
+        }}
+      >
+        <Text align={'center'} fz='xl' fw='bold' p="md">
+          Oczekujące rezerwacje
+        </Text>
+        {newAppointmentsList.isLoading ? (
+          <Flex justify="center" align="center" h="100%">
+            <Loader />
+          </Flex>
+        ) : (
+          <ScrollArea offsetScrollbars type="always">
+            <Flex w="100%" justify="center">
               <FlexibleAccordion
-                dataList={wizyty}
+                dataList={newAppointmentsList.data || []}
+                firstTableTitle={'Stosowane leki:'}
+                secondTableTitle={'Objawy:'}
+                isWithStatus={true}
+                withButtons={true}
+              />
+            </Flex>
+          </ScrollArea>
+        )}
+      </Flex>
+      <Flex
+        miw={width < BREAKPOINT ? '100%' : '25rem'}
+        w="25rem"
+        h="95vh"
+        gap="md"
+        direction="column"
+        sx={(theme) => {
+          return {
+            borderRadius: theme.radius.md,
+            border: '3px #fd7e14 solid',
+          };
+        }}
+      >
+        <Text p="md" fw={700} fz='md' align="center">
+          Dzisiejsze wizyty
+        </Text>
+        <Center>
+          <Select
+            value={selectedDoctorId}
+            label="Lekarz:"
+            data={selectDoctorData}
+            w="90%"
+            onChange={setSelectedDoctorId}
+          />
+        </Center>
+
+        {doctorTodayAppointmentsList.isLoading ? (
+          <Flex justify="center" align="center" h="100%">
+            <Loader />
+          </Flex>
+        ) : doctorTodayAppointmentsList.data?.length === 0 ? (
+          <Center>
+            <Text>Brak wizyt na dziś</Text>
+          </Center>
+        ) : (
+          <ScrollArea type="always">
+            <Flex justify="center">
+              <FlexibleAccordion
+                dataList={doctorTodayAppointmentsList.data || []}
                 firstTableTitle={'Stosowane leki:'}
                 secondTableTitle={'Objawy:'}
                 isWithStatus={true}
                 withEditButton={true}
+                directionColumn
               />
             </Flex>
           </ScrollArea>
-        </Flex>
+        )}
+      </Flex>
     </Flex>
-  )
-}
+  );
+};
 
-export default ReceptionMain
+export default ReceptionMain;

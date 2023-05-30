@@ -1,42 +1,48 @@
 import { Avatar, Button, Flex, Text } from '@mantine/core';
-import DocImg from '../Doctors/img/piotrek.jpg'
+import { useNavigate } from 'react-router-dom';
 
 type Doc = {
-  index : number
-}
-const DoctorItem = (
-  props:Doc
-) =>{
+  index: number;
+  lastName: string;
+  doctorId: number;
+  photo: string;
+  specialization:
+    | `OPHTHALMOLOGIST`
+    | `INTERNIST`
+    | `GASTROENTEROLOGIST`
+    | `PULMONOLOGIST`;
+};
 
-  return(
+const polishSpecialization = {
+  OPHTHALMOLOGIST: 'Okulista',
+  INTERNIST: 'Internista',
+  GASTROENTEROLOGIST: 'Gastrolog',
+  PULMONOLOGIST: 'Pulmonolog',
+};
+
+const DoctorItem = (props: Doc) => {
+  const navigate = useNavigate();
+  return (
     <Flex
-      p='md'
-      w='100%'
-      justify='space-between'
-      align='center'
+      p="md"
+      w="100%"
+      justify="space-between"
+      align="center"
       sx={() => {
-        return{
-          backgroundColor: props.index % 2 == 0 ? '#f1f3f5' : ''
-        }
-      }
-      }
+        return {
+          backgroundColor: props.index % 2 == 0 ? '#f1f3f5' : '',
+        };
+      }}
     >
-      <Flex
-        align='center'
-        direction='column'
-      >
-        <Avatar size='md' src={DocImg}/>
-        <Text>Skorwyr</Text>
+      <Flex w='25%' align="center" direction="column">
+        <Avatar size="md" src={props.photo} />
+        <Text>{props.lastName}</Text>
       </Flex>
       <Flex>
-        <Text>Specjalizacja</Text>
+        <Text>{polishSpecialization[`${props.specialization}`]}</Text>
       </Flex>
-      <Button
-        variant='outline'
-      >
-        Przejdź
-      </Button>
+      <Button variant="outline" onClick={() => navigate(`/doctor-profile/${props.doctorId}`)}>Przejdź</Button>
     </Flex>
-  )
-}
-export default DoctorItem
+  );
+};
+export default DoctorItem;

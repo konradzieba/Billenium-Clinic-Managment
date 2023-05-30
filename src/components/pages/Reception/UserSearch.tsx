@@ -1,4 +1,4 @@
-import { Button, Flex, TextInput, Text } from '@mantine/core';
+import { Button, Flex, Text,TextInput } from '@mantine/core';
 
 
 const UserSearch = () =>{
@@ -16,7 +16,7 @@ const UserSearch = () =>{
         justify='center'
         align='center'
       >
-        <Text>Wyszukaj pacjenta</Text>
+        <Text fw='bold' fz='md'>Wyszukaj pacjenta</Text>
       </Flex>
       <TextInput
         w='100%'

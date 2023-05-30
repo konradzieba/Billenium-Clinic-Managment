@@ -32,7 +32,6 @@ export const Home = () => {
   const { width } = useViewportSize();
   const navigate = useNavigate();
   const isDoctor = sessionStorage.getItem('role') === 'doctor';
-  // console.log(isDoctor);
   return (
     <Center>
       <Flex w="80%" direction="column">

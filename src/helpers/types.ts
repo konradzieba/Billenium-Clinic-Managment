@@ -4,7 +4,11 @@
 export type DoctorListType = {
   doctorId: number;
   description: string;
-  specialization: string;
+  specialization:
+    | `OPHTHALMOLOGIST`
+    | `INTERNIST`
+    | `GASTROENTEROLOGIST`
+    | `PULMONOLOGIST`;
   photo: string;
   firstName: string;
   lastName: string;

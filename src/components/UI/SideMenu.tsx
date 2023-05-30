@@ -81,7 +81,6 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 
 export function SideMenu() {
   const { pathname } = useLocation();
-  // console.log(pathname);
   const [active, setActive] = useState(pathname);
   const session = {
     sessionId: sessionStorage.getItem('sessionId') || null,

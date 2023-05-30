@@ -20,7 +20,6 @@ export const DoctorList = ({ specialization }: DoctorListProps) => {
   const { data, isLoading } = useQuery([`${specialization}`], () =>
     fetchDoctors(specialization)
   );
-  // console.log(data);
   return (
     <Flex
       maw="100%"

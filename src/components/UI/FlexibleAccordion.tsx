@@ -2,8 +2,8 @@ import { Accordion, Box, Button, Flex, List, Text } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
 import { IconPointFilled } from '@tabler/icons-react';
 
+import { AppointmentStatus } from '../../helpers/enums';
 import { AppointmentResponseType } from '../../helpers/types';
-
 type FlexibleAccordionProps = {
   dataList: AppointmentResponseType[];
   firstTableTitle: 'Leki:' | 'Stosowane leki:';
@@ -14,6 +14,7 @@ type FlexibleAccordionProps = {
   descriptionBody?: string;
   withButtons?: boolean;
   withEditButton?: boolean;
+  directionColumn?: boolean;
   onAccept?: () => void;
   onDecline?: () => void;
   onEdit?: () => void;
@@ -33,6 +34,7 @@ export const FlexibleAccordion = ({
   isWithStatus,
   withPatient,
   withEditButton,
+  directionColumn,
   onEdit,
 }: FlexibleAccordionProps) => {
   const { width } = useViewportSize();
@@ -42,9 +44,9 @@ export const FlexibleAccordion = ({
       radius="md"
       multiple
       w={width < BREAKPOINT ? '90%' : '80%'}
+      miw='90%'
       styles={{
         item: {
-          // styles added to all items
           backgroundColor: '#fff',
           border: `1px solid #fd7e14`,
         },
@@ -75,10 +77,16 @@ export const FlexibleAccordion = ({
                       <Text span fw="bold" mr={3}>
                         Status:
                       </Text>
-                      {data.appointmentStatus === 'NEW' && 'Oczekująca'}
-                      {data.appointmentStatus === 'APPROVED' && 'Zatwierdzona'}
-                      {data.appointmentDate === 'CANCELED' && 'Odrzucona'}
-                      {data.appointmentDate === 'RESCHEDULED' && 'Przeniesiona'}
+                      {data.appointmentStatus === AppointmentStatus.NEW &&
+                        'Oczekujący'}
+                      {data.appointmentStatus === AppointmentStatus.APPROVED &&
+                        'Zatwierdzony'}
+                      {data.appointmentStatus === AppointmentStatus.CANCELED &&
+                        'Odrzucony'}
+                      {data.appointmentStatus ===
+                        AppointmentStatus.RESCHEDULED && 'Przeniesiony'}
+                      {data.appointmentStatus === AppointmentStatus.DONE &&
+                        'Zakończony'}
                     </Text>
                   ) : (
                     <Text>
@@ -110,8 +118,8 @@ export const FlexibleAccordion = ({
             )}
           </Flex>
           <Accordion.Panel>
-            <Flex px="md" direction={width < BREAKPOINT ? 'column' : 'row'}>
-              <Box w={width < BREAKPOINT ? '100%' : '50%'} pl="md">
+            <Flex px="md" direction={width < BREAKPOINT || directionColumn ? 'column' : 'row'}>
+              <Box w={width < BREAKPOINT ? '100%' : '50%'}>
                 <Text fw="bold">{firstTableTitle}</Text>
                 <List
                   icon={
@@ -130,7 +138,7 @@ export const FlexibleAccordion = ({
                   ))}
                 </List>
               </Box>
-              <Box w={width < BREAKPOINT ? '100%' : '50%'} pl="md">
+              <Box w={width < BREAKPOINT ? '100%' : '50%'}>
                 <Text fw="bold">{secondTableTitle}</Text>
                 <List
                   icon={
@@ -144,11 +152,17 @@ export const FlexibleAccordion = ({
                     />
                   }
                 >
-                  {data.patientSymptoms
-                    .split(', ')
-                    .map((recommendation, index) => (
-                      <List.Item key={index}>{recommendation}</List.Item>
-                    ))}
+                  {data.appointmentStatus === AppointmentStatus.DONE
+                    ? data.doctorRecommendations
+                        .split(', ')
+                        .map((recommendation, index) => (
+                          <List.Item key={index}>{recommendation}</List.Item>
+                        ))
+                    : data.patientSymptoms
+                        .split(', ')
+                        .map((recommendation, index) => (
+                          <List.Item key={index}>{recommendation}</List.Item>
+                        ))}
                 </List>
               </Box>
             </Flex>

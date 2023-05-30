@@ -15,7 +15,8 @@ type FlexibleAccordionProps = {
   withButtons?: boolean;
   withEditButton?: boolean;
   directionColumn?: boolean;
-  onAccept?: (appointmentId: number) => void;
+  setApprovalAppointmentId?: (id: number) => void;
+  onAccept?: (opened: boolean) => void;
   onDecline?: (appointmentId: number) => void;
   onEdit?: () => void;
 };
@@ -36,6 +37,7 @@ export const FlexibleAccordion = ({
   withEditButton,
   directionColumn,
   onEdit,
+  setApprovalAppointmentId,
 }: FlexibleAccordionProps) => {
   const { width } = useViewportSize();
   return (
@@ -104,8 +106,9 @@ export const FlexibleAccordion = ({
                 <Button
                   size="xs"
                   onClick={() => {
-                    if (onAccept) {
-                      onAccept(data.appointmentId);
+                    if (onAccept && setApprovalAppointmentId) {
+                      setApprovalAppointmentId(data.appointmentId);
+                      onAccept(true);
                     }
                   }}
                 >

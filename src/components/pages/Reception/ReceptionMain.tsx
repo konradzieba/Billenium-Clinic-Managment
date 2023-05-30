@@ -24,6 +24,8 @@ const ReceptionMain = () => {
   const { width } = useViewportSize();
   const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<number | null>(null);
   const fetchDoctors = async () => {
     const response = await axios.get(DOCTORS_URL);
     return response.data as DoctorListType[];
@@ -67,7 +69,7 @@ const ReceptionMain = () => {
     : [{ value: '1', label: 'Brak lekarzy', image: '' }];
 
   const patchAppointmentStatus = async (requestBody: {
-    appointmentId: number;
+    appointmentId: number | null;
     status: string;
   }) => {
     const response = await axios.patch(CHANGE_APPOINTMENT_STATUS, {
@@ -90,7 +92,7 @@ const ReceptionMain = () => {
     },
   });
 
-  const handleApproveAppointment = (appointmentId: number) => {
+  const handleApproveAppointment = (appointmentId: number | null) => {
     mutation.mutate({
       appointmentId: appointmentId,
       status: 'approved',
@@ -193,7 +195,8 @@ const ReceptionMain = () => {
                 secondTableTitle={'Objawy:'}
                 isWithStatus={true}
                 withButtons={true}
-                onAccept={handleApproveAppointment}
+                onAccept={setIsApprovalModalOpen}
+                setApprovalAppointmentId={setSelectedAppointmentId}
                 onDecline={handleCancelAppointment}
               />
             </Flex>
@@ -238,7 +241,11 @@ const ReceptionMain = () => {
           <ScrollArea type="always">
             <Flex justify="center">
               <FlexibleAccordion
-                dataList={doctorTodayAppointmentsList.data?.filter(data => data.appointmentStatus === 'APPROVED') || []}
+                dataList={
+                  doctorTodayAppointmentsList.data?.filter(
+                    (data) => data.appointmentStatus === 'APPROVED'
+                  ) || []
+                }
                 firstTableTitle={'Stosowane leki:'}
                 secondTableTitle={'Objawy:'}
                 isWithStatus={true}
@@ -255,6 +262,15 @@ const ReceptionMain = () => {
           opened={isErrorModalOpen}
           setOpen={setIsErrorModalOpen}
           isErrorModal
+        />
+      )}
+      {isApprovalModalOpen && (
+        <ConfirmModal
+          title="Czy na pewno chcesz zatwierdzić wizytę?"
+          opened={isApprovalModalOpen}
+          setOpen={setIsApprovalModalOpen}
+          onApproveAppointment={handleApproveAppointment}
+          appointmentId={selectedAppointmentId}
         />
       )}
     </Flex>

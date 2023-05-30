@@ -8,7 +8,9 @@ type ConfirmModal = {
   acceptText?: string;
   cancelText?: string;
   isErrorModal?: boolean;
+  appointmentId?: number | null;
   onAccept?: () => void;
+  onApproveAppointment?: (id: number | null) => void;
 };
 
 const ConfirmModal = ({
@@ -18,7 +20,9 @@ const ConfirmModal = ({
   acceptText,
   cancelText,
   isErrorModal,
+  appointmentId,
   onAccept,
+  onApproveAppointment,
 }: ConfirmModal) => {
   return (
     <Center>
@@ -35,9 +39,21 @@ const ConfirmModal = ({
                 <Button variant="outline" onClick={() => setOpen(false)}>
                   {cancelText || 'Anuluj'}
                 </Button>
-                <Button variant="filled" onClick={onAccept}>
-                  {acceptText || 'Zatwierdź'}
-                </Button>
+                {onApproveAppointment ? (
+                  <Button
+                    variant="filled"
+                    onClick={() => {
+                      appointmentId && onApproveAppointment(appointmentId);
+                      setOpen(false);
+                    }}
+                  >
+                    {acceptText || 'Zatwierdź'}
+                  </Button>
+                ) : (
+                  <Button variant="filled" onClick={onAccept}>
+                    {acceptText || 'Zatwierdź'}
+                  </Button>
+                )}
               </>
             )}
           </Flex>

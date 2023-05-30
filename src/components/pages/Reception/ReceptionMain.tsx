@@ -1,21 +1,16 @@
-import {
-  Center,
-  Flex,
-  Loader,
-  ScrollArea,
-  Select,
-  Text,
-} from '@mantine/core';
+import { Center, Flex, Loader, ScrollArea, Select, Text } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
 import {
+  AppointmentDeclineError,
   AppointmentResponseType,
   DoctorListType,
 } from '../../../helpers/types';
+import ConfirmModal from '../../UI/ConfirmModal';
 import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
 import DoctorItem from './DoctorItem';
 import UserSearch from './UserSearch';
@@ -23,10 +18,12 @@ import UserSearch from './UserSearch';
 const BREAKPOINT = 1080;
 const DOCTORS_URL = 'http://localhost:8080/api/doctors';
 const NEW_APPOINTMENTS = 'http://localhost:8080/api/appointments/new';
+const CHANGE_APPOINTMENT_STATUS = 'http://localhost:8080/api/appointments';
 
 const ReceptionMain = () => {
   const { width } = useViewportSize();
   const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const fetchDoctors = async () => {
     const response = await axios.get(DOCTORS_URL);
     return response.data as DoctorListType[];
@@ -68,6 +65,45 @@ const ReceptionMain = () => {
         };
       })
     : [{ value: '1', label: 'Brak lekarzy', image: '' }];
+
+  const patchAppointmentStatus = async (requestBody: {
+    appointmentId: number;
+    status: string;
+  }) => {
+    const response = await axios.patch(CHANGE_APPOINTMENT_STATUS, {
+      appointmentId: requestBody.appointmentId,
+      newStatus: requestBody.status,
+    });
+    return response.data as AppointmentResponseType;
+  };
+
+  const mutation = useMutation(patchAppointmentStatus, {
+    onSuccess: () => {
+      newAppointmentsList.refetch();
+      doctorTodayAppointmentsList.refetch();
+    },
+    onError: (error: AxiosError<AppointmentDeclineError>) => {
+      const { response } = error;
+      if (response?.status === 422) {
+        setIsErrorModalOpen(true);
+      }
+    },
+  });
+
+  const handleApproveAppointment = (appointmentId: number) => {
+    mutation.mutate({
+      appointmentId: appointmentId,
+      status: 'approved',
+    });
+  };
+
+  const handleCancelAppointment = (appointmentId: number) => {
+    mutation.mutate({
+      appointmentId: appointmentId,
+      status: 'canceled',
+    });
+  };
+
   return (
     <Flex
       justify="space-around"
@@ -141,7 +177,7 @@ const ReceptionMain = () => {
           };
         }}
       >
-        <Text align={'center'} fz='xl' fw='bold' p="md">
+        <Text align={'center'} fz="xl" fw="bold" p="md">
           Oczekujące rezerwacje
         </Text>
         {newAppointmentsList.isLoading ? (
@@ -157,6 +193,8 @@ const ReceptionMain = () => {
                 secondTableTitle={'Objawy:'}
                 isWithStatus={true}
                 withButtons={true}
+                onAccept={handleApproveAppointment}
+                onDecline={handleCancelAppointment}
               />
             </Flex>
           </ScrollArea>
@@ -175,7 +213,7 @@ const ReceptionMain = () => {
           };
         }}
       >
-        <Text p="md" fw={700} fz='md' align="center">
+        <Text p="md" fw={700} fz="md" align="center">
           Dzisiejsze wizyty
         </Text>
         <Center>
@@ -200,7 +238,7 @@ const ReceptionMain = () => {
           <ScrollArea type="always">
             <Flex justify="center">
               <FlexibleAccordion
-                dataList={doctorTodayAppointmentsList.data || []}
+                dataList={doctorTodayAppointmentsList.data?.filter(data => data.appointmentStatus === 'APPROVED') || []}
                 firstTableTitle={'Stosowane leki:'}
                 secondTableTitle={'Objawy:'}
                 isWithStatus={true}
@@ -211,6 +249,14 @@ const ReceptionMain = () => {
           </ScrollArea>
         )}
       </Flex>
+      {isErrorModalOpen && (
+        <ConfirmModal
+          title="Nie można anulować wizyty na 24h przed jej terminem"
+          opened={isErrorModalOpen}
+          setOpen={setIsErrorModalOpen}
+          isErrorModal
+        />
+      )}
     </Flex>
   );
 };

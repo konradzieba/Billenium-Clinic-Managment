@@ -7,6 +7,7 @@ type ConfirmModal = {
   setOpen: Dispatch<boolean>;
   acceptText?: string;
   cancelText?: string;
+  isErrorModal?: boolean;
   onAccept?: () => void;
 };
 
@@ -16,6 +17,7 @@ const ConfirmModal = ({
   setOpen,
   acceptText,
   cancelText,
+  isErrorModal,
   onAccept,
 }: ConfirmModal) => {
   return (
@@ -24,10 +26,20 @@ const ConfirmModal = ({
         <Flex direction="column">
           <Text align="center">{title}</Text>
           <Flex mt="xl" justify="space-evenly">
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              {cancelText || 'Anuluj'}
-            </Button>
-            <Button variant="filled" onClick={onAccept}>{acceptText || 'Zatwierdź'}</Button>
+            {isErrorModal ? (
+              <Button variant="filled" onClick={() => setOpen(false)}>
+                Rozumiem
+              </Button>
+            ) : (
+              <>
+                <Button variant="outline" onClick={() => setOpen(false)}>
+                  {cancelText || 'Anuluj'}
+                </Button>
+                <Button variant="filled" onClick={onAccept}>
+                  {acceptText || 'Zatwierdź'}
+                </Button>
+              </>
+            )}
           </Flex>
         </Flex>
       </Modal>

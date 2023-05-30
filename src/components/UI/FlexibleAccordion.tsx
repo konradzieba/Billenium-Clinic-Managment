@@ -15,8 +15,8 @@ type FlexibleAccordionProps = {
   withButtons?: boolean;
   withEditButton?: boolean;
   directionColumn?: boolean;
-  onAccept?: () => void;
-  onDecline?: () => void;
+  onAccept?: (appointmentId: number) => void;
+  onDecline?: (appointmentId: number) => void;
   onEdit?: () => void;
 };
 
@@ -44,7 +44,7 @@ export const FlexibleAccordion = ({
       radius="md"
       multiple
       w={width < BREAKPOINT ? '90%' : '80%'}
-      miw='90%'
+      miw="90%"
       styles={{
         item: {
           backgroundColor: '#fff',
@@ -101,10 +101,25 @@ export const FlexibleAccordion = ({
             </Accordion.Control>
             {withButtons && (
               <Flex justify="center" align="center" gap="xs" px="md">
-                <Button size="xs" onClick={onAccept}>
-                  Zakcpetuj
+                <Button
+                  size="xs"
+                  onClick={() => {
+                    if (onAccept) {
+                      onAccept(data.appointmentId);
+                    }
+                  }}
+                >
+                  Zaakcpetuj
                 </Button>
-                <Button onClick={onDecline} variant="outline" size="xs">
+                <Button
+                  onClick={() => {
+                    if (onDecline) {
+                      onDecline(data.appointmentId);
+                    }
+                  }}
+                  variant="outline"
+                  size="xs"
+                >
                   Odrzuć
                 </Button>
               </Flex>
@@ -118,7 +133,12 @@ export const FlexibleAccordion = ({
             )}
           </Flex>
           <Accordion.Panel>
-            <Flex px="md" direction={width < BREAKPOINT || directionColumn ? 'column' : 'row'}>
+            <Flex
+              px="md"
+              direction={
+                width < BREAKPOINT || directionColumn ? 'column' : 'row'
+              }
+            >
               <Box w={width < BREAKPOINT ? '100%' : '50%'}>
                 <Text fw="bold">{firstTableTitle}</Text>
                 <List

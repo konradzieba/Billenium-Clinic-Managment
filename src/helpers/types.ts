@@ -73,3 +73,8 @@ export type AppointmentResponseType = {
   createdAt: string;
   modifiedAt: string;
 };
+
+export type AppointmentDeclineError = {
+  error: string;
+  errors: Record<string, string[]>;
+};

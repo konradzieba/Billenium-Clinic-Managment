@@ -80,15 +80,15 @@ export const FlexibleAccordion = ({
                         Status:
                       </Text>
                       {data.appointmentStatus === AppointmentStatus.NEW &&
-                        'Oczekujący'}
+                        'Oczekująca'}
                       {data.appointmentStatus === AppointmentStatus.APPROVED &&
-                        'Zatwierdzony'}
+                        'Zatwierdzona'}
                       {data.appointmentStatus === AppointmentStatus.CANCELED &&
-                        'Odrzucony'}
+                        'Odrzucona'}
                       {data.appointmentStatus ===
                         AppointmentStatus.RESCHEDULED && 'Przeniesiony'}
                       {data.appointmentStatus === AppointmentStatus.DONE &&
-                        'Zakończony'}
+                        'Zakończona'}
                     </Text>
                   ) : (
                     <Text>

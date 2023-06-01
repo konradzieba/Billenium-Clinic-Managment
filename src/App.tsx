@@ -9,11 +9,12 @@ import Calendar from './components/pages/Appointment/Calendar';
 import EditAppointment from './components/pages/Appointment/EditAppointment';
 import Layout from './components/pages/Appointment/Layout';
 import SymptomsMeds from './components/pages/Appointment/SymptomsMeds';
+import Archives from './components/pages/Archives/Archives';
 import ForgotPassword from './components/pages/Auth/ForgotPassword';
 import ProtectedRoute from './components/pages/Auth/ProtectedRoute';
 import SignIn from './components/pages/Auth/SignIn';
 import SignUp from './components/pages/Auth/SignUp';
-import DoctorProfile from './components/pages/DoctorProfile/DoctorProfile';
+import { DoctorProfile } from './components/pages/DoctorProfile/DoctorProfile';
 import { DoctorList } from './components/pages/Doctors/DoctorsList';
 import NotFound from './components/pages/ErrorPages/NotFound';
 import Unauthorized from './components/pages/ErrorPages/Unauthorized';
@@ -25,7 +26,6 @@ import { SpecializationList } from './components/pages/Specializations/Specializ
 import { VisitsList } from './components/pages/Visits/VisitsList';
 import { SideMenu } from './components/UI/SideMenu';
 import { DoctorsSpeciality } from './helpers/enums';
-import Archives from './components/pages/Archives/Archives';
 
 const queryClient = new QueryClient();
 

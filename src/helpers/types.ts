@@ -78,3 +78,12 @@ export type AppointmentDeclineError = {
   error: string;
   errors: Record<string, string[]>;
 };
+
+export type DoctorInfoType = {
+  doctorId: number;
+  specialization: string;
+  description: string;
+  photo: string;
+  userInfoResponseDTO: Omit<PatientUserInfoType, 'password'>;
+  addressResponseDTO: AddressResponseType;
+};

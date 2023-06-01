@@ -201,7 +201,12 @@ export const DoctorProfile = () => {
                   size={30}
                   style={{ cursor: 'pointer' }}
                   onClick={open}
-                  display={userRole === 'doctor' ? 'block' : 'none'}
+                  display={
+                    userRole === 'doctor' &&
+                    doctorId === sessionStorage.getItem('doctorId')
+                      ? 'block'
+                      : 'none'
+                  }
                 />
                 <IconArrowBack
                   size={30}

@@ -80,7 +80,8 @@ export const Home = () => {
           mt={width > BREAKPOINT ? 'xl' : 0}
         >
           {sessionStorage.getItem('sessionId') &&
-          sessionStorage.getItem('userId') && !isDoctor ? (
+          sessionStorage.getItem('userId') &&
+          !isDoctor ? (
             <Button
               size="md"
               radius="md"
@@ -89,7 +90,15 @@ export const Home = () => {
               Umów się na wizytę
             </Button>
           ) : isDoctor ? (
-            <Button size="md" radius="md" onClick={() => navigate('/')}>
+            <Button
+              size="md"
+              radius="md"
+              onClick={() =>
+                navigate(
+                  `/doctor-profile/${sessionStorage.getItem('doctorId')}`
+                )
+              }
+            >
               Przeglądaj wizyty
             </Button>
           ) : (

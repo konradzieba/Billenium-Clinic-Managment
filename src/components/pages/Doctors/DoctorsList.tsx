@@ -1,11 +1,11 @@
 import { Box, Button, Flex, Loader, Title } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 import { DoctorListType } from '../../../helpers/types';
 import AppointmentStepper from '../../UI/AppointmentStepper';
 import Doctor from './Doctor';
-import { useNavigate } from 'react-router-dom';
 
 type DoctorListProps = {
   specialization: string;

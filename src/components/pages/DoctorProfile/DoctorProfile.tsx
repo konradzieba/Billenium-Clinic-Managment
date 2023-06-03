@@ -18,7 +18,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconArrowBack, IconSearch, IconSettings2 } from '@tabler/icons-react';
+import { IconArrowBack, IconSearch, IconSettings } from '@tabler/icons-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -68,7 +68,7 @@ const DOCTOR_VISITS_URL = 'http://localhost:8080/api/doctors/';
 export const DoctorProfile = () => {
   const userRole = sessionStorage.getItem('role');
   const todaysDate = dayjs(new Date()).format('YYYY-MM-DD').toString();
-  const todaysDateShort = dayjs(new Date()).format('DD-MM').toString();
+  const todaysDateShort = dayjs(new Date()).format('D MMMM').toString();
   const navigate = useNavigate();
   const { classes, cx } = useStyles();
   const { pathname } = useLocation();
@@ -197,7 +197,7 @@ export const DoctorProfile = () => {
                 </Box>
               </Flex>
               <Flex direction="column" gap="xl">
-                <IconSettings2
+                <IconSettings
                   size={30}
                   style={{ cursor: 'pointer' }}
                   onClick={open}
@@ -220,10 +220,9 @@ export const DoctorProfile = () => {
         <Flex direction="column" h="80%" gap="xl">
           <Flex justify="center" direction="column" mih="50%">
             <Flex justify="space-between">
-              <Text
-                fz="lg"
-                fw={700}
-              >{`Wizyty na dzień ${todaysDateShort}: `}</Text>
+              <Text fz="lg" fw={700}>
+                {`Wizyty na dzień: ${todaysDateShort}`}
+              </Text>
               {visits.data?.length === 0 ? null : (
                 <Button variant="filled">Pobierz wizyty</Button>
               )}

@@ -3,6 +3,7 @@ import 'dayjs/locale/pl';
 import { Container, MantineProvider } from '@mantine/core';
 import { DatesProvider } from '@mantine/dates';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Calendar from './components/pages/Appointment/Calendar';
@@ -26,10 +27,10 @@ import { SpecializationList } from './components/pages/Specializations/Specializ
 import { VisitsList } from './components/pages/Visits/VisitsList';
 import { SideMenu } from './components/UI/SideMenu';
 import { DoctorsSpeciality } from './helpers/enums';
-
 const queryClient = new QueryClient();
 
 const App = () => {
+  dayjs.locale('pl');
   return (
     <MantineProvider
       theme={{

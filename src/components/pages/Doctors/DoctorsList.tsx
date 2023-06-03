@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Loader, Title } from '@mantine/core';
+import { Box, Button, Center, Flex, Loader, Text, Title } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +33,10 @@ export const DoctorList = ({ specialization }: DoctorListProps) => {
     >
       <Box>
         <Title align={'center'}> Wybierz interesującego Cię lekarza</Title>
-        {isLoading && <Loader mt="xl" />}
+        <Center pt="xl">
+          {isLoading && <Loader mt="xl" />}
+          {!isLoading && !data && ( <Text fz='xl'>Nie znaleziono lekarzy w wybranej specjalizacji</Text>)}
+        </Center>
         {data?.map((doc, index) => {
           return (
             <Doctor

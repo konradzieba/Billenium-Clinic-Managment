@@ -1,12 +1,12 @@
 import { Button, Flex, ScrollArea, TextInput, Title } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm, zodResolver } from '@mantine/form';
+import dayjs from 'dayjs';
+import { useState } from 'react';
 
 import { signUpSchema as schema } from '../../../helpers/schemas';
-import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
-import { useState } from 'react';
 import { AppointmentResponseType } from '../../../helpers/types';
-import dayjs from 'dayjs';
+import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
 
 const wizyty = [
   {

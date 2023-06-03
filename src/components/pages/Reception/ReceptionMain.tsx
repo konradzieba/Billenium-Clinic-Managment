@@ -46,15 +46,14 @@ const ReceptionMain = () => {
   );
 
   const todaysDate = dayjs(new Date()).format('YYYY-MM-DD').toString();
-
   const fetchDoctorTodayAppointments = async () => {
     const response = await axios.get(
-      `http://localhost:8080/api/doctors/${selectedDoctorId}/appointments?appointmendDate=${todaysDate}`
+      `http://localhost:8080/api/doctors/${selectedDoctorId}/appointments?appointmentDate=${todaysDate}`
     );
     return response.data as AppointmentResponseType[];
   };
   const doctorTodayAppointmentsList = useQuery(
-    [`todayAppointments-${selectedDoctorId}`, selectedDoctorId],
+    [`todayAppointments-${selectedDoctorId}-${todaysDate}`, selectedDoctorId],
     fetchDoctorTodayAppointments,
     { enabled: selectedDoctorId !== null }
   );

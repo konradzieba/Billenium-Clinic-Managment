@@ -28,6 +28,7 @@ import { SpecializationList } from './components/pages/Specializations/Specializ
 import { VisitsList } from './components/pages/Visits/VisitsList';
 import { SideMenu } from './components/UI/SideMenu';
 import { DoctorsSpeciality } from './helpers/enums';
+import AboutUs from './components/pages/AboutUs/AboutUs';
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -58,6 +59,7 @@ const App = () => {
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/specializations" element={<SpecializationList />} />
+              <Route path="/about-us" element={<AboutUs />} />
               <Route
                 path={`/specializations/${DoctorsSpeciality.INTERNIST}`}
                 element={
@@ -206,16 +208,43 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              {/* Recepcja */}
-              <Route path="/reception" element={<ReceptionMain />} />
-              {/* Recepcja + lekarz */}
+              <Route
+                path="/reception"
+                element={
+                  <ProtectedRoute role="doctor&reception">
+                    <ReceptionMain />
+                  </ProtectedRoute>
+                }
+              />
+              {/* TUTAJ DODAĆ */}
               <Route
                 path="/editAppointment"
                 element={<EditAppointment role={'doctor'} />}
               />
-              <Route path="/doctor-profile/:id" element={<DoctorProfile />} />
-              <Route path="/patient-profile-info/:id" element={<PatientProfileInfo />} />
-              <Route path="/archives" element={<Archives />} />
+              <Route
+                path="/doctor-profile/:id"
+                element={
+                  <ProtectedRoute role="doctor&reception">
+                    <DoctorProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/patient-profile-info/:id"
+                element={
+                  <ProtectedRoute role="doctor&reception">
+                    <PatientProfileInfo />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/archives"
+                element={
+                  <ProtectedRoute role="doctor&reception">
+                    <Archives />
+                  </ProtectedRoute>
+                }
+              />
 
               <Route path="/not-found" element={<NotFound />} />
               <Route path="/unauthorized" element={<Unauthorized />} />

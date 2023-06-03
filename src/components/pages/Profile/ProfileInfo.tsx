@@ -5,13 +5,14 @@ import {
   Container,
   Flex,
   Input,
+  List,
   Loader,
   Text,
   TextInput,
   Title,
 } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
-import { IconPlus } from '@tabler/icons-react';
+import { IconPlus, IconX } from '@tabler/icons-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { ChangeEvent, useReducer, useState } from 'react';
@@ -48,6 +49,28 @@ export const ProfileInfo = () => {
     userProfileReducer,
     userProfileInitialValues
   );
+  const [medicinesList, setMedicinesList] = useState<string[]>([]);
+  const [allergyList, setAllergyList] = useState<string[]>([]);
+  if (medicinesList[0] === '') {
+    setMedicinesList([]);
+  }
+  if (allergyList[0] === '') {
+    setAllergyList([]);
+  }
+  const handleAddMedicines = (value: string) => {
+    if (value) {
+      setMedicinesList((prevState) => [...prevState, value]);
+      setOpenMedicines(false);
+    }
+  };
+
+  const handleAddAllergy = (value: string | null) => {
+    if (value !== null) {
+      setAllergyList((prevState) => [...prevState, value]);
+    }
+    setOpenAllergy(false);
+  };
+
   const { data, isLoading, refetch } = useQuery(
     [`patientInfo${sessionStorage.getItem('patientId')}`],
     fetchUserData,
@@ -61,10 +84,11 @@ export const ProfileInfo = () => {
           type: 'phoneNumber',
           payload: data.patientUserInfo.phoneNumber,
         });
+        setMedicinesList(data.medicines.split(','));
+        setAllergyList(data.allergies.split(','));
       },
     }
   );
-
   const patchUserInfo = async (url: string) => {
     const response = await axios.patch(url, {
       patientId: data!.patientId,
@@ -73,8 +97,8 @@ export const ProfileInfo = () => {
         phoneNumber: state.phoneNumber,
         email: state.email,
       },
-      allergies: '',
-      medicines: '',
+      allergies: allergyList.toString(),
+      medicines: medicinesList.toString(),
       addressUpdateDTO: {
         addressId: data!.addressResponseDTO.addressId,
         city: state.city,
@@ -139,7 +163,7 @@ export const ProfileInfo = () => {
           )}
         </Flex>
         {isLoading ? (
-          <Center w='50vw' h='50vh'>
+          <Center w="50vw" h="50vh">
             <Loader />
           </Center>
         ) : (
@@ -284,12 +308,14 @@ export const ProfileInfo = () => {
                   <ActionIcon
                     color="#fd7e14"
                     variant="light"
+                    display={isBlocked ? 'none' : 'flex'}
                     onClick={() => setOpenMedicines(true)}
                   >
                     <IconPlus size="1rem" />
                   </ActionIcon>
                 </Flex>
                 <Flex
+                  h="100%"
                   mt="xs"
                   sx={(theme) => {
                     return {
@@ -298,7 +324,35 @@ export const ProfileInfo = () => {
                     };
                   }}
                   p="md"
-                ></Flex>
+                >
+                  <List w="100%">
+                    {medicinesList.map((medicine, index) => {
+                      return (
+                        <Flex justify="space-between" key={index + 200}>
+                          <List.Item key={index}>
+                            <Text>{medicine}</Text>
+                          </List.Item>
+                          <ActionIcon
+                            key={index + 100}
+                            color="#fd7e14"
+                            variant="light"
+                            size="xs"
+                            display={isBlocked ? 'none' : 'flex'}
+                            onClick={() =>
+                              setMedicinesList((prevState) =>
+                                prevState.filter(
+                                  (item) => prevState.indexOf(item) !== index
+                                )
+                              )
+                            }
+                          >
+                            <IconX size="0.75rem" />
+                          </ActionIcon>
+                        </Flex>
+                      );
+                    })}
+                  </List>
+                </Flex>
               </Flex>
               <Flex direction="column" w={width < 1080 ? '100%' : '50%'} p="md">
                 <Flex justify="space-between">
@@ -306,12 +360,14 @@ export const ProfileInfo = () => {
                   <ActionIcon
                     color="#fd7e14"
                     variant="light"
+                    display={isBlocked ? 'none' : 'flex'}
                     onClick={() => setOpenAllergy(true)}
                   >
                     <IconPlus size="1rem" />
                   </ActionIcon>
                 </Flex>
                 <Flex
+                  h="100%"
                   mt="xs"
                   sx={(theme) => {
                     return {
@@ -320,14 +376,50 @@ export const ProfileInfo = () => {
                     };
                   }}
                   p="md"
-                ></Flex>
+                >
+                  <List w="100%">
+                    {allergyList.map((allergy, index) => {
+                      return (
+                        <Flex justify="space-between" key={index + 200}>
+                          <List.Item key={index}>
+                            <Text>{allergy}</Text>
+                          </List.Item>
+                          <ActionIcon
+                            key={index + 100}
+                            color="#fd7e14"
+                            variant="light"
+                            size="xs"
+                            display={isBlocked ? 'none' : 'flex'}
+                            onClick={() =>
+                              setAllergyList((prevState) =>
+                                prevState.filter(
+                                  (item) => prevState.indexOf(item) !== index
+                                )
+                              )
+                            }
+                          >
+                            <IconX size="0.75rem" />
+                          </ActionIcon>
+                        </Flex>
+                      );
+                    })}
+                  </List>
+                </Flex>
               </Flex>
             </Flex>
           </>
         )}
       </Flex>
-      <ModalMedicines opened={openMedicines} setOpen={setOpenMedicines} />
-      <ModalAllergy opened={openAllergy} setOpen={setOpenAllergy} />
+      <ModalMedicines
+        opened={openMedicines}
+        setOpen={setOpenMedicines}
+        saveFunction={handleAddMedicines}
+      />
+      <ModalAllergy
+        opened={openAllergy}
+        setOpen={setOpenAllergy}
+        saveFunction={handleAddAllergy}
+      />
       <ConfirmModal
         title="Czy na pewno chcesz zmienić dane?"
         opened={save}

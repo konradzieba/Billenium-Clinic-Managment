@@ -3,30 +3,30 @@ import { Dispatch, useState } from 'react';
 
 type ModalMedicinesProps = {
   opened: boolean;
+  saveFunction: (medicine: string) => void;
   setOpen: Dispatch<boolean>;
 };
 
 const leki = [
-  'Paracetamol',
-  'Ibuprofen',
-  'Aspiryna',
-  'Ketonal',
-  'Apap',
-  'Nurofen',
-  'Nasivin',
-  'Gripex',
-  'Lekadol',
-  'Fervex',
-  'Vicks',
-  'Claritine',
-  'Nalgesin',
-  'Strepsils',
-  'Sinupret',
-  'Septolete',
-  'Mucosolvan',
-  'Coldrex',
-  'Rutinoscorbin',
-  'Doppelherz',
+  { value: 'Paracetamol', label: 'Paracetamol' },
+  { value: 'Aspiryna', label: 'Aspiryna' },
+  { value: 'Ketonal', label: 'Ketonal' },
+  { value: 'Apap', label: 'Apap' },
+  { value: 'Nurofen', label: 'Nurofen' },
+  { value: 'Nasivin', label: 'Nasivin' },
+  { value: 'Gripex', label: 'Gripex' },
+  { value: 'Lekadol', label: 'Lekadol' },
+  { value: 'Fervex', label: 'Fervex' },
+  { value: 'Vicks', label: 'Vicks' },
+  { value: 'Claritine', label: 'Claritine' },
+  { value: 'Nalgesin', label: 'Nalgesin' },
+  { value: 'Strepsils', label: 'Strepsils' },
+  { value: 'Sinupret', label: 'Sinupret' },
+  { value: 'Septolete', label: 'Septolete' },
+  { value: 'Mucosolvan', label: 'Mucosolvan' },
+  { value: 'Coldrex', label: 'Coldrex' },
+  { value: 'Rutinoscorbin', label: 'Rutinoscorbin' },
+  { value: 'Doppelherz', label: 'Doppelherz' },
 ];
 
 const autoCompleteRegex = new RegExp(/^\d+$/);
@@ -36,10 +36,11 @@ const ModalMedicines = (props: ModalMedicinesProps) => {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
 
-  const [value, setValue] = useState('');
+  const [dose, setDose] = useState<string>('');
+  const [medicine, setMedicine] = useState<string | null>(null);
   const dawki =
-    value.trim().length > 0 && value.match(autoCompleteRegex)
-      ? dawki_lekow.map((provider) => `${value} ${provider}`)
+    dose.trim().length > 0 && dose.match(autoCompleteRegex)
+      ? dawki_lekow.map((provider) => `${dose} ${provider}`)
       : [];
   return (
     <Modal
@@ -60,10 +61,11 @@ const ModalMedicines = (props: ModalMedicinesProps) => {
             label="Wpisz swoje lekarstwa"
             placeholder="Nazwa lekarstwa"
             searchable
+            onChange={setMedicine}
             getCreateLabel={(query) => `+ Dodaj ${query}`}
             onCreate={(query) => {
               const item = query;
-              setData((current) => [...current, item]);
+              setData((current) => [...current, { value: item, label: item }]);
               return item;
             }}
             creatable
@@ -74,8 +76,8 @@ const ModalMedicines = (props: ModalMedicinesProps) => {
             onDropdownClose={() => setOpen2(false)}
             w="30%"
             data={dawki}
-            value={value}
-            onChange={setValue}
+            value={dose}
+            onChange={setDose}
             label="Dawka"
             placeholder="Dawka"
             maxDropdownHeight={120}
@@ -83,7 +85,14 @@ const ModalMedicines = (props: ModalMedicinesProps) => {
         </Flex>
       </Flex>
       <Flex justify={'center'}>
-        <Button mt="md" variant="outline">
+        <Button
+          mt="md"
+          variant="outline"
+          onClick={() => {
+            setDose('');
+            props.saveFunction(`${medicine} ${dose}`);
+          }}
+        >
           Dodaj lekarstwo
         </Button>
       </Flex>

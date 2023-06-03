@@ -166,7 +166,7 @@ export const DoctorProfile = () => {
               <td>
                 <Button
                   variant="outline"
-                  onClick={() => console.log(patient.patientId)}
+                  onClick={() => navigate(`/patient-profile-info/${patient.patientId}`)}
                 >
                   Sprawdz historię
                 </Button>

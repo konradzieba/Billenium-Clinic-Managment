@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
@@ -25,7 +26,8 @@ const PatientProfileInfo = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const patientId = pathname.split('/')[2];
-
+  const [medicinesList, setMedicinesList] = useState<string[]>([]);
+  const [allergiesList, setAllergiesList] = useState<string[]>([]);
   const fetchPatientInfo = async () => {
     const response = await axios.get(`${PATIENT_INFO_URL}/${patientId}`);
     return response.data as UserProfileInfoType;
@@ -39,9 +41,14 @@ const PatientProfileInfo = () => {
 
   const patientInfo = useQuery(
     [`patientInfoProfile`, patientId],
-    fetchPatientInfo
+    fetchPatientInfo,
+    {
+      onSuccess(data) {
+        setMedicinesList(data.medicines.split(','));
+        setAllergiesList(data.allergies.split(','));
+      },
+    }
   );
-
   const patientAppointments = useQuery(
     [`appointments`, patientId],
     fetchNewAppointments
@@ -85,12 +92,26 @@ const PatientProfileInfo = () => {
                       {patientInfo.data?.patientUserInfo.birthdate}
                     </Text>
                   </Text>
-                  <Text mt="md">Stosowane leki: </Text>
-                  <List>
-                    <List.Item>lek</List.Item>
-                    <List.Item>lek</List.Item>
-                    <List.Item>lek</List.Item>
-                  </List>
+                  {medicinesList[0] !== '' ? (
+                    <>
+                      <Text mt="md" style={infoBorder} pl={3}>
+                        Stosowane leki:{' '}
+                      </Text>
+                      <ScrollArea h={100} offsetScrollbars>
+                        <List>
+                          {medicinesList.map((medicine, index) => {
+                            return (
+                              <List.Item key={index}>{medicine}</List.Item>
+                            );
+                          })}
+                        </List>
+                      </ScrollArea>
+                    </>
+                  ) : (
+                    <Text mt="md" style={infoBorder} pl={3}>
+                      Brak stosowanych leków
+                    </Text>
+                  )}
                 </Flex>
                 <Flex gap="sm" direction="column">
                   <Text style={infoBorder} pl={3}>
@@ -113,11 +134,24 @@ const PatientProfileInfo = () => {
                       {patientInfo.data?.addressResponseDTO.zipCode}
                     </Text>
                   </Text>
-                  <Text mt="md">Alergie: </Text>
-                  <List>
-                    <List.Item>lek</List.Item>
-                    <List.Item>lek</List.Item>
-                  </List>
+                  {allergiesList[0] !== '' ? (
+                    <>
+                      <Text mt="md" style={infoBorder} pl={3}>
+                        Alergie:{' '}
+                      </Text>
+                      <ScrollArea h={100} offsetScrollbars>
+                        <List>
+                          {allergiesList.map((allergy, index) => {
+                            return <List.Item key={index}>{allergy}</List.Item>;
+                          })}
+                        </List>
+                      </ScrollArea>
+                    </>
+                  ) : (
+                    <Text mt="md" style={infoBorder} pl={3}>
+                      Brak alergii
+                    </Text>
+                  )}
                 </Flex>
               </>
             )}
@@ -145,7 +179,9 @@ const PatientProfileInfo = () => {
         </Flex>
       </Flex>
       <Center>
-        <Button onClick={() => navigate('/reception')}my='md'>Powrót do panelu recepcji</Button>
+        <Button onClick={() => navigate('/reception')} my="md">
+          Powrót do panelu recepcji
+        </Button>
       </Center>
     </Container>
   );

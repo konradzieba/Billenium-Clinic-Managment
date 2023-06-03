@@ -1,6 +1,8 @@
 import {
   Button,
+  Center,
   Flex,
+  Loader,
   ScrollArea,
   Select,
   TextInput,
@@ -107,35 +109,41 @@ const Archives = () => {
   return (
     <Flex w="100%" justify="center">
       <Flex miw="50%" direction="column" align="center" gap="md">
-        <Flex w="100%" align="center" direction="column">
-          <Title>Archiwum</Title>
-          <Flex w="100%" align="end" justify="space-between" gap="md">
-            <Flex gap="md">
-              <DateInput
-                valueFormat="YYYY-MM-DD"
-                maxDate={new Date()}
-                excludeDate={(date) => isWeekend(dayjs(date))}
-                label="Data: "
-                value={date}
-                onChange={(value) => value && setDate(value)}
-              />
-              <TextInput
-                label={'Pacjent:'}
-                value={selectedPatientName}
-                onChange={(e) => setSelectedPatientName(e.target.value)}
-                placeholder={'Imię i nazwisko'}
-              />
-              <Select
-                value={selectedDoctorName}
-                label="Lekarz:"
-                data={selectDoctorData}
-                onChange={setSelectedDoctorName}
-              />
+        <Flex w="100%" align="center" direction="column" gap="md">
+          <Title mt="lg">Archiwum</Title>
+          {allDoctors.isLoading && allAppointmentsList.isLoading ? (
+            <Center mt="xl">
+              <Loader />
+            </Center>
+          ) : (
+            <Flex w="100%" align="end" justify="space-evenly" gap="md">
+              <Flex gap="md">
+                <DateInput
+                  valueFormat="YYYY-MM-DD"
+                  maxDate={new Date()}
+                  excludeDate={(date) => isWeekend(dayjs(date))}
+                  label="Data: "
+                  value={date}
+                  onChange={(value) => value && setDate(value)}
+                />
+                <TextInput
+                  label={'Pacjent:'}
+                  value={selectedPatientName}
+                  onChange={(e) => setSelectedPatientName(e.target.value)}
+                  placeholder={'Imię i nazwisko'}
+                />
+                <Select
+                  value={selectedDoctorName}
+                  label="Lekarz:"
+                  data={selectDoctorData}
+                  onChange={setSelectedDoctorName}
+                />
+              </Flex>
+              <Button onClick={handleClick}>Szukaj</Button>
             </Flex>
-            <Button onClick={handleClick}>Szukaj</Button>
-          </Flex>
+          )}
         </Flex>
-        <ScrollArea mah="50rem" w="100%" maw={'55rem'}>
+        <ScrollArea mah="50rem" w="100%" maw={'55rem'} mt="md">
           <Flex justify="center">
             <FlexibleAccordion
               dataList={filteredAppointments}

@@ -112,7 +112,7 @@ export function SideMenu() {
       <NavbarLink
         {...link}
         key={link.label}
-        active={link.link === active}
+        active={link.link === active }
         onClick={() => {
           navigate(link.link);
           setActive(link.link);
@@ -177,6 +177,7 @@ export function SideMenu() {
                 navigate('/sign-in');
               }}
               label="Zaloguj się"
+              active={active === '/sign-in'}
             />
           )}
         </Stack>

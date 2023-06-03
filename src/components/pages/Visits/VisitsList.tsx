@@ -81,72 +81,103 @@ export const VisitsList = () => {
               <Tabs.Panel mt="xl" value={AppointmentStatus.APPROVED}>
                 <ScrollArea h={550}>
                   <Center>
-                    <FlexibleAccordion
-                      isWithStatus
-                      dataList={
-                        data?.filter(
-                          (appointment) =>
-                            appointment.appointmentStatus ===
-                            AppointmentStatus.APPROVED
-                        ) || []
-                      }
-                      firstTableTitle="Leki:"
-                      secondTableTitle="Objawy:"
-                    />
+                    {data?.filter(
+                      (appointment) =>
+                        appointment.appointmentStatus ===
+                        AppointmentStatus.APPROVED
+                    ).length === 0 ? (
+                      <Text>Brak zatwierdzonych wizyt</Text>
+                    ) : (
+                      <FlexibleAccordion
+                        isWithStatus
+                        dataList={
+                          data?.filter(
+                            (appointment) =>
+                              appointment.appointmentStatus ===
+                              AppointmentStatus.APPROVED
+                          ) || []
+                        }
+                        firstTableTitle="Leki:"
+                        secondTableTitle="Objawy:"
+                      />
+                    )}
                   </Center>
                 </ScrollArea>
               </Tabs.Panel>
               <Tabs.Panel mt="xl" value={AppointmentStatus.NEW}>
                 <ScrollArea h={550}>
                   <Center>
-                    <FlexibleAccordion
-                      isWithStatus
-                      dataList={
-                        data?.filter(
-                          (appointment) =>
-                            appointment.appointmentStatus ===
-                            AppointmentStatus.NEW
-                        ) || []
-                      }
-                      firstTableTitle="Leki:"
-                      secondTableTitle="Objawy:"
-                    />
+                    {data?.filter(
+                      (appointment) =>
+                        appointment.appointmentStatus === AppointmentStatus.NEW
+                    ).length === 0 ? (
+                      <Text>Brak oczekujących wizyt</Text>
+                    ) : (
+                      <FlexibleAccordion
+                        isWithStatus
+                        dataList={
+                          data?.filter(
+                            (appointment) =>
+                              appointment.appointmentStatus ===
+                              AppointmentStatus.NEW
+                          ) || []
+                        }
+                        firstTableTitle="Leki:"
+                        secondTableTitle="Objawy:"
+                      />
+                    )}
                   </Center>
                 </ScrollArea>
               </Tabs.Panel>
               <Tabs.Panel mt="xl" value={AppointmentStatus.CANCELED}>
                 <ScrollArea h={550}>
                   <Center>
-                    <FlexibleAccordion
-                      isWithStatus
-                      dataList={
-                        data?.filter(
-                          (appointment) =>
-                            appointment.appointmentStatus ===
-                            AppointmentStatus.CANCELED
-                        ) || []
-                      }
-                      firstTableTitle="Leki:"
-                      secondTableTitle="Objawy:"
-                    />
+                    {data?.filter(
+                      (appointment) =>
+                        appointment.appointmentStatus ===
+                        AppointmentStatus.CANCELED
+                    ).length === 0 ? (
+                      <Text>Brak anulowanych wizyt</Text>
+                    ) : (
+                      <FlexibleAccordion
+                        isWithStatus
+                        dataList={
+                          data?.filter(
+                            (appointment) =>
+                              appointment.appointmentStatus ===
+                              AppointmentStatus.CANCELED
+                          ) || []
+                        }
+                        firstTableTitle="Leki:"
+                        secondTableTitle="Objawy:"
+                      />
+                    )}
                   </Center>
                 </ScrollArea>
               </Tabs.Panel>
               <Tabs.Panel mt="xl" value={AppointmentStatus.RESCHEDULED}>
                 <ScrollArea h={550}>
                   <Center>
-                    <FlexibleAccordion
-                      isWithStatus
-                      dataList={
-                        data?.filter(
-                          (appointment) =>
-                            appointment.appointmentStatus ===
-                            AppointmentStatus.RESCHEDULED
-                        ) || []
-                      }
-                      firstTableTitle="Leki:"
-                      secondTableTitle="Objawy:"
-                    />
+                    {data?.filter(
+                      (appointment) =>
+                        appointment.appointmentStatus ===
+                        AppointmentStatus.RESCHEDULED
+                    ).length === 0 ? (
+                      <Text>Brak przełożonych wizyt</Text>
+                    ) : (
+                      <FlexibleAccordion
+                        isWithStatus
+                        dataList={
+                          data?.filter(
+                            (appointment) =>
+                              appointment.appointmentStatus ===
+                              AppointmentStatus.RESCHEDULED
+                          ) || []
+                        }
+                        firstTableTitle="Leki:"
+                        secondTableTitle="Objawy:"
+                      />
+                    )}
                   </Center>
                 </ScrollArea>
               </Tabs.Panel>

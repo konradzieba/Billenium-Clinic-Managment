@@ -33,7 +33,7 @@ const customSlide = {
   transitionProperty: 'right, top',
 };
 
-function isWeekend(date: Dayjs): boolean {
+export function isWeekend(date: Dayjs): boolean {
   const dayOfWeek = date.day();
   return dayOfWeek === 6 || dayOfWeek === 0;
 }

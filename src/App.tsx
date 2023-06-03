@@ -21,6 +21,7 @@ import NotFound from './components/pages/ErrorPages/NotFound';
 import Unauthorized from './components/pages/ErrorPages/Unauthorized';
 import { History } from './components/pages/History/History';
 import { Home } from './components/pages/Home/Home';
+import PatientProfileInfo from './components/pages/PatientProfileInfo/PatientProfileInfo';
 import { ProfileInfo } from './components/pages/Profile/ProfileInfo';
 import ReceptionMain from './components/pages/Reception/ReceptionMain';
 import { SpecializationList } from './components/pages/Specializations/SpecializationList';
@@ -213,6 +214,7 @@ const App = () => {
                 element={<EditAppointment role={'doctor'} />}
               />
               <Route path="/doctor-profile/:id" element={<DoctorProfile />} />
+              <Route path="/patient-profile-info/:id" element={<PatientProfileInfo />} />
               <Route path="/archives" element={<Archives />} />
 
               <Route path="/not-found" element={<NotFound />} />

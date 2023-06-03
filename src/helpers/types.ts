@@ -87,3 +87,8 @@ export type DoctorInfoType = {
   userInfoResponseDTO: Omit<PatientUserInfoType, 'password'>;
   addressResponseDTO: AddressResponseType;
 };
+
+export type PatientPESELListType = {
+  patientId: number;
+  pesel: string;
+}

@@ -1,157 +1,97 @@
-import { Button, Flex, ScrollArea, TextInput, Title } from '@mantine/core';
+import {
+  Button,
+  Flex,
+  ScrollArea,
+  Select,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { useForm, zodResolver } from '@mantine/form';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
-import { signUpSchema as schema } from '../../../helpers/schemas';
-import { AppointmentResponseType } from '../../../helpers/types';
+// import { AppointmentStatus } from '../../../helpers/enums';
+import {
+  AppointmentResponseType,
+  DoctorListType,
+} from '../../../helpers/types';
 import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
+import { isWeekend } from '../Appointment/Calendar';
 
-const wizyty = [
-  {
-    appointmentId: 1,
-    patientName: 'Jan Paweł',
-    doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-07-04',
-    patientSymptoms: 'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21',
-  },
-  {
-    appointmentId: 2,
-    patientName: 'Karol Strzyk',
-    doctorName: 'Adam Piotrowski',
-    appointmentDate: '2023-07-04',
-    patientSymptoms: 'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21',
-  },
-  {
-    appointmentId: 3,
-    patientName: 'Michał Małysz',
-    doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-07-04',
-    patientSymptoms: 'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21',
-  },
-  {
-    appointmentId: 4,
-    patientName: 'Jan Paweł',
-    doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-07-04',
-    patientSymptoms:
-      'WWWWWWW WWWWWWWWWWWWWWWWWWW WWWWWWWW WWWWWWWW WWWWWWWWWWWWWWWWW',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21',
-  },
-  {
-    appointmentId: 5,
-    patientName: 'Karol Strzyk',
-    doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-06-02',
-    patientSymptoms: 'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21',
-  },
-  {
-    appointmentId: 6,
-    patientName: 'Michał Małysz',
-    doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-06-03',
-    patientSymptoms:
-      'Mocny ból głowy z zawrotami, zwędzenie rąk. Jestem ciągle głodny i nie mogę tego wytzymać',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21',
-  },
-  {
-    appointmentId: 7,
-    patientName: 'Jan Paweł',
-    doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-06-10',
-    patientSymptoms:
-      'WWWWWWW WWWWWWWWWWWWWWWWWWW WWWWWWWW WWWWWWWW WWWWWWWWWWWWWWWWW',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21',
-  },
-  {
-    appointmentId: 8,
-    patientName: 'Karol Strzyk',
-    doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-07-04',
-    patientSymptoms: 'Mocny ból głowy z zawrotami, zwędzenie rąk.',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21',
-  },
-  {
-    appointmentId: 9,
-    patientName: 'Michał Małysz',
-    doctorName: 'Krystian Bąk',
-    appointmentDate: '2023-07-04',
-    patientSymptoms:
-      'Mocny ból głowy z zawrotami, zwędzenie rąk. Jestem ciągle głodny i nie mogę tego wytzymać',
-    medicinesTaken: 'Ibuprofen',
-    appointmentStatus: 'NEW',
-    doctorRecommendations: '',
-    createdAt: '2023-06-21',
-    modifiedAt: '2023-06-21',
-  },
-];
+const AllAppointmentsURL = 'http://localhost:8080/api/appointments/all';
+const DOCTORS_URL = 'http://localhost:8080/api/doctors';
+
 const Archives = () => {
-  const form = useForm({
-    initialValues: {
-      maxDate: new Date(),
-      patient: '',
-      doctor:''
+  const [selectedDoctorName, setSelectedDoctorName] = useState<string | null>(
+    null
+  );
+  const [selectedPatientName, setSelectedPatientName] = useState<string>('');
+
+  const fetchAllAppointments = async () => {
+    const response = await axios.get(AllAppointmentsURL);
+    return response.data as AppointmentResponseType[];
+  };
+
+  const fetchAllDoctors = async () => {
+    const response = await axios.get(DOCTORS_URL);
+    return response.data as DoctorListType[];
+  };
+
+  const allAppointmentsList = useQuery(
+    ['AllAppointments'],
+    fetchAllAppointments
+  );
+  const allDoctors = useQuery(['AllDoctors'], fetchAllDoctors, {
+    onSuccess: () => {
+      setSelectedDoctorName('0');
     },
-    validate: zodResolver(schema),
   });
 
-  const [filteredAppointments, setFilteredAppointments] = useState<AppointmentResponseType[]>([])
+  const fetchedDoctorData = allDoctors.data
+    ? allDoctors.data?.map((doc) => {
+        return {
+          value: `${doc.firstName} ${doc.lastName}`,
+          label: `${doc.firstName} ${doc.lastName}`,
+        };
+      })
+    : [{ value: '1', label: 'Brak lekarzy' }];
+
+  const selectDoctorData = [
+    { value: '0', label: 'Wszyscy lekarze' },
+    ...fetchedDoctorData,
+  ];
+  const [filteredAppointments, setFilteredAppointments] = useState<
+    AppointmentResponseType[]
+  >([]);
+
+  const [date, setDate] = useState<Date>(new Date());
+  const formattedDate = dayjs(date).format('DD.MM.YYYY');
 
   const handleClick = () => {
-    setFilteredAppointments(wizyty.filter(
-      (appointment) =>
-        new Date(appointment.appointmentDate) <= new Date(dayjs(form.getInputProps('maxDate').value).format('YYYY-MM-DD'))
-    ))
-    if(form.getInputProps('patient').value !== ''){
-      setFilteredAppointments((prevState) => prevState.filter(
-        (appointment) =>
-          appointment.patientName.includes(form.getInputProps('patient').value)
-      ))
+    if (allAppointmentsList.data) {
+      const filteredAppointmentsList = allAppointmentsList.data?.filter(
+        (appointment) => {
+          if (
+            appointment.doctorName === selectedDoctorName &&
+            appointment.patientName.startsWith(selectedPatientName) &&
+            appointment.appointmentDate.includes(formattedDate)
+          ) {
+            return appointment;
+          }
+          if (
+            selectedDoctorName === '0' &&
+            appointment.patientName.startsWith(selectedPatientName) &&
+            appointment.appointmentDate.includes(formattedDate)
+          ) {
+            return appointment;
+          }
+        }
+      );
+      setFilteredAppointments(filteredAppointmentsList);
     }
-    if(form.getInputProps('doctor').value !== ''){
-      setFilteredAppointments((prevState) => prevState.filter(
-        (appointment) =>
-          appointment.doctorName.includes(form.getInputProps('doctor').value)
-      ))
-    }
-  }
+  };
 
   return (
     <Flex w="100%" justify="center">
@@ -161,39 +101,38 @@ const Archives = () => {
           <Flex w="100%" align="end" justify="space-between" gap="md">
             <Flex gap="md">
               <DateInput
-                valueFormat='YYYY-MM-DD'
-                label='Do dnia'
-                {...form.getInputProps('maxDate')}
+                valueFormat="YYYY-MM-DD"
+                maxDate={new Date()}
+                excludeDate={(date) => isWeekend(dayjs(date))}
+                label="Data: "
+                value={date}
+                onChange={(value) => value && setDate(value)}
               />
               <TextInput
-                label={'Pacjent'}
-                placeholder={'Wpisz dane pacjenta'}
-                {...form.getInputProps('patient')}
+                label={'Pacjent:'}
+                value={selectedPatientName}
+                onChange={(e) => setSelectedPatientName(e.target.value)}
+                placeholder={'Imię i nazwisko'}
               />
-              <TextInput
-                label={'Doktor'}
-                placeholder={'Wpisz dane doktora'}
-                {...form.getInputProps('doctor')}
+              <Select
+                value={selectedDoctorName}
+                label="Lekarz:"
+                data={selectDoctorData}
+                onChange={setSelectedDoctorName}
               />
             </Flex>
-            <Button
-              onClick={() => handleClick()}
-            >
-              Szukaj
-            </Button>
+            <Button onClick={handleClick}>Szukaj</Button>
           </Flex>
         </Flex>
         <ScrollArea mah="50rem" w="100%" maw={'55rem'}>
           <Flex justify="center">
-              <FlexibleAccordion
-                dataList={filteredAppointments}
-                firstTableTitle={'Stosowane leki:'}
-                secondTableTitle={'Objawy:'}
-                isWithStatus={false}
-                withButtons={false}
-                withEditButton={true}
-                withPatient={true}
-              />
+            <FlexibleAccordion
+              dataList={filteredAppointments}
+              firstTableTitle={'Stosowane leki:'}
+              secondTableTitle={'Objawy:'}
+              isWithStatus={false}
+              withPatient={true}
+            />
           </Flex>
         </ScrollArea>
       </Flex>

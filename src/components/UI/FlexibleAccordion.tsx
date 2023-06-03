@@ -15,6 +15,7 @@ type FlexibleAccordionProps = {
   withButtons?: boolean;
   withEditButton?: boolean;
   directionColumn?: boolean;
+  fullWidth?: boolean;
   setApprovalAppointmentId?: (id: number) => void;
   onAccept?: (opened: boolean) => void;
   onDecline?: (appointmentId: number) => void;
@@ -36,6 +37,7 @@ export const FlexibleAccordion = ({
   withPatient,
   withEditButton,
   directionColumn,
+  fullWidth,
   onEdit,
   setApprovalAppointmentId,
 }: FlexibleAccordionProps) => {
@@ -45,7 +47,7 @@ export const FlexibleAccordion = ({
       variant="separated"
       radius="md"
       multiple
-      w={width < BREAKPOINT ? '90%' : '80%'}
+      w={fullWidth ? '100%' : width < BREAKPOINT ? '90%' : '80%'}
       miw="90%"
       styles={{
         item: {
@@ -175,7 +177,7 @@ export const FlexibleAccordion = ({
                     />
                   }
                 >
-                  {data.appointmentStatus === AppointmentStatus.DONE
+                  {/* {data.appointmentStatus === AppointmentStatus.DONE
                     ? data.doctorRecommendations
                         .split(', ')
                         .map((recommendation, index) => (
@@ -185,7 +187,12 @@ export const FlexibleAccordion = ({
                         .split(', ')
                         .map((recommendation, index) => (
                           <List.Item key={index}>{recommendation}</List.Item>
-                        ))}
+                        ))} */}
+                  {data.patientSymptoms
+                    .split(', ')
+                    .map((recommendation, index) => (
+                      <List.Item key={index}>{recommendation}</List.Item>
+                    ))}
                 </List>
               </Box>
             </Flex>

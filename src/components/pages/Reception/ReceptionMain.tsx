@@ -9,6 +9,8 @@ import {
   AppointmentDeclineError,
   AppointmentResponseType,
   DoctorListType,
+  PatientPESELListType,
+  UserProfileInfoType,
 } from '../../../helpers/types';
 import ConfirmModal from '../../UI/ConfirmModal';
 import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
@@ -19,13 +21,19 @@ const BREAKPOINT = 1080;
 const DOCTORS_URL = 'http://localhost:8080/api/doctors';
 const NEW_APPOINTMENTS = 'http://localhost:8080/api/appointments/new';
 const CHANGE_APPOINTMENT_STATUS = 'http://localhost:8080/api/appointments';
+const PATIENTS_URL = 'http://localhost:8080/api/patients';
 
 const ReceptionMain = () => {
   const { width } = useViewportSize();
   const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
-  const [selectedAppointmentId, setSelectedAppointmentId] = useState<number | null>(null);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<
+    number | null
+  >(null);
+  const [patientPESELList, setPatientPESELList] = useState<
+    PatientPESELListType[] | null
+  >(null);
   const fetchDoctors = async () => {
     const response = await axios.get(DOCTORS_URL);
     return response.data as DoctorListType[];
@@ -52,6 +60,22 @@ const ReceptionMain = () => {
     );
     return response.data as AppointmentResponseType[];
   };
+  const fetchAllPatients = async () => {
+    const response = await axios.get(PATIENTS_URL);
+    return response.data as UserProfileInfoType[];
+  };
+
+  const allPatientsList = useQuery(['allPatients'], fetchAllPatients, {
+    onSuccess(data) {
+      const peselIDObj = data.map((patient) => {
+        return {
+          patientId: patient.patientId,
+          pesel: patient.patientUserInfo.pesel,
+        };
+      });
+      setPatientPESELList(peselIDObj);
+    },
+  });
   const doctorTodayAppointmentsList = useQuery(
     [`todayAppointments-${selectedDoctorId}-${todaysDate}`, selectedDoctorId],
     fetchDoctorTodayAppointments,
@@ -131,7 +155,13 @@ const ReceptionMain = () => {
             };
           }}
         >
-          <UserSearch />
+          {allPatientsList.isLoading ? (
+            <Flex justify="center" align="center" h="100%" w="100%">
+              <Loader />
+            </Flex>
+          ) : (
+            <UserSearch patientPESELList={patientPESELList} />
+          )}
         </Flex>
         <Flex
           h="30rem"

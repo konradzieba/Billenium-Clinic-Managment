@@ -1,41 +1,73 @@
-import { Button, Flex, Text,TextInput } from '@mantine/core';
+import { Button, Flex, Input, Text } from '@mantine/core';
+import { ChangeEvent, useState } from 'react';
+import { IMaskInput } from 'react-imask';
+import { useNavigate } from 'react-router-dom';
 
+import { PatientPESELListType } from '../../../helpers/types';
+import ConfirmModal from '../../UI/ConfirmModal';
+type UserSearchProps = {
+  patientPESELList: PatientPESELListType[] | null;
+};
 
-const UserSearch = () =>{
-
-  return(
-    <Flex
-      w='100%'
-      justify='start'
-      direction='column'
-      align='center'
-      gap='md'
-      p='md'
-    >
+const UserSearch = ({ patientPESELList }: UserSearchProps) => {
+  const [searchValue, setSearchValue] = useState('');
+  const navigate = useNavigate();
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const handleSearch = () => {
+    const patient = patientPESELList?.find(
+      (patient) => patient.pesel === searchValue
+    );
+    if (patient) {
+      navigate(`/patient-profile-info/${patient.patientId}`);
+    } else {
+      setIsErrorModalOpen(true);
+    }
+  };
+  return (
+    <>
       <Flex
-        justify='center'
-        align='center'
+        w="100%"
+        justify="start"
+        direction="column"
+        align="center"
+        gap="md"
+        p="md"
       >
-        <Text fw='bold' fz='md'>Wyszukaj pacjenta</Text>
+        <Flex justify="center" align="center">
+          <Text fw="bold" fz="md">
+            Wyszukaj pacjenta
+          </Text>
+        </Flex>
+        <Input.Wrapper w="20rem">
+          <Input
+            placeholder="Wpisz PESEL"
+            value={searchValue}
+            component={IMaskInput}
+            mask="00000000000"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSearchValue(e.currentTarget.value)
+            }
+            sx={(theme) => {
+              return {
+                borderRadius: theme.radius.md,
+              };
+            }}
+          />
+        </Input.Wrapper>
+        <Button variant="outline" w="10rem" onClick={handleSearch}>
+          Szukaj
+        </Button>
       </Flex>
-      <TextInput
-        w='100%'
-        placeholder={'Wpisz PESEL'}
-        sx={(theme) => {
-          return{
-            borderRadius:theme.radius.md
-          }
-        }
-        }
-
-      />
-      <Button
-        variant='outline'
-        w='10rem'
-      >
-        Szukaj
-      </Button>
-    </Flex>
-  )
-}
-export default UserSearch
+      {isErrorModalOpen && (
+        <ConfirmModal
+          title="Pacjent o podanym numerze PESEL nie istnieje w bazie danych."
+          opened={isErrorModalOpen}
+          setOpen={setIsErrorModalOpen}
+          acceptText="Rozumiem"
+          isErrorModal
+        />
+      )}
+    </>
+  );
+};
+export default UserSearch;

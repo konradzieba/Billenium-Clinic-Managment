@@ -1,9 +1,9 @@
 import {
   IconArchive,
-  IconAt,
   IconBook,
   IconDeviceDesktopAnalytics,
   IconHome2,
+  IconInfoCircle,
   IconNotes,
   IconNurse,
   IconUser,
@@ -12,13 +12,13 @@ import {
 export const NoLoginMenuLinks = [
   { icon: IconHome2, label: 'Strona główna', link: '/' },
   { icon: IconNurse, label: 'Specjaliści', link: '/specializations' },
-  { icon: IconAt, label: 'O nas', link: '/' },
+  { icon: IconInfoCircle, label: 'O nas', link: '/' },
 ];
 
 export const PatientMenuLinks = [
   { icon: IconHome2, label: 'Strona główna', link: '/' },
   { icon: IconNurse, label: 'Specjaliści', link: '/specializations' },
-  { icon: IconAt, label: 'O nas', link: '/' },
+  { icon: IconInfoCircle, label: 'O nas', link: '/' },
   { icon: IconBook, label: 'Wizyty', link: '/visits' },
   { icon: IconNotes, label: 'Historia wizyt', link: '/history' },
 ];
@@ -33,10 +33,10 @@ export const DoctorMenuLinks = [
   {
     icon: IconUser,
     label: 'Profil doktora',
-    link: `/doctor-profile/${sessionStorage.getItem('doctorId')}`,
+    link: `/doctor-profile/`,
   },
   { icon: IconArchive, label: 'Archiwum', link: '/archives' },
-  { icon: IconAt, label: 'O nas', link: '/' },
+  { icon: IconInfoCircle, label: 'O nas', link: '/' },
 ];
 
 export const ReceptionistMenuLinks = [
@@ -47,5 +47,5 @@ export const ReceptionistMenuLinks = [
     link: '/reception',
   },
   { icon: IconArchive, label: 'Archiwum', link: '/archives' },
-  { icon: IconAt, label: 'O nas', link: '/' },
+  { icon: IconInfoCircle, label: 'O nas', link: '/' },
 ];

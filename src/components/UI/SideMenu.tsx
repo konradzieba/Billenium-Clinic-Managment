@@ -86,7 +86,8 @@ export function SideMenu() {
     sessionId: sessionStorage.getItem('sessionId') || null,
     userId: sessionStorage.getItem('userId') || null,
     role: sessionStorage.getItem('role') || null,
-  }
+    doctorId: sessionStorage.getItem('doctorId') || null,
+  };
   const navigate = useNavigate();
   const mockdata =
     session.role === 'doctor'
@@ -96,17 +97,29 @@ export function SideMenu() {
       : session.role === 'patient'
       ? PatientMenuLinks
       : NoLoginMenuLinks;
-  const links = mockdata.map((link) => (
-    <NavbarLink
-      {...link}
-      key={link.label}
-      active={link.link === active}
-      onClick={() => {
-        navigate(link.link);
-        setActive(link.link);
-      }}
-    />
-  ));
+  const links = mockdata.map((link) =>
+    link.link === '/doctor-profile/' ? (
+      <NavbarLink
+        {...link}
+        key={link.label}
+        active={link.link === active}
+        onClick={() => {
+          navigate(`${link.link}${session.doctorId}`);
+          setActive(link.link);
+        }}
+      />
+    ) : (
+      <NavbarLink
+        {...link}
+        key={link.label}
+        active={link.link === active}
+        onClick={() => {
+          navigate(link.link);
+          setActive(link.link);
+        }}
+      />
+    )
+  );
 
   return (
     <Navbar
@@ -148,8 +161,7 @@ export function SideMenu() {
               active={active === '/profile'}
             />
           )}
-          {session.sessionId &&
-          session.userId ? (
+          {session.sessionId && session.userId ? (
             <NavbarLink
               icon={IconLogout}
               onClick={() => {

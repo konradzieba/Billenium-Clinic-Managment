@@ -1,10 +1,11 @@
 import {
   ActionIcon,
   Button,
+  Center,
   Container,
   Flex,
   Input,
-  Skeleton,
+  Loader,
   Text,
   TextInput,
   Title,
@@ -137,182 +138,193 @@ export const ProfileInfo = () => {
             </Flex>
           )}
         </Flex>
-        <Skeleton visible={isLoading}>
-          <Flex direction={width < 1080 ? 'column' : 'row'}>
-            <TextInput
-              miw="12rem"
-              disabled
-              radius="md"
-              p="md"
-              label="Imię"
-              value={data?.patientUserInfo.firstName || ''}
-            />
-            <TextInput
-              miw="12rem"
-              disabled
-              radius="md"
-              p="md"
-              label="Nazwisko"
-              value={data?.patientUserInfo.lastName || ''}
-            />
-            <TextInput
-              miw="12rem"
-              disabled
-              radius="md"
-              p="md"
-              label="Data urodzenia"
-              value={data?.patientUserInfo.birthdate || ''}
-            />
-            <TextInput
-              miw="12rem"
-              disabled
-              radius="md"
-              p="md"
-              label="PESEL"
-              value={data?.patientUserInfo.pesel || ''}
-            />
-          </Flex>
-          <Flex direction={width < 1080 ? 'column' : 'row'}>
-            <Input.Wrapper miw="12rem" p="md" label="Kod pocztowy">
-              <Input
+        {isLoading ? (
+          <Center w='50vw' h='50vh'>
+            <Loader />
+          </Center>
+        ) : (
+          <>
+            <Flex direction={width < 1080 ? 'column' : 'row'}>
+              <TextInput
+                miw="12rem"
+                disabled
                 radius="md"
-                component={IMaskInput}
-                mask="00-000"
-                value={state.zipCode}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  dispatch({ type: 'zipCode', payload: e.currentTarget.value })
+                p="md"
+                label="Imię"
+                value={data?.patientUserInfo.firstName || ''}
+              />
+              <TextInput
+                miw="12rem"
+                disabled
+                radius="md"
+                p="md"
+                label="Nazwisko"
+                value={data?.patientUserInfo.lastName || ''}
+              />
+              <TextInput
+                miw="12rem"
+                disabled
+                radius="md"
+                p="md"
+                label="Data urodzenia"
+                value={data?.patientUserInfo.birthdate || ''}
+              />
+              <TextInput
+                miw="12rem"
+                disabled
+                radius="md"
+                p="md"
+                label="PESEL"
+                value={data?.patientUserInfo.pesel || ''}
+              />
+            </Flex>
+            <Flex direction={width < 1080 ? 'column' : 'row'}>
+              <Input.Wrapper miw="12rem" p="md" label="Kod pocztowy">
+                <Input
+                  radius="md"
+                  component={IMaskInput}
+                  mask="00-000"
+                  value={state.zipCode}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    dispatch({
+                      type: 'zipCode',
+                      payload: e.currentTarget.value,
+                    })
+                  }
+                  disabled={isBlocked}
+                />
+              </Input.Wrapper>
+              <TextInput
+                miw="12rem"
+                radius="md"
+                p="md"
+                label="Miasto"
+                value={state.city}
+                onChange={(e) =>
+                  dispatch({ type: 'city', payload: e.currentTarget.value })
                 }
                 disabled={isBlocked}
               />
-            </Input.Wrapper>
-            <TextInput
-              miw="12rem"
-              radius="md"
-              p="md"
-              label="Miasto"
-              value={state.city}
-              onChange={(e) =>
-                dispatch({ type: 'city', payload: e.currentTarget.value })
-              }
-              disabled={isBlocked}
-            />
-            <TextInput
-              miw="15rem"
-              radius="md"
-              p="md"
-              w={width < 1080 ? '100%' : '50%'}
-              label="Adres"
-              value={state.street}
-              onChange={(e) =>
-                dispatch({ type: 'street', payload: e.currentTarget.value })
-              }
-              disabled={isBlocked}
-            />
-          </Flex>
-          <Flex direction={width < 1080 ? 'column' : 'row'}>
-            <TextInput
-              miw="12rem"
-              radius="md"
-              p="md"
-              onBlur={() => {
-                if (state.email.match(emailRegex) === null) {
-                  setInputError({
-                    ...inputError,
-                    email: 'Niepoprawny adres email',
-                  });
-                }
-              }}
-              error={inputError.email !== '' ? inputError.email : false}
-              label="Email"
-              value={state.email}
-              onChange={(e) => {
-                setInputError({ ...inputError, email: '' });
-                dispatch({ type: 'email', payload: e.currentTarget.value });
-              }}
-              disabled={isBlocked}
-            />
-            <Input.Wrapper
-              miw="12rem"
-              p="md"
-              label="Numer telefonu"
-              error={
-                inputError.phoneNumber !== '' ? inputError.phoneNumber : false
-              }
-            >
-              <Input
+              <TextInput
+                miw="15rem"
                 radius="md"
+                p="md"
+                w={width < 1080 ? '100%' : '50%'}
+                label="Adres"
+                value={state.street}
+                onChange={(e) =>
+                  dispatch({ type: 'street', payload: e.currentTarget.value })
+                }
+                disabled={isBlocked}
+              />
+            </Flex>
+            <Flex direction={width < 1080 ? 'column' : 'row'}>
+              <TextInput
+                miw="12rem"
+                radius="md"
+                p="md"
                 onBlur={() => {
-                  if (state.phoneNumber.length !== 9) {
+                  if (state.email.match(emailRegex) === null) {
                     setInputError({
                       ...inputError,
-                      phoneNumber: 'Numer telefonu musi mieć 9 cyfr',
+                      email: 'Niepoprawny adres email',
                     });
                   }
                 }}
-                error={
-                  inputError.phoneNumber !== '' ? inputError.phoneNumber : false
-                }
-                component={IMaskInput}
-                mask="000000000"
-                value={state.phoneNumber}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setInputError({ ...inputError, phoneNumber: '' });
-                  dispatch({
-                    type: 'phoneNumber',
-                    payload: e.currentTarget.value,
-                  });
+                error={inputError.email !== '' ? inputError.email : false}
+                label="Email"
+                value={state.email}
+                onChange={(e) => {
+                  setInputError({ ...inputError, email: '' });
+                  dispatch({ type: 'email', payload: e.currentTarget.value });
                 }}
                 disabled={isBlocked}
               />
-            </Input.Wrapper>
-          </Flex>
-          <Flex direction={width < 1080 ? 'column' : 'row'}>
-            <Flex direction="column" w={width < 1080 ? '100%' : '50%'} p="md">
-              <Flex justify="space-between">
-                <Text>Stosowane leki</Text>
-                <ActionIcon
-                  color="#fd7e14"
-                  variant="light"
-                  onClick={() => setOpenMedicines(true)}
-                >
-                  <IconPlus size="1rem" />
-                </ActionIcon>
-              </Flex>
-              <Flex
-                mt="xs"
-                sx={(theme) => {
-                  return {
-                    borderRadius: theme.radius.md,
-                    border: '2px #fd7e14 solid',
-                  };
-                }}
+              <Input.Wrapper
+                miw="12rem"
                 p="md"
-              ></Flex>
+                label="Numer telefonu"
+                error={
+                  inputError.phoneNumber !== '' ? inputError.phoneNumber : false
+                }
+              >
+                <Input
+                  radius="md"
+                  onBlur={() => {
+                    if (state.phoneNumber.length !== 9) {
+                      setInputError({
+                        ...inputError,
+                        phoneNumber: 'Numer telefonu musi mieć 9 cyfr',
+                      });
+                    }
+                  }}
+                  error={
+                    inputError.phoneNumber !== ''
+                      ? inputError.phoneNumber
+                      : false
+                  }
+                  component={IMaskInput}
+                  mask="000000000"
+                  value={state.phoneNumber}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setInputError({ ...inputError, phoneNumber: '' });
+                    dispatch({
+                      type: 'phoneNumber',
+                      payload: e.currentTarget.value,
+                    });
+                  }}
+                  disabled={isBlocked}
+                />
+              </Input.Wrapper>
             </Flex>
-            <Flex direction="column" w={width < 1080 ? '100%' : '50%'} p="md">
-              <Flex justify="space-between">
-                <Text>Alergie</Text>
-                <ActionIcon
-                  color="#fd7e14"
-                  variant="light"
-                  onClick={() => setOpenAllergy(true)}
-                >
-                  <IconPlus size="1rem" />
-                </ActionIcon>
+            <Flex direction={width < 1080 ? 'column' : 'row'}>
+              <Flex direction="column" w={width < 1080 ? '100%' : '50%'} p="md">
+                <Flex justify="space-between">
+                  <Text>Stosowane leki</Text>
+                  <ActionIcon
+                    color="#fd7e14"
+                    variant="light"
+                    onClick={() => setOpenMedicines(true)}
+                  >
+                    <IconPlus size="1rem" />
+                  </ActionIcon>
+                </Flex>
+                <Flex
+                  mt="xs"
+                  sx={(theme) => {
+                    return {
+                      borderRadius: theme.radius.md,
+                      border: '2px #fd7e14 solid',
+                    };
+                  }}
+                  p="md"
+                ></Flex>
               </Flex>
-              <Flex
-                mt="xs"
-                sx={(theme) => {
-                  return {
-                    borderRadius: theme.radius.md,
-                    border: '2px #fd7e14 solid',
-                  };
-                }}
-                p="md"
-              ></Flex>
+              <Flex direction="column" w={width < 1080 ? '100%' : '50%'} p="md">
+                <Flex justify="space-between">
+                  <Text>Alergie</Text>
+                  <ActionIcon
+                    color="#fd7e14"
+                    variant="light"
+                    onClick={() => setOpenAllergy(true)}
+                  >
+                    <IconPlus size="1rem" />
+                  </ActionIcon>
+                </Flex>
+                <Flex
+                  mt="xs"
+                  sx={(theme) => {
+                    return {
+                      borderRadius: theme.radius.md,
+                      border: '2px #fd7e14 solid',
+                    };
+                  }}
+                  p="md"
+                ></Flex>
+              </Flex>
             </Flex>
-          </Flex>
-        </Skeleton>
+          </>
+        )}
       </Flex>
       <ModalMedicines opened={openMedicines} setOpen={setOpenMedicines} />
       <ModalAllergy opened={openAllergy} setOpen={setOpenAllergy} />

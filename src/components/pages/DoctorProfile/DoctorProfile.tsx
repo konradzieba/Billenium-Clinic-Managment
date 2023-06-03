@@ -18,7 +18,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconArrowBack, IconSearch, IconSettings } from '@tabler/icons-react';
+import { IconSearch, IconSettings } from '@tabler/icons-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -166,7 +166,9 @@ export const DoctorProfile = () => {
               <td>
                 <Button
                   variant="outline"
-                  onClick={() => navigate(`/patient-profile-info/${patient.patientId}`)}
+                  onClick={() =>
+                    navigate(`/patient-profile-info/${patient.patientId}`)
+                  }
                 >
                   Sprawdz historię
                 </Button>
@@ -207,11 +209,6 @@ export const DoctorProfile = () => {
                       ? 'block'
                       : 'none'
                   }
-                />
-                <IconArrowBack
-                  size={30}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => navigate('/reception')}
                 />
               </Flex>
             </>
@@ -322,6 +319,9 @@ export const DoctorProfile = () => {
           </Flex>
         </Flex>
       </Flex>
+      <Center>
+        <Button onClick={() => navigate(-1)}>Powrót</Button>
+      </Center>
       <Drawer
         opened={opened}
         onClose={close}

@@ -55,7 +55,7 @@ export const DoctorList = ({ specialization }: DoctorListProps) => {
         size={'md'}
         onClick={() => navigate('/specializations')}
       >
-        Powrót do strony wybour specjalizacji
+        Powrót do strony wyboru specjalizacji
       </Button>
       <AppointmentStepper activeStep={0} />
     </Flex>

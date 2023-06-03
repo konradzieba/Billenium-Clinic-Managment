@@ -14,7 +14,6 @@ import {
   IconUser,
   TablerIconsProps,
 } from '@tabler/icons-react';
-import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import StudentMed from '../../assets/StudentMed.svg';
@@ -81,7 +80,6 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 
 export function SideMenu() {
   const { pathname } = useLocation();
-  const [active, setActive] = useState(pathname);
   const session = {
     sessionId: sessionStorage.getItem('sessionId') || null,
     userId: sessionStorage.getItem('userId') || null,
@@ -102,20 +100,27 @@ export function SideMenu() {
       <NavbarLink
         {...link}
         key={link.label}
-        active={link.link === active}
+        active={link.link === `/${pathname.split('/')[1]}/`}
         onClick={() => {
           navigate(`${link.link}${session.doctorId}`);
-          setActive(link.link);
+        }}
+      />
+    ) : link.link === '/specializations' ? (
+      <NavbarLink
+        {...link}
+        key={link.label}
+        active={link.link === `/${pathname.split('/')[1]}`}
+        onClick={() => {
+          navigate(link.link);
         }}
       />
     ) : (
       <NavbarLink
         {...link}
         key={link.label}
-        active={link.link === active }
+        active={link.link === pathname}
         onClick={() => {
           navigate(link.link);
-          setActive(link.link);
         }}
       />
     )
@@ -138,7 +143,6 @@ export function SideMenu() {
             alt="StudentMed Logo"
             onClick={() => {
               navigate('/');
-              setActive('/');
             }}
           />
         </UnstyledButton>
@@ -156,9 +160,8 @@ export function SideMenu() {
               label="Profil pacjenta"
               onClick={() => {
                 navigate('/profile');
-                setActive('/profile');
               }}
-              active={active === '/profile'}
+              active={pathname === '/profile'}
             />
           )}
           {session.sessionId && session.userId ? (
@@ -177,7 +180,7 @@ export function SideMenu() {
                 navigate('/sign-in');
               }}
               label="Zaloguj się"
-              active={active === '/sign-in'}
+              active={pathname === '/sign-in'}
             />
           )}
         </Stack>

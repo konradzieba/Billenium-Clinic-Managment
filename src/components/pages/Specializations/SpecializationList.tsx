@@ -7,9 +7,6 @@ import okul from './img/okul.jpg';
 import pulm from './img/pulm.jpg';
 import { SpecializationCard } from './SpecializationCard';
 
-// type SpecializationListProps = {
-
-// };
 
 const specializations = [
   {

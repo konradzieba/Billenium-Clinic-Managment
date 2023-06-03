@@ -12,7 +12,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
-// import { AppointmentStatus } from '../../../helpers/enums';
+import { AppointmentStatus } from '../../../helpers/enums';
 import {
   AppointmentResponseType,
   DoctorListType,
@@ -78,14 +78,25 @@ const Archives = () => {
             appointment.patientName.startsWith(selectedPatientName) &&
             appointment.appointmentDate.includes(formattedDate)
           ) {
-            return appointment;
+            if (
+              appointment.appointmentStatus === AppointmentStatus.DONE ||
+              appointment.appointmentStatus === AppointmentStatus.CANCELED
+            ) {
+              return appointment;
+            }
           }
           if (
             selectedDoctorName === '0' &&
             appointment.patientName.startsWith(selectedPatientName) &&
+            appointment.appointmentDate.includes(formattedDate) &&
             appointment.appointmentDate.includes(formattedDate)
           ) {
-            return appointment;
+            if (
+              appointment.appointmentStatus === AppointmentStatus.DONE ||
+              appointment.appointmentStatus === AppointmentStatus.CANCELED
+            ) {
+              return appointment;
+            }
           }
         }
       );
@@ -130,7 +141,7 @@ const Archives = () => {
               dataList={filteredAppointments}
               firstTableTitle={'Stosowane leki:'}
               secondTableTitle={'Objawy:'}
-              isWithStatus={false}
+              isWithStatus={true}
               withPatient={true}
             />
           </Flex>

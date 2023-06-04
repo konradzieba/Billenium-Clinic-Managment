@@ -67,7 +67,7 @@ const PatientProfileInfo = () => {
           <Text fz="xl" fw="bold">
             Informacje o pacjencie
           </Text>
-          <Flex gap="lg">
+          <Flex gap="xl">
             {patientInfo.isLoading ? (
               <Loader my="lg" />
             ) : (
@@ -92,26 +92,6 @@ const PatientProfileInfo = () => {
                       {patientInfo.data?.patientUserInfo.birthdate}
                     </Text>
                   </Text>
-                  {medicinesList[0] !== '' ? (
-                    <>
-                      <Text mt="md" style={infoBorder} pl={3}>
-                        Stosowane leki:{' '}
-                      </Text>
-                      <ScrollArea h={100} offsetScrollbars>
-                        <List>
-                          {medicinesList.map((medicine, index) => {
-                            return (
-                              <List.Item key={index}>{medicine}</List.Item>
-                            );
-                          })}
-                        </List>
-                      </ScrollArea>
-                    </>
-                  ) : (
-                    <Text mt="md" style={infoBorder} pl={3}>
-                      Brak stosowanych leków
-                    </Text>
-                  )}
                 </Flex>
                 <Flex gap="sm" direction="column">
                   <Text style={infoBorder} pl={3}>
@@ -134,6 +114,30 @@ const PatientProfileInfo = () => {
                       {patientInfo.data?.addressResponseDTO.zipCode}
                     </Text>
                   </Text>
+                </Flex>
+                <Flex direction='column'>
+                  {medicinesList[0] !== '' ? (
+                    <>
+                      <Text mt="md" style={infoBorder} pl={3}>
+                        Stosowane leki:{' '}
+                      </Text>
+                      <ScrollArea h={100} offsetScrollbars>
+                        <List>
+                          {medicinesList.map((medicine, index) => {
+                            return (
+                              <List.Item key={index}>{medicine}</List.Item>
+                            );
+                          })}
+                        </List>
+                      </ScrollArea>
+                    </>
+                  ) : (
+                    <Text mt="md" style={infoBorder} pl={3}>
+                      Brak stosowanych leków
+                    </Text>
+                  )}
+                </Flex>
+                <Flex direction='column'>
                   {allergiesList[0] !== '' ? (
                     <>
                       <Text mt="md" style={infoBorder} pl={3}>
@@ -164,7 +168,7 @@ const PatientProfileInfo = () => {
           {patientAppointments.isLoading ? (
             <Loader my="lg" />
           ) : (
-            <ScrollArea h={440} offsetScrollbars w="50vw">
+            <ScrollArea h={590} offsetScrollbars w="50vw">
               <Center>
                 <FlexibleAccordion
                   dataList={patientAppointments.data || []}

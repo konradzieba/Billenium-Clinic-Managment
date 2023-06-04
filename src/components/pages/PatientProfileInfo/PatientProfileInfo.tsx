@@ -183,8 +183,8 @@ const PatientProfileInfo = () => {
         </Flex>
       </Flex>
       <Center>
-        <Button onClick={() => navigate('/reception')} my="md">
-          Powrót do panelu recepcji
+        <Button onClick={() => navigate(-1)} my="md">
+          Powrót
         </Button>
       </Center>
     </Container>

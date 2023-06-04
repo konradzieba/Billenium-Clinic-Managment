@@ -16,6 +16,7 @@ import ConfirmModal from '../../UI/ConfirmModal';
 import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
 import DoctorItem from './DoctorItem';
 import UserSearch from './UserSearch';
+import Statistics from '../Statistics/Statistics';
 
 const BREAKPOINT = 1080;
 const DOCTORS_URL = 'http://localhost:8080/api/doctors';
@@ -198,6 +199,7 @@ const ReceptionMain = () => {
               })
             )}
           </Flex>
+          <Statistics source={'allDoctors'}/>
         </Flex>
         <Flex
           miw={width < BREAKPOINT ? '100%' : '30rem'}

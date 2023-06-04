@@ -28,7 +28,6 @@ import { SpecializationList } from './components/pages/Specializations/Specializ
 import { VisitsList } from './components/pages/Visits/VisitsList';
 import { SideMenu } from './components/UI/SideMenu';
 import { DoctorsSpeciality } from './helpers/enums';
-import AboutUs from './components/pages/AboutUs/AboutUs';
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -59,7 +58,6 @@ const App = () => {
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/specializations" element={<SpecializationList />} />
-              <Route path="/about-us" element={<AboutUs />} />
               <Route
                 path={`/specializations/${DoctorsSpeciality.INTERNIST}`}
                 element={

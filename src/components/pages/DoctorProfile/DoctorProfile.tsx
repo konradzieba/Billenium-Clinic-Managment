@@ -7,6 +7,7 @@ import {
   createStyles,
   Drawer,
   Flex,
+  Group,
   Input,
   Loader,
   rem,
@@ -18,7 +19,8 @@ import {
   Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconSearch, IconSettings } from '@tabler/icons-react';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { IconDownload, IconSearch, IconSettings } from '@tabler/icons-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -32,6 +34,7 @@ import {
   UserProfileInfoType,
 } from '../../../helpers/types';
 import ConfirmModal from '../../UI/ConfirmModal';
+import DoctorTodayAppointmentPDF from './DoctorTodayAppointmentPDF';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -136,17 +139,22 @@ export const DoctorProfile = () => {
   };
 
   const visits = useQuery([`visits-${doctorId}`], fetchVisits);
-  const visitsRows =
+
+  const filteredVisits =
     visits.data?.length !== 0
-      ? visits.data?.map((visit) => (
-          <tr key={visit.appointmentId}>
-            <td>{visit.appointmentDate}</td>
-            <td>{visit.patientName}</td>
-            <td>{visit.medicinesTaken}</td>
-            <td>{visit.patientSymptoms}</td>
-          </tr>
-        ))
+      ? visits.data?.filter((visit) => visit.appointmentStatus === 'APPROVED')
       : [];
+
+  const visitsRows = filteredVisits
+    ? filteredVisits.map((visit) => (
+        <tr key={visit.appointmentId}>
+          <td>{visit.appointmentDate}</td>
+          <td>{visit.patientName}</td>
+          <td>{visit.medicinesTaken}</td>
+          <td>{visit.patientSymptoms}</td>
+        </tr>
+      ))
+    : [];
   const pacientsRows =
     patients.data?.length !== 0
       ? patients.data
@@ -221,7 +229,18 @@ export const DoctorProfile = () => {
                 {`Wizyty na dzień: ${todaysDateShort}`}
               </Text>
               {visits.data?.length === 0 ? null : (
-                <Button variant="filled">Pobierz wizyty</Button>
+                <PDFDownloadLink
+                  document={<DoctorTodayAppointmentPDF visits={visits.data} />}
+                  fileName={`Studentmed-wizyty-${todaysDate}-${visits.data?.[0].doctorName}`}
+                >
+                  {({ loading }) =>
+                    loading ? (
+                      <Button variant="filled"><Group>Pobierz wizyty <IconDownload size='1rem'/></Group></Button>
+                    ) : (
+                      <Button variant="filled"><Group>Pobierz wizyty <IconDownload size='1rem'/></Group></Button>
+                    )
+                  }
+                </PDFDownloadLink>
               )}
             </Flex>
             {visits.isLoading ? (
@@ -252,7 +271,7 @@ export const DoctorProfile = () => {
                     <tr>
                       <th style={{ color: '#fd7e14' }}>Godzina</th>
                       <th style={{ color: '#fd7e14' }}>Pacjent</th>
-                      <th style={{ color: '#fd7e14' }}>Leki</th>
+                      <th style={{ color: '#fd7e14' }}>Stosowane leki</th>
                       <th style={{ color: '#fd7e14' }}>Objawy</th>
                     </tr>
                   </thead>

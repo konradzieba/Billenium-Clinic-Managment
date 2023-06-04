@@ -34,6 +34,7 @@ import {
   UserProfileInfoType,
 } from '../../../helpers/types';
 import ConfirmModal from '../../UI/ConfirmModal';
+import Statistics from '../Statistics/Statistics';
 import DoctorTodayAppointmentPDF from './DoctorTodayAppointmentPDF';
 
 const useStyles = createStyles((theme) => ({
@@ -186,7 +187,7 @@ export const DoctorProfile = () => {
       : [];
   return (
     <Container miw="80%">
-      <Flex direction="column" gap={50} py="lg">
+      <Flex direction="column" gap={'md'}>
         <Flex justify="space-evenly" align="center" w="100%" gap="md" h="20%">
           {doctorInfo.isLoading ? (
             <Loader />
@@ -205,6 +206,7 @@ export const DoctorProfile = () => {
                   <Title>{`Profil doktora ${doctorInfo.data?.userInfoResponseDTO.firstName} ${doctorInfo.data?.userInfoResponseDTO.lastName}`}</Title>
                   <Text fz="lg">{`${doctorSpecialization}, tel. ${doctorInfo.data?.userInfoResponseDTO.phoneNumber}`}</Text>
                 </Box>
+                <Statistics/>
               </Flex>
               <Flex direction="column" gap="xl">
                 <IconSettings

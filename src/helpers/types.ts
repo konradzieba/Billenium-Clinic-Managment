@@ -92,3 +92,36 @@ export type PatientPESELListType = {
   patientId: number;
   pesel: string;
 }
+
+export type ClinicStats = {
+  clinicStats:{
+    numberOfAllAppointments: number,
+    numberOfNew: number,
+    numberOfApproved:number,
+    numberOfCanceled:number,
+    numberOfDone:number,
+    numberOfRescheduled:number
+  }
+  doctorsStats:DoctorsStats[]
+}
+
+export type DoctorsStats = {
+  doctorId:number,
+  doctorName:string,
+  doctorAppointmentsStats:{
+    numberOfNew:number,
+    numberOfApproved:number,
+    numberOfCanceled:number,
+    numberOfDone:number,
+    numberOfRescheduled:number
+  }
+}
+
+export type ChartType = {
+    id: string,
+    label: string,
+    value: number,
+    color: string
+  }
+
+

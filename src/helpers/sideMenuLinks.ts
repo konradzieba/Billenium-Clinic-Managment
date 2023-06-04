@@ -3,7 +3,6 @@ import {
   IconBook,
   IconDeviceDesktopAnalytics,
   IconHome2,
-  IconInfoCircle,
   IconNotes,
   IconNurse,
   IconUser,
@@ -12,13 +11,11 @@ import {
 export const NoLoginMenuLinks = [
   { icon: IconHome2, label: 'Strona główna', link: '/' },
   { icon: IconNurse, label: 'Specjaliści', link: '/specializations' },
-  { icon: IconInfoCircle, label: 'O nas', link: '/about-us' },
 ];
 
 export const PatientMenuLinks = [
   { icon: IconHome2, label: 'Strona główna', link: '/' },
   { icon: IconNurse, label: 'Specjaliści', link: '/specializations' },
-  { icon: IconInfoCircle, label: 'O nas', link: '/about-us' },
   { icon: IconBook, label: 'Wizyty', link: '/visits' },
   { icon: IconNotes, label: 'Historia wizyt', link: '/history' },
 ];
@@ -36,7 +33,6 @@ export const DoctorMenuLinks = [
     link: `/doctor-profile/`,
   },
   { icon: IconArchive, label: 'Archiwum', link: '/archives' },
-  { icon: IconInfoCircle, label: 'O nas', link: '/about-us' },
 ];
 
 export const ReceptionistMenuLinks = [
@@ -47,5 +43,4 @@ export const ReceptionistMenuLinks = [
     link: '/reception',
   },
   { icon: IconArchive, label: 'Archiwum', link: '/archives' },
-  { icon: IconInfoCircle, label: 'O nas', link: '/about-us' },
 ];

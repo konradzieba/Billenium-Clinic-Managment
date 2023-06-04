@@ -30,7 +30,9 @@ export const VisitsList = () => {
   const { data, isLoading } = useQuery(
     [`appointments-${sessionStorage.getItem('patientId')}`],
     fetchNewAppointments,
-    { refetchOnMount: 'always' }
+    { refetchOnMount: 'always' , onSuccess:(data) =>{
+        console.log(data)
+      }}
   );
   const navigate = useNavigate();
   return (

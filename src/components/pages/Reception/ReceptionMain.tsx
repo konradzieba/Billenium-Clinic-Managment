@@ -25,6 +25,7 @@ const PATIENTS_URL = 'http://localhost:8080/api/patients';
 
 const ReceptionMain = () => {
   const { width } = useViewportSize();
+  const userInfoId = sessionStorage.getItem('userId') || '';
   const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
@@ -93,10 +94,12 @@ const ReceptionMain = () => {
 
   const patchAppointmentStatus = async (requestBody: {
     appointmentId: number | null;
+    userInfoId: string;
     status: string;
   }) => {
     const response = await axios.patch(CHANGE_APPOINTMENT_STATUS, {
       appointmentId: requestBody.appointmentId,
+      userInfoId: userInfoId,
       newStatus: requestBody.status,
     });
     return response.data as AppointmentResponseType;
@@ -118,6 +121,7 @@ const ReceptionMain = () => {
   const handleApproveAppointment = (appointmentId: number | null) => {
     mutation.mutate({
       appointmentId: appointmentId,
+      userInfoId: userInfoId,
       status: 'approved',
     });
   };
@@ -125,48 +129,83 @@ const ReceptionMain = () => {
   const handleCancelAppointment = (appointmentId: number) => {
     mutation.mutate({
       appointmentId: appointmentId,
+      userInfoId: userInfoId,
       status: 'canceled',
     });
   };
 
   return (
-    <Flex
-      justify="space-around"
-      w="100%"
-      p="md"
-      gap={width < BREAKPOINT ? 25 : 0}
-      direction={width < BREAKPOINT ? 'column' : 'row'}
-      miw={width < BREAKPOINT ? '' : '1080px'}
-    >
+    <>
       <Flex
-        w={width < BREAKPOINT ? '100%' : '25rem'}
-        direction="column"
-        gap={width < BREAKPOINT ? 'md' : 0}
         justify="space-around"
-        mah="95vh"
+        w="100%"
+        p="md"
+        gap={width < BREAKPOINT ? 25 : 0}
+        direction={width < BREAKPOINT ? 'column' : 'row'}
+        miw={width < BREAKPOINT ? '' : '1080px'}
       >
         <Flex
-          h="10rem"
-          miw={width < BREAKPOINT ? '100%' : '15rem'}
-          sx={(theme) => {
-            return {
-              borderRadius: theme.radius.md,
-              border: '3px #fd7e14 solid',
-            };
-          }}
+          w={width < BREAKPOINT ? '100%' : '25rem'}
+          direction="column"
+          gap={width < BREAKPOINT ? 'md' : 0}
+          justify="space-around"
+          mah="95vh"
         >
-          {allPatientsList.isLoading ? (
-            <Flex justify="center" align="center" h="100%" w="100%">
-              <Loader />
-            </Flex>
-          ) : (
-            <UserSearch patientPESELList={patientPESELList} />
-          )}
+          <Flex
+            h="10rem"
+            miw={width < BREAKPOINT ? '100%' : '15rem'}
+            sx={(theme) => {
+              return {
+                borderRadius: theme.radius.md,
+                border: '3px #fd7e14 solid',
+              };
+            }}
+          >
+            {allPatientsList.isLoading ? (
+              <Flex justify="center" align="center" h="100%" w="100%">
+                <Loader />
+              </Flex>
+            ) : (
+              <UserSearch patientPESELList={patientPESELList} />
+            )}
+          </Flex>
+          <Flex
+            h="30rem"
+            w="100%"
+            miw={width < BREAKPOINT ? '100%' : '15rem'}
+            direction="column"
+            sx={(theme) => {
+              return {
+                borderRadius: theme.radius.md,
+                border: '3px #fd7e14 solid',
+              };
+            }}
+          >
+            {doctorList.isLoading ? (
+              <Flex justify="center" align="center" h="100%">
+                <Loader />
+              </Flex>
+            ) : (
+              doctorList.data?.map((doctor, index) => {
+                return (
+                  <DoctorItem
+                    key={doctor.doctorId}
+                    index={index}
+                    lastName={doctor.lastName}
+                    specialization={doctor.specialization}
+                    photo={doctor.photo}
+                    doctorId={doctor.doctorId}
+                  />
+                );
+              })
+            )}
+          </Flex>
         </Flex>
         <Flex
-          h="30rem"
-          w="100%"
-          miw={width < BREAKPOINT ? '100%' : '15rem'}
+          miw={width < BREAKPOINT ? '100%' : '30rem'}
+          w={width < BREAKPOINT ? '100%' : '50rem'}
+          h="95vh"
+          justify="start"
           direction="column"
           sx={(theme) => {
             return {
@@ -175,115 +214,83 @@ const ReceptionMain = () => {
             };
           }}
         >
-          {doctorList.isLoading ? (
+          <Text align={'center'} fz="xl" fw="bold" p="md">
+            Oczekujące rezerwacje
+          </Text>
+          {newAppointmentsList.isLoading ? (
             <Flex justify="center" align="center" h="100%">
               <Loader />
             </Flex>
           ) : (
-            doctorList.data?.map((doctor, index) => {
-              return (
-                <DoctorItem
-                  key={doctor.doctorId}
-                  index={index}
-                  lastName={doctor.lastName}
-                  specialization={doctor.specialization}
-                  photo={doctor.photo}
-                  doctorId={doctor.doctorId}
+            <ScrollArea offsetScrollbars type="always">
+              <Flex w="100%" justify="center">
+                <FlexibleAccordion
+                  dataList={newAppointmentsList.data || []}
+                  firstTableTitle={'Stosowane leki:'}
+                  secondTableTitle={'Objawy:'}
+                  isWithStatus={true}
+                  withButtons={true}
+                  onAccept={setIsApprovalModalOpen}
+                  setApprovalAppointmentId={setSelectedAppointmentId}
+                  onDecline={handleCancelAppointment}
                 />
-              );
-            })
+              </Flex>
+            </ScrollArea>
           )}
         </Flex>
-      </Flex>
-      <Flex
-        miw={width < BREAKPOINT ? '100%' : '30rem'}
-        w={width < BREAKPOINT ? '100%' : '50rem'}
-        h="95vh"
-        justify="start"
-        direction="column"
-        sx={(theme) => {
-          return {
-            borderRadius: theme.radius.md,
-            border: '3px #fd7e14 solid',
-          };
-        }}
-      >
-        <Text align={'center'} fz="xl" fw="bold" p="md">
-          Oczekujące rezerwacje
-        </Text>
-        {newAppointmentsList.isLoading ? (
-          <Flex justify="center" align="center" h="100%">
-            <Loader />
-          </Flex>
-        ) : (
-          <ScrollArea offsetScrollbars type="always">
-            <Flex w="100%" justify="center">
-              <FlexibleAccordion
-                dataList={newAppointmentsList.data || []}
-                firstTableTitle={'Stosowane leki:'}
-                secondTableTitle={'Objawy:'}
-                isWithStatus={true}
-                withButtons={true}
-                onAccept={setIsApprovalModalOpen}
-                setApprovalAppointmentId={setSelectedAppointmentId}
-                onDecline={handleCancelAppointment}
-              />
-            </Flex>
-          </ScrollArea>
-        )}
-      </Flex>
-      <Flex
-        miw={width < BREAKPOINT ? '100%' : '25rem'}
-        w="25rem"
-        h="95vh"
-        gap="md"
-        direction="column"
-        sx={(theme) => {
-          return {
-            borderRadius: theme.radius.md,
-            border: '3px #fd7e14 solid',
-          };
-        }}
-      >
-        <Text p="md" fw={700} fz="md" align="center">
-          Dzisiejsze wizyty
-        </Text>
-        <Center>
-          <Select
-            value={selectedDoctorId}
-            label="Lekarz:"
-            data={selectDoctorData}
-            w="90%"
-            onChange={setSelectedDoctorId}
-          />
-        </Center>
-
-        {doctorTodayAppointmentsList.isLoading ? (
-          <Flex justify="center" align="center" h="100%">
-            <Loader />
-          </Flex>
-        ) : doctorTodayAppointmentsList.data?.length === 0 ? (
+        <Flex
+          miw={width < BREAKPOINT ? '100%' : '25rem'}
+          w="25rem"
+          h="95vh"
+          gap="md"
+          direction="column"
+          sx={(theme) => {
+            return {
+              borderRadius: theme.radius.md,
+              border: '3px #fd7e14 solid',
+            };
+          }}
+        >
+          <Text p="md" fw={700} fz="md" align="center">
+            Dzisiejsze wizyty
+          </Text>
           <Center>
-            <Text>Brak wizyt na dziś</Text>
+            <Select
+              value={selectedDoctorId}
+              label="Lekarz:"
+              data={selectDoctorData}
+              w="90%"
+              onChange={setSelectedDoctorId}
+            />
           </Center>
-        ) : (
-          <ScrollArea type="always">
-            <Flex justify="center">
-              <FlexibleAccordion
-                dataList={
-                  doctorTodayAppointmentsList.data?.filter(
-                    (data) => data.appointmentStatus === 'APPROVED'
-                  ) || []
-                }
-                firstTableTitle={'Stosowane leki:'}
-                secondTableTitle={'Objawy:'}
-                isWithStatus={true}
-                withEditButton={true}
-                directionColumn
-              />
+
+          {doctorTodayAppointmentsList.isLoading ? (
+            <Flex justify="center" align="center" h="100%">
+              <Loader />
             </Flex>
-          </ScrollArea>
-        )}
+          ) : doctorTodayAppointmentsList.data?.length === 0 ? (
+            <Center>
+              <Text>Brak wizyt na dziś</Text>
+            </Center>
+          ) : (
+            <ScrollArea type="always">
+              <Flex justify="center">
+                <FlexibleAccordion
+                  dataList={
+                    doctorTodayAppointmentsList.data?.filter(
+                      (data) => data.appointmentStatus === 'APPROVED'
+                    ) || []
+                  }
+                  firstTableTitle={'Stosowane leki:'}
+                  secondTableTitle={'Objawy:'}
+                  isWithStatus={true}
+                  withEditButton={true}
+                  directionColumn
+                />
+              </Flex>
+            </ScrollArea>
+          )}
+        </Flex>
       </Flex>
       {isErrorModalOpen && (
         <ConfirmModal
@@ -302,7 +309,7 @@ const ReceptionMain = () => {
           appointmentId={selectedAppointmentId}
         />
       )}
-    </Flex>
+    </>
   );
 };
 

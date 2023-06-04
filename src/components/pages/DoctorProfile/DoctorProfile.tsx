@@ -236,7 +236,7 @@ export const DoctorProfile = () => {
               </Flex>
             ) : (
               <ScrollArea
-                h="300px"
+                h="200px"
                 onScrollPositionChange={({ y }) => setScrolledVisits(y !== 0)}
               >
                 <Table
@@ -277,7 +277,7 @@ export const DoctorProfile = () => {
               </Flex>
             ) : (
               <ScrollArea
-                h="300px"
+                h="200px"
                 onScrollPositionChange={({ y }) => setScrolledPacients(y !== 0)}
               >
                 <Table

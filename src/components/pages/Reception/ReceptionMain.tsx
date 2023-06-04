@@ -26,7 +26,9 @@ const PATIENTS_URL = 'http://localhost:8080/api/patients';
 const ReceptionMain = () => {
   const { width } = useViewportSize();
   const userInfoId = sessionStorage.getItem('userId') || '';
-  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(
+    sessionStorage.getItem('selectedDoctor') || '1038'
+  );
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState<
@@ -43,11 +45,7 @@ const ReceptionMain = () => {
     const response = await axios.get(NEW_APPOINTMENTS);
     return response.data as AppointmentResponseType[];
   };
-  const doctorList = useQuery(['doctorsList'], fetchDoctors, {
-    onSuccess: (data) => {
-      setSelectedDoctorId(data[0].doctorId.toString());
-    },
-  });
+  const doctorList = useQuery(['doctorsList'], fetchDoctors);
 
   const newAppointmentsList = useQuery(
     ['newAppointments'],
@@ -260,7 +258,10 @@ const ReceptionMain = () => {
               label="Lekarz:"
               data={selectDoctorData}
               w="90%"
-              onChange={setSelectedDoctorId}
+              onChange={(value) => {
+                setSelectedDoctorId(value);
+                sessionStorage.setItem('selectedDoctor', value || '1038');
+              }}
             />
           </Center>
 

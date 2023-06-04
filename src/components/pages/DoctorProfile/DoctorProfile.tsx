@@ -211,7 +211,7 @@ export const DoctorProfile = () => {
               <Flex direction="column" gap="xl">
                 <IconSettings
                   size={30}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', color: '#fd7e14' }}
                   onClick={open}
                   display={
                     userRole === 'doctor' &&
@@ -230,7 +230,7 @@ export const DoctorProfile = () => {
               <Text fz="lg" fw={700}>
                 {`Wizyty na dzień: ${todaysDateShort}`}
               </Text>
-              {visits.data?.length !== 0 && sessionStorage.getItem('doctorId') === doctorId && sessionStorage.getItem('role') === 'doctor' ?  (
+              {filteredVisits && filteredVisits.length > 0 && sessionStorage.getItem('doctorId') === doctorId && sessionStorage.getItem('role') === 'doctor' ?  (
                 <PDFDownloadLink
                   document={<DoctorTodayAppointmentPDF visits={filteredVisits} />}
                   fileName={`Studentmed-wizyty-${todaysDate}-${visits.data?.[0].doctorName}`}
@@ -244,7 +244,7 @@ export const DoctorProfile = () => {
                   }
                 </PDFDownloadLink>
               ) : null}
-              {visits.data?.length !== 0 && sessionStorage.getItem('role') === 'reception' ? (
+              {filteredVisits && filteredVisits.length > 0 && sessionStorage.getItem('role') === 'reception' ? (
                 <PDFDownloadLink
                   document={<DoctorTodayAppointmentPDF visits={filteredVisits} />}
                   fileName={`Studentmed-wizyty-${todaysDate}-${visits.data?.[0].doctorName}`}
@@ -263,7 +263,7 @@ export const DoctorProfile = () => {
               <Flex justify="center" align="center" h="100%">
                 <Loader />
               </Flex>
-            ) : visits.data?.length === 0 ? (
+            ) : filteredVisits && filteredVisits.length === 0 ? (
               <Flex justify="center" align="center" h="100%">
                 <Text fz="lg">Brak wizyt na dziś</Text>
               </Flex>

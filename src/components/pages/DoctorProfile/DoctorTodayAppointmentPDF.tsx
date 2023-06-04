@@ -84,6 +84,7 @@ const DoctorTodayAppointmentPDF = ({
 }: DoctorTodayAppointmentPDFProps) => {
   const todaysDateShort = dayjs(new Date()).format('D MMMM').toString();
   const todaysDateLong = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss') 
+  console.log(visits);
   return (
     <Document>
       <Page size="A4" style={styles.body}>

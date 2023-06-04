@@ -1,10 +1,11 @@
 import { Flex, Loader, Text } from '@mantine/core';
+import { ResponsivePie } from '@nivo/pie';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { ChartType, ClinicStats, DoctorsStats } from '../../../helpers/types';
-import { useState, useEffect } from 'react';
-import { ResponsivePie } from '@nivo/pie';
+import { useEffect,useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
+import { ChartType, ClinicStats, DoctorsStats } from '../../../helpers/types';
 
 const fetchStats = async () => {
   const response = await axios.get("http://localhost:8080/api/appointments/clinic-stats")
@@ -117,7 +118,7 @@ const Statistics = (
       {isLoading ? (<Loader/>) : (
         <ResponsivePie
           data={stats}
-          margin={{ right: source === 'doctor' ? 80 : 150, left: 125 }}
+          margin={{ right: source === 'doctor' ? 100 : 150, left: 125 }}
           innerRadius={0.5}
           padAngle={4}
           cornerRadius={3}

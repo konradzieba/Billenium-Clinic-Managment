@@ -37,7 +37,7 @@ export const DoctorList = ({ specialization }: DoctorListProps) => {
           {isLoading && <Loader mt="xl" />}
           {!isLoading && !data && ( <Text fz='xl'>Nie znaleziono lekarzy w wybranej specjalizacji</Text>)}
         </Center>
-        {data?.map((doc, index) => {
+        {data && data?.map((doc, index) => {
           return (
             <Doctor
               key={index}

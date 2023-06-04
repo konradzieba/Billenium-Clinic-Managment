@@ -206,7 +206,7 @@ export const DoctorProfile = () => {
                   <Title>{`Profil doktora ${doctorInfo.data?.userInfoResponseDTO.firstName} ${doctorInfo.data?.userInfoResponseDTO.lastName}`}</Title>
                   <Text fz="lg">{`${doctorSpecialization}, tel. ${doctorInfo.data?.userInfoResponseDTO.phoneNumber}`}</Text>
                 </Box>
-                <Statistics/>
+                <Statistics source={"doctor"}/>
               </Flex>
               <Flex direction="column" gap="xl">
                 <IconSettings

@@ -16,6 +16,7 @@ import ConfirmModal from '../../UI/ConfirmModal';
 import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
 import DoctorItem from './DoctorItem';
 import UserSearch from './UserSearch';
+import Statistics from '../Statistics/Statistics';
 import { useNavigate } from 'react-router-dom';
 
 const BREAKPOINT = 1080;
@@ -204,6 +205,7 @@ const ReceptionMain = () => {
               })
             )}
           </Flex>
+          <Statistics source={'allDoctors'}/>
         </Flex>
         <Flex
           miw={width < BREAKPOINT ? '100%' : '30rem'}

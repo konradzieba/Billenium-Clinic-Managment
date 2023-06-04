@@ -20,7 +20,7 @@ import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
 export const VisitsList = () => {
   const NEW_APPOINTMENT_URL = `http://localhost:8080/api/patients/${sessionStorage.getItem(
     'patientId'
-  )}/appointments`;
+  )}/appointments?limit=30`;
 
   const fetchNewAppointments = async () => {
     const response = await axios.get(NEW_APPOINTMENT_URL);

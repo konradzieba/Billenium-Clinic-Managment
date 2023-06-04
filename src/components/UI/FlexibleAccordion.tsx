@@ -158,9 +158,13 @@ export const FlexibleAccordion = ({
                     />
                   }
                 >
-                  {data.medicinesTaken.split(', ').map((medicine, index) => (
+
+                  {data.medicinesTaken && data.medicinesTaken.split(', ').map((medicine, index) => (
                     <List.Item key={index}>{medicine}</List.Item>
                   ))}
+                  {!data.medicinesTaken && (
+                    <List.Item key={0}>Nie wprowadzono leków</List.Item>
+                  )}
                 </List>
               </Box>
               <Box w={width < BREAKPOINT ? '100%' : '50%'}>
@@ -188,11 +192,14 @@ export const FlexibleAccordion = ({
                         .map((recommendation, index) => (
                           <List.Item key={index}>{recommendation}</List.Item>
                         ))} */}
-                  {data.patientSymptoms
+                  {data.patientSymptoms && data.patientSymptoms
                     .split(', ')
                     .map((recommendation, index) => (
                       <List.Item key={index}>{recommendation}</List.Item>
                     ))}
+                  {!data.patientSymptoms && (
+                    <List.Item key={0}>Nie wprowadzono objawów</List.Item>
+                  )}
                 </List>
               </Box>
             </Flex>

@@ -216,8 +216,8 @@ const App = () => {
               />
               {/* TUTAJ DODAĆ */}
               <Route
-                path="/editAppointment"
-                element={<EditAppointment role={'doctor'} />}
+                path="/editAppointment/:id"
+                element={<EditAppointment />}
               />
               {/* */}
               <Route

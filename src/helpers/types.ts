@@ -72,6 +72,7 @@ export type AppointmentResponseType = {
   doctorRecommendations: string;
   createdAt: string;
   modifiedAt: string;
+  diagnosis: string;
 };
 
 export type AppointmentDeclineError = {

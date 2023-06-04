@@ -19,7 +19,7 @@ type FlexibleAccordionProps = {
   setApprovalAppointmentId?: (id: number) => void;
   onAccept?: (opened: boolean) => void;
   onDecline?: (appointmentId: number) => void;
-  onEdit?: () => void;
+  onEdit?: (appointmentId: number) => void;
 };
 
 const BREAKPOINT = 1080;
@@ -131,7 +131,15 @@ export const FlexibleAccordion = ({
             )}
             {withEditButton && (
               <Flex justify="center" align="center" gap="xs" px="md">
-                <Button size="xs" variant="outline" onClick={onEdit}>
+                <Button
+                  size="xs"
+                  variant="outline"
+                  onClick={() => {
+                    if (onEdit) {
+                      onEdit(data.appointmentId);
+                    }
+                  }}
+                >
                   Edytuj
                 </Button>
               </Flex>
@@ -158,10 +166,12 @@ export const FlexibleAccordion = ({
                     />
                   }
                 >
-
-                  {data.medicinesTaken && data.medicinesTaken.split(', ').map((medicine, index) => (
-                    <List.Item key={index}>{medicine}</List.Item>
-                  ))}
+                  {data.medicinesTaken &&
+                    data.medicinesTaken
+                      .split(', ')
+                      .map((medicine, index) => (
+                        <List.Item key={index}>{medicine}</List.Item>
+                      ))}
                   {!data.medicinesTaken && (
                     <List.Item key={0}>Nie wprowadzono leków</List.Item>
                   )}
@@ -192,11 +202,12 @@ export const FlexibleAccordion = ({
                         .map((recommendation, index) => (
                           <List.Item key={index}>{recommendation}</List.Item>
                         ))} */}
-                  {data.patientSymptoms && data.patientSymptoms
-                    .split(', ')
-                    .map((recommendation, index) => (
-                      <List.Item key={index}>{recommendation}</List.Item>
-                    ))}
+                  {data.patientSymptoms &&
+                    data.patientSymptoms
+                      .split(', ')
+                      .map((recommendation, index) => (
+                        <List.Item key={index}>{recommendation}</List.Item>
+                      ))}
                   {!data.patientSymptoms && (
                     <List.Item key={0}>Nie wprowadzono objawów</List.Item>
                   )}

@@ -16,6 +16,7 @@ import ConfirmModal from '../../UI/ConfirmModal';
 import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
 import DoctorItem from './DoctorItem';
 import UserSearch from './UserSearch';
+import { useNavigate } from 'react-router-dom';
 
 const BREAKPOINT = 1080;
 const DOCTORS_URL = 'http://localhost:8080/api/doctors';
@@ -25,6 +26,7 @@ const PATIENTS_URL = 'http://localhost:8080/api/patients';
 
 const ReceptionMain = () => {
   const { width } = useViewportSize();
+  const navigate = useNavigate();
   const userInfoId = sessionStorage.getItem('userId') || '';
   const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(
     sessionStorage.getItem('selectedDoctor') || '1038'
@@ -131,6 +133,10 @@ const ReceptionMain = () => {
       status: 'canceled',
     });
   };
+
+  const handleEditAppointment = (appointmentId: number) => {
+    navigate(`/editAppointment/${appointmentId}`);
+  }
 
   return (
     <>
@@ -274,7 +280,7 @@ const ReceptionMain = () => {
               <Text>Brak wizyt na dziś</Text>
             </Center>
           ) : (
-            <ScrollArea type="always">
+            <ScrollArea type="always" h='700px'>
               <Flex justify="center">
                 <FlexibleAccordion
                   dataList={
@@ -285,8 +291,9 @@ const ReceptionMain = () => {
                   firstTableTitle={'Stosowane leki:'}
                   secondTableTitle={'Objawy:'}
                   isWithStatus={true}
-                  withEditButton={true}
+                  withEditButton={sessionStorage.getItem('role') === 'reception' || sessionStorage.getItem('doctorId') === selectedDoctorId}
                   directionColumn
+                  onEdit={handleEditAppointment}
                 />
               </Flex>
             </ScrollArea>

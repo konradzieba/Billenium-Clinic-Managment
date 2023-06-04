@@ -232,7 +232,7 @@ export const DoctorProfile = () => {
               </Text>
               {visits.data?.length === 0 ? null : (
                 <PDFDownloadLink
-                  document={<DoctorTodayAppointmentPDF visits={visits.data} />}
+                  document={<DoctorTodayAppointmentPDF visits={filteredVisits} />}
                   fileName={`Studentmed-wizyty-${todaysDate}-${visits.data?.[0].doctorName}`}
                 >
                   {({ loading }) =>

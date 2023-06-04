@@ -90,7 +90,7 @@ export function SideMenu() {
   const mockdata =
     session.role === 'doctor'
       ? DoctorMenuLinks
-      : session.role === 'receptionist'
+      : session.role === 'reception'
       ? ReceptionistMenuLinks
       : session.role === 'patient'
       ? PatientMenuLinks

@@ -14,9 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import StudentMed from '../../../assets/StudentMed.svg';
 import DoctorLImg from './img/doctor_l.png';
 import DoctorRImg from './img/doctor_r.png';
-// type HomeProps = {
 
-// };
 const HomeText =
   'Zaufaj StudentMed - nasza przychodnia to miejsce, w którym Twoje zdrowie jest dla nas najważniejsze! Oferujemy kompleksową opiekę medyczną dla studentów i innych pacjentów. Zawsze stawiamy na indywidualne podejście do każdego przypadku, dzięki czemu możesz mieć pewność, że otrzymasz najlepszą opiekę. Nasz zespół to wysoko wykwalifikowani lekarze i specjaliści, którzy zawsze są gotowi do pomocy. Skorzystaj z naszej oferty i umów się na wizytę już dziś!';
 
@@ -31,7 +29,6 @@ const BREAKPOINT = 1470;
 export const Home = () => {
   const { width } = useViewportSize();
   const navigate = useNavigate();
-  const isDoctor = sessionStorage.getItem('role') === 'doctor';
   return (
     <Center>
       <Flex w="80%" direction="column">
@@ -80,34 +77,52 @@ export const Home = () => {
           mt={width > BREAKPOINT ? 'xl' : 0}
         >
           {sessionStorage.getItem('sessionId') &&
-          sessionStorage.getItem('userId') &&
-          !isDoctor ? (
-            <Button
-              size="md"
-              radius="md"
-              onClick={() => navigate('/specializations')}
-            >
-              Umów się na wizytę
-            </Button>
-          ) : isDoctor ? (
-            <Button
-              size="md"
-              radius="md"
-              onClick={() =>
-                navigate(
-                  `/doctor-profile/${sessionStorage.getItem('doctorId')}`
-                )
-              }
-            >
-              Przeglądaj wizyty
-            </Button>
-          ) : (
-            <Button size="md" radius="md" onClick={() => navigate('/sign-in')}>
-              Zaloguj się
-            </Button>
-          )}
-
-          {/* Jeśli użytkownik nie będzie zalogowany tutaj trzeba podmienić przycisk na zaloguj się */}
+            sessionStorage.getItem('userId') &&
+            sessionStorage.getItem('role') === 'doctor' && (
+              <Button
+                size="md"
+                radius="md"
+                onClick={() =>
+                  navigate(
+                    `/doctor-profile/${sessionStorage.getItem('doctorId')}`
+                  )
+                }
+              >
+                Przeglądaj swoje wizyty
+              </Button>
+            )}
+          {sessionStorage.getItem('sessionId') &&
+            sessionStorage.getItem('userId') &&
+            sessionStorage.getItem('role') === 'reception' && (
+              <Button
+                size="md"
+                radius="md"
+                onClick={() => navigate(`/reception`)}
+              >
+                Przejdź do panelu recepcji
+              </Button>
+            )}
+          {sessionStorage.getItem('sessionId') &&
+            sessionStorage.getItem('userId') &&
+            sessionStorage.getItem('role') === 'patient' && (
+              <Button
+                size="md"
+                radius="md"
+                onClick={() => navigate(`/visits`)}
+              >
+                Przeglądaj wizyty
+              </Button>
+            )}
+          {!sessionStorage.getItem('sessionId') &&
+            !sessionStorage.getItem('userId') && (
+              <Button
+                size="md"
+                radius="md"
+                onClick={() => navigate(`/sign-in`)}
+              >
+                Zaloguj się
+              </Button>
+            )}
         </Flex>
       </Flex>
     </Center>

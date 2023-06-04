@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   AppointmentDeclineError,
@@ -14,10 +15,9 @@ import {
 } from '../../../helpers/types';
 import ConfirmModal from '../../UI/ConfirmModal';
 import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
+import Statistics from '../Statistics/Statistics';
 import DoctorItem from './DoctorItem';
 import UserSearch from './UserSearch';
-import Statistics from '../Statistics/Statistics';
-import { useNavigate } from 'react-router-dom';
 
 const BREAKPOINT = 1080;
 const DOCTORS_URL = 'http://localhost:8080/api/doctors';

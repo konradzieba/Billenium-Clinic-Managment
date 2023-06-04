@@ -230,7 +230,7 @@ export const DoctorProfile = () => {
               <Text fz="lg" fw={700}>
                 {`Wizyty na dzień: ${todaysDateShort}`}
               </Text>
-              {visits.data?.length === 0 ? null : (
+              {visits.data?.length !== 0 && sessionStorage.getItem('doctorId') === doctorId && sessionStorage.getItem('role') === 'doctor' ?  (
                 <PDFDownloadLink
                   document={<DoctorTodayAppointmentPDF visits={filteredVisits} />}
                   fileName={`Studentmed-wizyty-${todaysDate}-${visits.data?.[0].doctorName}`}
@@ -243,7 +243,21 @@ export const DoctorProfile = () => {
                     )
                   }
                 </PDFDownloadLink>
-              )}
+              ) : null}
+              {visits.data?.length !== 0 && sessionStorage.getItem('role') === 'reception' ? (
+                <PDFDownloadLink
+                  document={<DoctorTodayAppointmentPDF visits={filteredVisits} />}
+                  fileName={`Studentmed-wizyty-${todaysDate}-${visits.data?.[0].doctorName}`}
+                >
+                  {({ loading }) =>
+                    loading ? (
+                      <Button variant="filled"><Group>Pobierz wizyty <IconDownload size='1rem'/></Group></Button>
+                    ) : (
+                      <Button variant="filled"><Group>Pobierz wizyty <IconDownload size='1rem'/></Group></Button>
+                    )
+                  }
+                </PDFDownloadLink>
+              ): null}
             </Flex>
             {visits.isLoading ? (
               <Flex justify="center" align="center" h="100%">

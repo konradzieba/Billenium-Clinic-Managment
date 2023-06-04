@@ -151,6 +151,7 @@ const Archives = () => {
               secondTableTitle={'Objawy:'}
               isWithStatus={true}
               withPatient={true}
+              isWithDiagnosis
             />
           </Flex>
         </ScrollArea>

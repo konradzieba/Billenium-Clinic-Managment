@@ -46,7 +46,7 @@ const EditAppointment = () => {
 
   const patchAppointment = async () => {
     const response = await axios.patch(
-      `${FETCH_APPOINTMENT_URL}done/${appointmentId}?recommendations=${recommendations}&diagnose=${diagnose}`
+      `${FETCH_APPOINTMENT_URL}done/${appointmentId}?recommendations=${recommendations}&diagnosis=${diagnose}`
     );
     return response.data as AppointmentResponseType;
   };
@@ -182,7 +182,9 @@ const EditAppointment = () => {
                 <Button
                   disabled={
                     inputError.diagnose !== '' ||
-                    inputError.recommendations !== ''
+                    inputError.recommendations !== '' || 
+                    diagnose === '' ||
+                    recommendations === ''
                   }
                   onClick={()=> setSave(true)}
                 >

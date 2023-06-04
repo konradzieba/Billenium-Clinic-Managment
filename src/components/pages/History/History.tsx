@@ -53,6 +53,7 @@ export const History = () => {
               dataList={data || []}
               firstTableTitle="Leki:"
               secondTableTitle="Zalecenia:"
+              isWithDiagnosis
             />
           )}
         </Flex>

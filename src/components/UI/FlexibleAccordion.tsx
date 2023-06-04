@@ -16,6 +16,7 @@ type FlexibleAccordionProps = {
   withEditButton?: boolean;
   directionColumn?: boolean;
   fullWidth?: boolean;
+  isWithDiagnosis?: boolean;
   setApprovalAppointmentId?: (id: number) => void;
   onAccept?: (opened: boolean) => void;
   onDecline?: (appointmentId: number) => void;
@@ -38,6 +39,7 @@ export const FlexibleAccordion = ({
   withEditButton,
   directionColumn,
   fullWidth,
+  isWithDiagnosis,
   onEdit,
   setApprovalAppointmentId,
 }: FlexibleAccordionProps) => {
@@ -91,6 +93,8 @@ export const FlexibleAccordion = ({
                         AppointmentStatus.RESCHEDULED && 'Przeniesiony'}
                       {data.appointmentStatus === AppointmentStatus.DONE &&
                         'Zakończona'}
+                      {data.appointmentStatus === AppointmentStatus.CONTROL &&
+                        'Kontrola'}
                     </Text>
                   ) : (
                     <Text>
@@ -100,6 +104,15 @@ export const FlexibleAccordion = ({
                       {descriptionBody || 'Opis'}
                     </Text>
                   )}
+                  {isWithDiagnosis &&
+                    data.appointmentStatus === AppointmentStatus.DONE && (
+                      <Text>
+                        <Text span fw="bold" mr={3}>
+                          Diagnoza:
+                        </Text>
+                        {data.diagnosis || 'Brak diagnozy'}
+                      </Text>
+                    )}
                 </Flex>
               </Flex>
             </Accordion.Control>
@@ -191,17 +204,6 @@ export const FlexibleAccordion = ({
                     />
                   }
                 >
-                  {/* {data.appointmentStatus === AppointmentStatus.DONE
-                    ? data.doctorRecommendations
-                        .split(', ')
-                        .map((recommendation, index) => (
-                          <List.Item key={index}>{recommendation}</List.Item>
-                        ))
-                    : data.patientSymptoms
-                        .split(', ')
-                        .map((recommendation, index) => (
-                          <List.Item key={index}>{recommendation}</List.Item>
-                        ))} */}
                   {data.patientSymptoms &&
                     data.patientSymptoms
                       .split(', ')
@@ -213,6 +215,33 @@ export const FlexibleAccordion = ({
                   )}
                 </List>
               </Box>
+              {isWithDiagnosis && data.appointmentStatus === AppointmentStatus.DONE && (
+                <Box w={width < BREAKPOINT ? '100%' : '50%'}>
+                  <Text fw="bold">Rekomendacje</Text>
+                  <List
+                    icon={
+                      <IconPointFilled
+                        size="1rem"
+                        style={{
+                          color: '#fd7e14',
+                          textAlign: 'center',
+                          marginTop: '0.25rem',
+                        }}
+                      />
+                    }
+                  >
+                    {data.doctorRecommendations &&
+                      data.doctorRecommendations
+                        .split(', ')
+                        .map((doctorRecommendations, index) => (
+                          <List.Item key={index}>{doctorRecommendations}</List.Item>
+                        ))}
+                    {!data.doctorRecommendations && (
+                      <List.Item key={0}>Nie wprowadzono rekomendacji</List.Item>
+                    )}
+                  </List>
+                </Box>
+              )}
             </Flex>
           </Accordion.Panel>
         </Accordion.Item>

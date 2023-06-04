@@ -65,7 +65,7 @@ export const VisitsList = () => {
               </Button>
             </Flex>
           ) : (
-            <Tabs w="90%" defaultValue={AppointmentStatus.APPROVED}>
+            <Tabs w="90%" defaultValue={AppointmentStatus.NEW}>
               <Tabs.List grow>
                 <Tabs.Tab fz="md" value={AppointmentStatus.APPROVED}>
                   Zatwierdzone
@@ -76,8 +76,8 @@ export const VisitsList = () => {
                 <Tabs.Tab fz="md" value={AppointmentStatus.CANCELED}>
                   Anulowane
                 </Tabs.Tab>
-                <Tabs.Tab fz="md" value={AppointmentStatus.RESCHEDULED}>
-                  Przełożone
+                <Tabs.Tab fz="md" value={AppointmentStatus.CONTROL}>
+                  Kontrolne
                 </Tabs.Tab>
               </Tabs.List>
               <Tabs.Panel mt="xl" value={AppointmentStatus.APPROVED}>
@@ -157,15 +157,15 @@ export const VisitsList = () => {
                   </Center>
                 </ScrollArea>
               </Tabs.Panel>
-              <Tabs.Panel mt="xl" value={AppointmentStatus.RESCHEDULED}>
+              <Tabs.Panel mt="xl" value={AppointmentStatus.CONTROL}>
                 <ScrollArea h={550}>
                   <Center>
                     {data?.filter(
                       (appointment) =>
                         appointment.appointmentStatus ===
-                        AppointmentStatus.RESCHEDULED
+                        AppointmentStatus.CONTROL
                     ).length === 0 ? (
-                      <Text>Brak przełożonych wizyt</Text>
+                      <Text>Brak wizyt kontrolnych</Text>
                     ) : (
                       <FlexibleAccordion
                         isWithStatus
@@ -173,7 +173,7 @@ export const VisitsList = () => {
                           data?.filter(
                             (appointment) =>
                               appointment.appointmentStatus ===
-                              AppointmentStatus.RESCHEDULED
+                              AppointmentStatus.CONTROL
                           ) || []
                         }
                         firstTableTitle="Leki:"

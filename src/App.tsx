@@ -214,12 +214,14 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              {/* TUTAJ DODAĆ */}
               <Route
                 path="/editAppointment/:id"
-                element={<EditAppointment />}
+                element={
+                  <ProtectedRoute role="doctor&reception">
+                    <EditAppointment />
+                  </ProtectedRoute>
+                }
               />
-              {/* */}
               <Route
                 path="/doctor-profile/:id"
                 element={

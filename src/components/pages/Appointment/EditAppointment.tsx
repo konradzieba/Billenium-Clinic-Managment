@@ -30,8 +30,6 @@ const EditAppointment = () => {
     diagnose: '',
     recommendations: '',
   });
-  // console.log('diagnoza', diagnose);
-  // console.log('zalecenia', recommendations);
   const fetchAppointment = async () => {
     const response = await axios.get(
       `${FETCH_APPOINTMENT_URL}${appointmentId}`
@@ -132,7 +130,7 @@ const EditAppointment = () => {
                   w="100%"
                   label={'Diagnoza'}
                   value={diagnose}
-                  placeholder="Niedobór snu i chroniczny stres..."
+                  placeholder="Diagnoza po wizycie..."
                   onChange={(e) => {
                     setInputError({ ...inputError, diagnose: '' });
                     setDiagnose(e.currentTarget.value);
@@ -155,7 +153,7 @@ const EditAppointment = () => {
                   w="100%"
                   label={'Zalecenia lekarza'}
                   value={recommendations}
-                  placeholder="Paracetamol 500mg, Ibuprofen 3mg, Amoksycylina 500mg..."
+                  placeholder="Zalecenia po wizycie..."
                   onChange={(e) => {
                     setInputError({ ...inputError, recommendations: '' });
                     setRecommendations(e.currentTarget.value);

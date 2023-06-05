@@ -79,7 +79,7 @@ const PatientProfileInfo = () => {
               <>
                 <Flex gap="sm" direction="column">
                   <Text style={infoBorder} pl={3}>
-                    Imię Nazwisko:{' '}
+                    Imię i nazwisko:{' '}
                     <Text span fw="bold">
                       {patientInfo.data?.patientUserInfo.firstName}{' '}
                       {patientInfo.data?.patientUserInfo.lastName}
@@ -126,11 +126,11 @@ const PatientProfileInfo = () => {
                       <Text mt="md" style={infoBorder} pl={3}>
                         Stosowane leki:{' '}
                       </Text>
-                      <ScrollArea h={100} offsetScrollbars>
+                      <ScrollArea h={80} offsetScrollbars type='always'>
                         <List>
                           {medicinesList.map((medicine, index) => {
                             return (
-                              <List.Item key={index}>{medicine}</List.Item>
+                              <List.Item pl={5} key={index}>{medicine}</List.Item>
                             );
                           })}
                         </List>
@@ -148,10 +148,10 @@ const PatientProfileInfo = () => {
                       <Text mt="md" style={infoBorder} pl={3}>
                         Alergie:{' '}
                       </Text>
-                      <ScrollArea h={100} offsetScrollbars>
+                      <ScrollArea h={80} offsetScrollbars type='always'>
                         <List>
                           {allergiesList.map((allergy, index) => {
-                            return <List.Item key={index}>{allergy}</List.Item>;
+                            return <List.Item pl={5}  key={index}>{allergy}</List.Item>;
                           })}
                         </List>
                       </ScrollArea>

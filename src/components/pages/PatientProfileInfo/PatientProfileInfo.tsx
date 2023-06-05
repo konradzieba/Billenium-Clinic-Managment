@@ -176,6 +176,7 @@ const PatientProfileInfo = () => {
                   secondTableTitle="Objawy:"
                   isWithStatus
                   fullWidth
+                  isWithDiagnosis
                 />
               </Center>
             </ScrollArea>

@@ -74,12 +74,6 @@ const Statistics = (
         value: docStat.doctorAppointmentsStats.numberOfCanceled,
         color: "hsl(350, 70%, 50%)",
       };
-      const rescheduledApp: ChartType = {
-        id: "Przełożone",
-        label: "Przełożone",
-        value: docStat.doctorAppointmentsStats.numberOfRescheduled,
-        color: "hsl(350, 70%, 50%)",
-      };
       setStats([])
       setStats((prevState) => [
         ...prevState,
@@ -87,7 +81,6 @@ const Statistics = (
         approvedApp,
         doneApp,
         cancelApp,
-        rescheduledApp,
       ]);
     }
     if(source === 'allDoctors'){
@@ -95,7 +88,7 @@ const Statistics = (
         if(allDocStats.length > 0){
           const id:string = doc.doctorName
           const label:string = doc.doctorName
-          const value:number = doc.doctorAppointmentsStats.numberOfRescheduled + doc.doctorAppointmentsStats.numberOfDone +
+          const value:number = doc.doctorAppointmentsStats.numberOfDone +
             doc.doctorAppointmentsStats.numberOfNew + doc.doctorAppointmentsStats.numberOfApproved + doc.doctorAppointmentsStats.numberOfCanceled
           const color = "hsl(350, 70%, 50%)"
           setStats(prevState => [...prevState, {id, label, value, color}])

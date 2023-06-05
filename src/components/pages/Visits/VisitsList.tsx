@@ -28,8 +28,13 @@ export const VisitsList = () => {
   const NEW_APPOINTMENT_URL = `http://localhost:8080/api/patients/${sessionStorage.getItem(
     'patientId'
   )}/appointments?limit=30`;
+
   const userInfoId = sessionStorage.getItem('userId') || '';
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<
+    number | null
+  >(null);
   const fetchNewAppointments = async () => {
     const response = await axios.get(NEW_APPOINTMENT_URL);
     return response.data as AppointmentResponseType[];
@@ -74,6 +79,9 @@ export const VisitsList = () => {
       status: 'canceled',
     });
   };
+  const handleOpenModal = () => {
+    setIsCancelModalOpen(true)
+  }
 
   return (
     <>
@@ -142,6 +150,10 @@ export const VisitsList = () => {
                           }
                           firstTableTitle="Leki:"
                           secondTableTitle="Objawy:"
+                          withEditButton
+                          editButtonText="Anuluj wizytę"
+                          onEdit={handleOpenModal}
+                          setApprovalAppointmentId={setSelectedAppointmentId}
                         />
                       )}
                     </Center>
@@ -170,7 +182,8 @@ export const VisitsList = () => {
                           secondTableTitle="Objawy:"
                           withEditButton
                           editButtonText="Anuluj wizytę"
-                          onEdit={handleCancelAppointment}
+                          onEdit={handleOpenModal}
+                          setApprovalAppointmentId={setSelectedAppointmentId}
                         />
                       )}
                     </Center>
@@ -223,6 +236,10 @@ export const VisitsList = () => {
                           }
                           firstTableTitle="Leki:"
                           secondTableTitle="Objawy:"
+                          withEditButton
+                          editButtonText="Anuluj wizytę"
+                          onEdit={handleOpenModal}
+                          setApprovalAppointmentId={setSelectedAppointmentId}
                         />
                       )}
                     </Center>
@@ -239,6 +256,15 @@ export const VisitsList = () => {
           opened={isErrorModalOpen}
           setOpen={setIsErrorModalOpen}
           isErrorModal
+        />
+      )}
+      {isCancelModalOpen && (
+        <ConfirmModal
+          title="Czy na pewno chcesz anulować wizytę?"
+          opened={isCancelModalOpen}
+          setOpen={setIsCancelModalOpen}
+          onApproveAppointment={handleCancelAppointment}
+          appointmentId={selectedAppointmentId}
         />
       )}
     </>

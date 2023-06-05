@@ -37,6 +37,7 @@ const ReceptionMain = () => {
   const [selectedAppointmentId, setSelectedAppointmentId] = useState<
     number | null
   >(null);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [patientPESELList, setPatientPESELList] = useState<
     PatientPESELListType[] | null
   >(null);
@@ -127,7 +128,7 @@ const ReceptionMain = () => {
     });
   };
 
-  const handleCancelAppointment = (appointmentId: number) => {
+  const handleCancelAppointment = (appointmentId: number | null) => {
     mutation.mutate({
       appointmentId: appointmentId,
       userInfoId: userInfoId,
@@ -137,6 +138,9 @@ const ReceptionMain = () => {
 
   const handleEditAppointment = (appointmentId: number) => {
     navigate(`/editAppointment/${appointmentId}`);
+  }
+  const handleOpenModal = () => {
+    setIsCancelModalOpen(true)
   }
 
   return (
@@ -238,7 +242,7 @@ const ReceptionMain = () => {
                   withButtons={sessionStorage.getItem('role') === 'reception' ? true : false}
                   onAccept={setIsApprovalModalOpen}
                   setApprovalAppointmentId={setSelectedAppointmentId}
-                  onDecline={handleCancelAppointment}
+                  onDecline={handleOpenModal}
                 />
               </Flex>
             </ScrollArea>
@@ -316,6 +320,15 @@ const ReceptionMain = () => {
           opened={isApprovalModalOpen}
           setOpen={setIsApprovalModalOpen}
           onApproveAppointment={handleApproveAppointment}
+          appointmentId={selectedAppointmentId}
+        />
+      )}
+      {isCancelModalOpen && (
+        <ConfirmModal
+          title="Czy na pewno chcesz anulować wizytę?"
+          opened={isCancelModalOpen}
+          setOpen={setIsCancelModalOpen}
+          onApproveAppointment={handleCancelAppointment}
           appointmentId={selectedAppointmentId}
         />
       )}

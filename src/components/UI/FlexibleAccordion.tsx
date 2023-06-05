@@ -136,7 +136,8 @@ export const FlexibleAccordion = ({
                 </Button>
                 <Button
                   onClick={() => {
-                    if (onDecline) {
+                    if (onDecline && setApprovalAppointmentId) {
+                      setApprovalAppointmentId(data.appointmentId);
                       onDecline(data.appointmentId);
                     }
                   }}
@@ -153,7 +154,8 @@ export const FlexibleAccordion = ({
                   size="xs"
                   variant="outline"
                   onClick={() => {
-                    if (onEdit) {
+                    if (onEdit && setApprovalAppointmentId) {
+                      setApprovalAppointmentId(data.appointmentId);
                       onEdit(data.appointmentId);
                     }
                   }}

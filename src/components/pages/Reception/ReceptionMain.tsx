@@ -300,6 +300,7 @@ const ReceptionMain = () => {
                   withEditButton={sessionStorage.getItem('role') === 'reception' || sessionStorage.getItem('doctorId') === selectedDoctorId}
                   directionColumn
                   onEdit={handleEditAppointment}
+                  setApprovalAppointmentId={setSelectedAppointmentId}
                 />
               </Flex>
             </ScrollArea>

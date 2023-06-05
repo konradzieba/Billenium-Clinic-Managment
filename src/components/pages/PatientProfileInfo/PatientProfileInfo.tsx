@@ -54,6 +54,11 @@ const PatientProfileInfo = () => {
     fetchNewAppointments
   );
 
+  const filteredAppointments = patientAppointments.data?.filter(
+    (appointment) =>
+      appointment.appointmentStatus === 'DONE' ||
+      appointment.appointmentStatus === 'CANCELED'
+  );
   return (
     <Container miw="80%">
       <Flex direction="column" py="lg">
@@ -115,7 +120,7 @@ const PatientProfileInfo = () => {
                     </Text>
                   </Text>
                 </Flex>
-                <Flex direction='column'>
+                <Flex direction="column">
                   {medicinesList[0] !== '' ? (
                     <>
                       <Text mt="md" style={infoBorder} pl={3}>
@@ -137,7 +142,7 @@ const PatientProfileInfo = () => {
                     </Text>
                   )}
                 </Flex>
-                <Flex direction='column'>
+                <Flex direction="column">
                   {allergiesList[0] !== '' ? (
                     <>
                       <Text mt="md" style={infoBorder} pl={3}>
@@ -170,14 +175,18 @@ const PatientProfileInfo = () => {
           ) : (
             <ScrollArea h={590} offsetScrollbars w="50vw">
               <Center>
-                <FlexibleAccordion
-                  dataList={patientAppointments.data || []}
-                  firstTableTitle="Leki:"
-                  secondTableTitle="Objawy:"
-                  isWithStatus
-                  fullWidth
-                  isWithDiagnosis
-                />
+                {filteredAppointments ? (
+                  <FlexibleAccordion
+                    dataList={filteredAppointments || []}
+                    firstTableTitle="Leki:"
+                    secondTableTitle="Objawy:"
+                    isWithStatus
+                    fullWidth
+                    isWithDiagnosis
+                  />
+                ) : (
+                  <Text>Brak wizyt</Text>
+                )}
               </Center>
             </ScrollArea>
           )}

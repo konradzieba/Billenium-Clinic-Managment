@@ -153,7 +153,7 @@ export const FlexibleAccordion = ({
                     }
                   }}
                 >
-                  Edytuj
+                  Zakończ
                 </Button>
               </Flex>
             )}

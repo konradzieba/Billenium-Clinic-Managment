@@ -58,16 +58,19 @@ const SignIn = () => {
       sessionStorage.setItem('sessionId', data.sessionId);
       sessionStorage.setItem('userId', data.userInfoId.toString());
       sessionStorage.setItem('role', data.role);
-      if(data.patientId){
-        sessionStorage.setItem('patientId', data.patientId.toString())
+      if (data.patientId) {
+        sessionStorage.setItem('patientId', data.patientId.toString());
       }
-      if(data.doctorId){
-        sessionStorage.setItem('doctorId', data.doctorId.toString())
+      if (data.doctorId) {
+        sessionStorage.setItem('doctorId', data.doctorId.toString());
       }
       navigate('/');
     },
     onError: () => {
-      form.setFieldError('email', 'Email bądź hasło nie są poprawne. Spróbuj ponownie.');
+      form.setFieldError(
+        'email',
+        'Email bądź hasło nie są poprawne. Spróbuj ponownie.'
+      );
     },
   });
 
@@ -118,15 +121,7 @@ const SignIn = () => {
             withAsterisk={false}
             {...form.getInputProps('password')}
           />
-          <Group position="apart" mt="lg">
-            <Anchor
-              component="button"
-              size="sm"
-              onClick={() => navigate('/forgot-password')}
-            >
-              Zapomniałeś hasła?
-            </Anchor>
-          </Group>
+          <Group position="apart" mt="lg"></Group>
           <Button fullWidth mt="xl" radius="md" type="submit">
             Zaloguj się
           </Button>

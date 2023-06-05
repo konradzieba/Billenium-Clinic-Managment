@@ -1,4 +1,12 @@
-import { Button, Container, Flex, Loader, Text, Title } from '@mantine/core';
+import {
+  Button,
+  Container,
+  Flex,
+  Loader,
+  ScrollArea,
+  Text,
+  Title,
+} from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -43,18 +51,24 @@ export const History = () => {
           ) : data?.length === 0 ? (
             <Flex direction="column" gap="sm" pt="xl">
               <Text>Nie masz jeszcze żadnych wizyt</Text>
-              <Button variant="outline" onClick={() => navigate('/specializations')}>
+              <Button
+                variant="outline"
+                onClick={() => navigate('/specializations')}
+              >
                 Umów wizytę
               </Button>
             </Flex>
           ) : (
-            <FlexibleAccordion
-              isWithStatus
-              dataList={data || []}
-              firstTableTitle="Leki:"
-              secondTableTitle="Zalecenia:"
-              isWithDiagnosis
-            />
+            <ScrollArea w="90%" h="600px" offsetScrollbars>
+              <FlexibleAccordion
+                isWithStatus
+                dataList={data || []}
+                firstTableTitle="Leki:"
+                secondTableTitle="Zalecenia:"
+                isWithDiagnosis
+                fullWidth
+              />
+            </ScrollArea>
           )}
         </Flex>
       </Flex>

@@ -143,7 +143,7 @@ const Archives = () => {
             </Flex>
           )}
         </Flex>
-        <ScrollArea mah="50rem" w="100%" maw={'55rem'} mt="md">
+        <ScrollArea mah="45rem" w="100%" maw={'55rem'} mt="md">
           <Flex justify="center">
             <FlexibleAccordion
               dataList={filteredAppointments}

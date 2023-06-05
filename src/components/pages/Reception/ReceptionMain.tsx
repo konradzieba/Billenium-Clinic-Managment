@@ -235,7 +235,7 @@ const ReceptionMain = () => {
                   firstTableTitle={'Stosowane leki:'}
                   secondTableTitle={'Objawy:'}
                   isWithStatus={true}
-                  withButtons={true}
+                  withButtons={sessionStorage.getItem('role') === 'reception' ? true : false}
                   onAccept={setIsApprovalModalOpen}
                   setApprovalAppointmentId={setSelectedAppointmentId}
                   onDecline={handleCancelAppointment}

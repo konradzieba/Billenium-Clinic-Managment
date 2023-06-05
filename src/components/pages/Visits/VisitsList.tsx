@@ -11,6 +11,7 @@ import {
 } from '@mantine/core';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AppointmentStatus } from '../../../helpers/enums';
@@ -18,9 +19,8 @@ import {
   AppointmentDeclineError,
   AppointmentResponseType,
 } from '../../../helpers/types';
-import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
-import { useState } from 'react';
 import ConfirmModal from '../../UI/ConfirmModal';
+import { FlexibleAccordion } from '../../UI/FlexibleAccordion';
 
 const CHANGE_APPOINTMENT_STATUS = 'http://localhost:8080/api/appointments';
 

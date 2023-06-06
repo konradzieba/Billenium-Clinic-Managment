@@ -126,3 +126,7 @@ export type ChartType = {
   }
 
 
+export type UserCreationErrorType = {
+  fieldName: string,
+  error: string,
+}

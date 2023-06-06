@@ -54,11 +54,11 @@ const PatientProfileInfo = () => {
     fetchNewAppointments
   );
 
-  const filteredAppointments = patientAppointments.data?.filter(
+  const filteredAppointments = patientAppointments.data ? patientAppointments.data?.filter(
     (appointment) =>
       appointment.appointmentStatus === 'DONE' ||
       appointment.appointmentStatus === 'CANCELED'
-  );
+  ) : [];
   return (
     <Container miw="80%">
       <Flex direction="column" py="lg">
@@ -175,7 +175,7 @@ const PatientProfileInfo = () => {
           ) : (
             <ScrollArea h={590} offsetScrollbars w="50vw">
               <Center>
-                {filteredAppointments ? (
+                {filteredAppointments && filteredAppointments.length > 0 ? (
                   <FlexibleAccordion
                     dataList={filteredAppointments || []}
                     firstTableTitle="Leki:"

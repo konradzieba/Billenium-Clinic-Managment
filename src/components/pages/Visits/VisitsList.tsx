@@ -80,8 +80,8 @@ export const VisitsList = () => {
     });
   };
   const handleOpenModal = () => {
-    setIsCancelModalOpen(true)
-  }
+    setIsCancelModalOpen(true);
+  };
 
   return (
     <>
@@ -105,7 +105,7 @@ export const VisitsList = () => {
               <Loader mt="xl" />
             ) : data?.length === 0 ? (
               <Flex direction="column" gap="sm" pt="xl">
-                <Text>Nie masz jeszcze żadnych zakończonych wizyt</Text>
+                <Text>Nie masz jeszcze żadnych wizyt</Text>
                 <Button
                   variant="outline"
                   onClick={() => navigate('/specializations')}

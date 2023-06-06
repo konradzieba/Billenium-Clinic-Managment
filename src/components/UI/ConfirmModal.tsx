@@ -8,10 +8,11 @@ type ConfirmModal = {
   acceptText?: string;
   cancelText?: string;
   isErrorModal?: boolean;
-  isMessage?:boolean;
+  isMessage?: boolean;
   messageFunction?: () => void;
   appointmentId?: number | null;
   onAccept?: () => void;
+  locked?: boolean;
   onApproveAppointment?: (id: number | null) => void;
 };
 
@@ -25,21 +26,27 @@ const ConfirmModal = ({
   isMessage,
   messageFunction,
   appointmentId,
+  locked,
   onAccept,
   onApproveAppointment,
 }: ConfirmModal) => {
-
-  const handleMessage = () =>{
-    if(isMessage && messageFunction){
-      messageFunction()
+  const handleMessage = () => {
+    if (isMessage && messageFunction) {
+      messageFunction();
     }
-    setOpen(false)
-
-  }
+    setOpen(false);
+  };
 
   return (
     <Center>
-      <Modal opened={opened} onClose={() => setOpen(false)} zIndex={9999}>
+      <Modal
+        opened={opened}
+        onClose={() => setOpen(false)}
+        zIndex={9999}
+        closeOnClickOutside={locked ? false : true}
+        closeOnEscape={locked ? false : true}
+        withCloseButton={locked ? false : true}
+      >
         <Flex direction="column">
           <Text align="center">{title}</Text>
           <Flex mt="xl" justify="space-evenly">

@@ -8,21 +8,43 @@ type ModalAllergyProps = {
 };
 
 const alergie = [
-  { value: 'kurz', label: 'kurz' },
-  { value: 'pyłki', label: 'pyłki' },
-  { value: 'sierść', label: 'sierść' },
-  { value: 'roztocza', label: 'roztocza' },
-  { value: 'plesń', label: 'plesń' },
-  { value: 'słonecznik', label: 'słonecznik' },
-  { value: 'orzechy', label: 'orzechy' },
+  { value: 'pyłki roślin', label: 'pyłki roślin' },
+  { value: 'pleśń', label: 'pleśń' },
+  { value: 'sierść zwierząt', label: 'sierść zwierząt' },
+  {
+    value: 'orzechy',
+    label: 'orzechy',
+  },
+  { value: 'pyłki traw', label: 'pyłki traw' },
+  { value: 'osy i pszczoły', label: 'osy i pszczoły' },
+  {
+    value: 'penicylina',
+    label: 'penicylina',
+  },
+  { value: 'lateks', label: 'lateks' },
+  { value: 'nikiel', label: 'nikiel' },
+  {
+    value: 'kurz domowy',
+    label: 'kurz domowy',
+  },
+  { value: 'truskawki', label: 'truskawki' },
   { value: 'ryby', label: 'ryby' },
-  { value: 'mleko', label: 'mleko' },
-  { value: 'jaja', label: 'jaja' },
-  { value: 'pszenica', label: 'pszenica' },
+  {
+    value: 'perfumy',
+    label: 'perfumy',
+  },
+  { value: 'pszczeli jad', label: 'pszczeli jad' },
+  { value: 'czekolada', label: 'czekolada' },
+  {
+    value: 'pomarańcze',
+    label: 'pomarańcze',
+  },
+  {
+    value: 'krewetki',
+    label: 'krewetki',
+  },
+  { value: 'włosy koni', label: 'włosy koni' },
   { value: 'soja', label: 'soja' },
-  { value: 'seler', label: 'seler' },
-  { value: 'gorczyca', label: 'gorczyca' },
-  { value: 'sezam', label: 'sezam' },
 ];
 
 const ModalAllergy = (props: ModalAllergyProps) => {
@@ -61,7 +83,11 @@ const ModalAllergy = (props: ModalAllergyProps) => {
           creatable
           maxDropdownHeight={120}
         />
-        <Button mt="md" variant="outline" onClick={() => props.saveFunction(allergy)}>
+        <Button
+          mt="md"
+          variant="outline"
+          onClick={() => props.saveFunction(allergy)}
+        >
           Dodaj alergię
         </Button>
       </Flex>

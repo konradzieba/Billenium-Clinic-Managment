@@ -17,7 +17,8 @@ import dayjs from 'dayjs';
 import { signUpSchema as schema } from '../../../helpers/schemas';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
+import ConfirmModal from '../../UI/ConfirmModal';
 
 const URL = 'http://localhost:8080/api/users'
 
@@ -40,6 +41,7 @@ type responseType = registerValues & {
 }
 
 const SignUp = () => {
+  const [isRegisteredModalOpen, setIsRegisteredModalOpen] = useState(false);
   const navigate = useNavigate();
   const form = useForm({
     initialValues: {
@@ -64,7 +66,7 @@ const SignUp = () => {
   const mutation = useMutation(createUser, {
     onSuccess: () => {
       form.reset()
-      navigate('/sign-in')
+      handleSubmitModal()
   }
   })
 
@@ -74,7 +76,11 @@ const SignUp = () => {
         const date = dayjs(values.birthdate).format(`YYYY-MM-DD`)
         mutation.mutate({...rest, birthdate:date})
   }
+  const handleSubmitModal = () => {
+    setIsRegisteredModalOpen(true)
+  }
   return (
+    <>
     <Container w={640} my={40}>
       <Title
         align="center"
@@ -197,6 +203,15 @@ const SignUp = () => {
         </Paper>
       </Box>
     </Container>
+      <ConfirmModal
+        isErrorModal
+        isMessage
+        title="Zostałeś pomyślnie zarejestrowany"
+        opened={isRegisteredModalOpen}
+        setOpen={setIsRegisteredModalOpen}
+        messageFunction={() => navigate('/sign-in')}
+      />
+    </>
   );
 };
 

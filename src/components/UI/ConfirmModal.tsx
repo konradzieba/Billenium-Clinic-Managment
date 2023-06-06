@@ -8,6 +8,8 @@ type ConfirmModal = {
   acceptText?: string;
   cancelText?: string;
   isErrorModal?: boolean;
+  isMessage?:boolean;
+  messageFunction?: () => void;
   appointmentId?: number | null;
   onAccept?: () => void;
   onApproveAppointment?: (id: number | null) => void;
@@ -20,10 +22,21 @@ const ConfirmModal = ({
   acceptText,
   cancelText,
   isErrorModal,
+  isMessage,
+  messageFunction,
   appointmentId,
   onAccept,
   onApproveAppointment,
 }: ConfirmModal) => {
+
+  const handleMessage = () =>{
+    if(isMessage && messageFunction){
+      messageFunction()
+    }
+    setOpen(false)
+
+  }
+
   return (
     <Center>
       <Modal opened={opened} onClose={() => setOpen(false)} zIndex={9999}>
@@ -31,7 +44,7 @@ const ConfirmModal = ({
           <Text align="center">{title}</Text>
           <Flex mt="xl" justify="space-evenly">
             {isErrorModal ? (
-              <Button variant="filled" onClick={() => setOpen(false)}>
+              <Button variant="filled" onClick={handleMessage}>
                 Rozumiem
               </Button>
             ) : (

@@ -53,7 +53,9 @@ const ReceptionMain = () => {
 
   const newAppointmentsList = useQuery(
     ['newAppointments'],
-    fetchNewAppointments
+    fetchNewAppointments, {
+      refetchInterval: 60000,
+    }
   );
 
   const todaysDate = dayjs(new Date()).format('YYYY-MM-DD').toString();
@@ -82,8 +84,10 @@ const ReceptionMain = () => {
   const doctorTodayAppointmentsList = useQuery(
     [`todayAppointments-${selectedDoctorId}-${todaysDate}`, selectedDoctorId],
     fetchDoctorTodayAppointments,
-    { enabled: selectedDoctorId !== null }
+    { enabled: selectedDoctorId !== null, refetchInterval: 5000 }
   );
+
+
   const selectDoctorData = doctorList.data
     ? doctorList.data?.map((doc) => {
         return {
@@ -138,10 +142,16 @@ const ReceptionMain = () => {
 
   const handleEditAppointment = (appointmentId: number) => {
     navigate(`/editAppointment/${appointmentId}`);
-  }
+  };
   const handleOpenModal = () => {
-    setIsCancelModalOpen(true)
-  }
+    setIsCancelModalOpen(true);
+  };
+
+  const approvedAppointments = doctorTodayAppointmentsList.data
+    ? doctorTodayAppointmentsList.data?.filter(
+        (appointment) => appointment.appointmentStatus === 'APPROVED'
+      )
+    : null;
 
   return (
     <>
@@ -209,7 +219,7 @@ const ReceptionMain = () => {
               })
             )}
           </Flex>
-          <Statistics source={'allDoctors'}/>
+          <Statistics source={'allDoctors'} />
         </Flex>
         <Flex
           miw={width < BREAKPOINT ? '100%' : '30rem'}
@@ -239,7 +249,11 @@ const ReceptionMain = () => {
                   firstTableTitle={'Stosowane leki:'}
                   secondTableTitle={'Objawy:'}
                   isWithStatus={true}
-                  withButtons={sessionStorage.getItem('role') === 'reception' ? true : false}
+                  withButtons={
+                    sessionStorage.getItem('role') === 'reception'
+                      ? true
+                      : false
+                  }
                   onAccept={setIsApprovalModalOpen}
                   setApprovalAppointmentId={setSelectedAppointmentId}
                   onDecline={handleOpenModal}
@@ -281,12 +295,12 @@ const ReceptionMain = () => {
             <Flex justify="center" align="center" h="100%">
               <Loader />
             </Flex>
-          ) : doctorTodayAppointmentsList.data?.length === 0 ? (
+          ) : !approvedAppointments || approvedAppointments.length === 0 ? (
             <Center>
               <Text>Brak wizyt na dziś</Text>
             </Center>
           ) : (
-            <ScrollArea type="always" h='700px'>
+            <ScrollArea type="always" h="700px">
               <Flex justify="center">
                 <FlexibleAccordion
                   dataList={
@@ -297,7 +311,10 @@ const ReceptionMain = () => {
                   firstTableTitle={'Stosowane leki:'}
                   secondTableTitle={'Objawy:'}
                   isWithStatus={true}
-                  withEditButton={sessionStorage.getItem('role') === 'reception' || sessionStorage.getItem('doctorId') === selectedDoctorId}
+                  withEditButton={
+                    sessionStorage.getItem('role') === 'reception' ||
+                    sessionStorage.getItem('doctorId') === selectedDoctorId
+                  }
                   directionColumn
                   onEdit={handleEditAppointment}
                   setApprovalAppointmentId={setSelectedAppointmentId}

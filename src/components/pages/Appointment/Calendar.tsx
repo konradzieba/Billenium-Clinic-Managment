@@ -60,7 +60,7 @@ const TimePicker = ({
     enabled: isFetchEnabled,
     refetchInterval: 20000,
   });
-
+  const todaysDate = dayjs(new Date()).format('YYYY-MM-DD');
   const handleSetDateTime = (hour: { hour: string; isAvailable: boolean }) => {
     hour.isAvailable && setSelectedTime(hour.hour);
     sessionStorage.setItem(
@@ -101,6 +101,10 @@ const TimePicker = ({
                         }
                       : !hour.isAvailable
                       ? { color: 'lightgray', cursor: 'default' }
+                      : todaysDate === appointmentDate
+                      ? hour.hour < dayjs().format('HH:mm')
+                        ? { color: 'lightgray', cursor: 'default' }
+                        : {}
                       : {}
                   }
                   onClick={() => {

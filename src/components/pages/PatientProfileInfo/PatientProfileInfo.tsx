@@ -54,6 +54,11 @@ const PatientProfileInfo = () => {
     fetchNewAppointments
   );
 
+  const filteredAppointments = patientAppointments.data?.filter(
+    (appointment) =>
+      appointment.appointmentStatus === 'DONE' ||
+      appointment.appointmentStatus === 'CANCELED'
+  );
   return (
     <Container miw="80%">
       <Flex direction="column" py="lg">
@@ -74,7 +79,7 @@ const PatientProfileInfo = () => {
               <>
                 <Flex gap="sm" direction="column">
                   <Text style={infoBorder} pl={3}>
-                    Imię Nazwisko:{' '}
+                    Imię i nazwisko:{' '}
                     <Text span fw="bold">
                       {patientInfo.data?.patientUserInfo.firstName}{' '}
                       {patientInfo.data?.patientUserInfo.lastName}
@@ -115,17 +120,17 @@ const PatientProfileInfo = () => {
                     </Text>
                   </Text>
                 </Flex>
-                <Flex direction='column'>
+                <Flex direction="column">
                   {medicinesList[0] !== '' ? (
                     <>
                       <Text mt="md" style={infoBorder} pl={3}>
                         Stosowane leki:{' '}
                       </Text>
-                      <ScrollArea h={100} offsetScrollbars>
+                      <ScrollArea h={80} offsetScrollbars type='always'>
                         <List>
                           {medicinesList.map((medicine, index) => {
                             return (
-                              <List.Item key={index}>{medicine}</List.Item>
+                              <List.Item pl={5} key={index}>{medicine}</List.Item>
                             );
                           })}
                         </List>
@@ -137,16 +142,16 @@ const PatientProfileInfo = () => {
                     </Text>
                   )}
                 </Flex>
-                <Flex direction='column'>
+                <Flex direction="column">
                   {allergiesList[0] !== '' ? (
                     <>
                       <Text mt="md" style={infoBorder} pl={3}>
                         Alergie:{' '}
                       </Text>
-                      <ScrollArea h={100} offsetScrollbars>
+                      <ScrollArea h={80} offsetScrollbars type='always'>
                         <List>
                           {allergiesList.map((allergy, index) => {
-                            return <List.Item key={index}>{allergy}</List.Item>;
+                            return <List.Item pl={5}  key={index}>{allergy}</List.Item>;
                           })}
                         </List>
                       </ScrollArea>
@@ -170,14 +175,18 @@ const PatientProfileInfo = () => {
           ) : (
             <ScrollArea h={590} offsetScrollbars w="50vw">
               <Center>
-                <FlexibleAccordion
-                  dataList={patientAppointments.data || []}
-                  firstTableTitle="Leki:"
-                  secondTableTitle="Objawy:"
-                  isWithStatus
-                  fullWidth
-                  isWithDiagnosis
-                />
+                {filteredAppointments ? (
+                  <FlexibleAccordion
+                    dataList={filteredAppointments || []}
+                    firstTableTitle="Leki:"
+                    secondTableTitle="Objawy:"
+                    isWithStatus
+                    fullWidth
+                    isWithDiagnosis
+                  />
+                ) : (
+                  <Text>Brak wizyt</Text>
+                )}
               </Center>
             </ScrollArea>
           )}

@@ -90,13 +90,13 @@ export const FlexibleAccordion = ({
                       {data.appointmentStatus === AppointmentStatus.APPROVED &&
                         'Zatwierdzona'}
                       {data.appointmentStatus === AppointmentStatus.CANCELED &&
-                        'Odrzucona'}
+                        'Anulowana'}
                       {data.appointmentStatus ===
                         AppointmentStatus.RESCHEDULED && 'Przeniesiony'}
                       {data.appointmentStatus === AppointmentStatus.DONE &&
                         'Zakończona'}
                       {data.appointmentStatus === AppointmentStatus.CONTROL &&
-                        'Kontrola'}
+                        'Kontrolna'}
                     </Text>
                   ) : (
                     <Text>
